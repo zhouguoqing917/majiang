@@ -19,13 +19,6 @@ var handler = Handler.prototype;
  *
  */
 handler.queryEntry = function(msg, session, next) {
-	var uid = msg.uid;
-	if(!uid) {
-		next(null, {
-			code: 500
-		});
-		return;
-	}
 	// get all connectors
 	var connectors = this.app.getServersByType('connector');
 	if(!connectors || connectors.length === 0) {
@@ -35,7 +28,7 @@ handler.queryEntry = function(msg, session, next) {
 		return;
 	}
 	// select connector, because more than one connector existed.
-	var res = dispatcher.dispatch(uid, connectors);
+	var res = dispatcher.dispatch(connectors);
 	next(null, {
 		code: 200,
 		host: res.host,
