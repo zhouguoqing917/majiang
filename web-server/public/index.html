@@ -20,7 +20,7 @@
       var roomNo ;
       window.onload=function(){
           var pomelo = window.pomelo;
-          var host = "192.168.0.27";
+          var host = "47.94.45.41";
           var port = "6100";
           pomelo.init({
               host: host,
@@ -31,18 +31,18 @@
           });
       };
 
-      function createRoom(){
-          pomelo.request("room.roomHandler.createRoom", {}, function(data) {
-              console.log(`${data.msg}:${JSON.stringify(data.data)}`);
-              roomNo = data.data.roomNo;
-          });
-      }
-
-      function getUserRoomList(){
-          pomelo.request("room.roomHandler.getUserRoomList", {}, function(data) {
-              console.log(`${data.msg}:${JSON.stringify(data.data)}`);
-          });
-      }
+//      function createRoom(){
+//          pomelo.request("room.roomHandler.createRoom", {}, function(data) {
+//              console.log(`${data.msg}:${JSON.stringify(data.data)}`);
+//              roomNo = data.data.roomNo;
+//          });
+//      }
+//
+//      function getUserRoomList(){
+//          pomelo.request("room.roomHandler.getUserRoomList", {}, function(data) {
+//              console.log(`${data.msg}:${JSON.stringify(data.data)}`);
+//          });
+//      }
 
       //        function show() {
       //            pomelo.request("square.login.getForUserInfo", {}, function(data) {
@@ -51,7 +51,7 @@
       //        };
 
       function checkLogin() {
-          pomelo.request("connector.squareHandler.checkLogin", {openid:'ol9tcwyRUZO76fxRzmjPg7s2C2Ec',token:'3O_hm45B3I1fQSFLoHzd9h1TxZfobTSqNWwoN763Syr2biJbNBlYQ-PmLi05Be3arDk0x_o-3O5lewCsg7jn8mhvCFmZjYQyJcUfT7FNz_A'}, function(data) {
+          pomelo.request("connector.loginHandler.checkLogin", {openid:'11111111',token:'11111111'}, function(data) {
               console.log(`${data.msg}`);
           });
       };
