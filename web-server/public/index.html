@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>
+    Pomelo
+  </title>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+  <meta http-equiv="content-style-type" content="text/css" />
+  <meta http-equiv="content-scripte-type" content="text/javascript" />
+  <meta name="author" content="netease" />
+  <meta name="version" content="1.0" />
+  <meta name="keywords" content="pomelo" />
+  <link type="text/css" rel="stylesheet" href="css/base.css" />
+  <script src="js/lib/build/build.js?v=2" type="text/javascript"></script>
+  <script type="text/javascript">
+      require('boot');
+  </script>
+  <script type="text/javascript">
+      var roomNo ;
+      window.onload=function(){
+          var pomelo = window.pomelo;
+          var host = "192.168.0.27";
+          var port = "6100";
+          pomelo.init({
+              host: host,
+              port: port,
+              log: false
+          }, function() {
+              console.log('成功连上服务器');
+          });
+      };
+
+      function createRoom(){
+          pomelo.request("room.roomHandler.createRoom", {}, function(data) {
+              console.log(`${data.msg}:${JSON.stringify(data.data)}`);
+              roomNo = data.data.roomNo;
+          });
+      }
+
+      function getUserRoomList(){
+          pomelo.request("room.roomHandler.getUserRoomList", {}, function(data) {
+              console.log(`${data.msg}:${JSON.stringify(data.data)}`);
+          });
+      }
+
+      //        function show() {
+      //            pomelo.request("square.login.getForUserInfo", {}, function(data) {
+      //                console.log(`${data.msg}:${JSON.stringify(data.data)}`);
+      //            });
+      //        };
+
+      function checkLogin() {
+          pomelo.request("connector.squareHandler.checkLogin", {openid:'ol9tcwyRUZO76fxRzmjPg7s2C2Ec',token:'3O_hm45B3I1fQSFLoHzd9h1TxZfobTSqNWwoN763Syr2biJbNBlYQ-PmLi05Be3arDk0x_o-3O5lewCsg7jn8mhvCFmZjYQyJcUfT7FNz_A'}, function(data) {
+              console.log(`${data.msg}`);
+          });
+      };
+
+      //        function getWXUserInfo() {
+      //            pomelo.request("square.login.getWXUserInfo", {openid:'ol9tcwyRUZO76fxRzmjPg7s2C2Ec'}, function(data) {
+      //                console.log(`${data.msg}:${JSON.stringify(data.data)}`);
+      //            });
+      //        };
+
+
+      function entryRoom() {
+          pomelo.request("room.roomHandler.entryRoom", {roomNo : roomNo}, function(data) {
+              console.log(`${data.msg}:${JSON.stringify(data.data)}`);
+          });
+      };
+      pomelo.on('onUserEntry',function(){
+          console.log(arguments,'======>>>>onUserEntry');
+      })
+      pomelo.on('onGameStart',function(data){
+          console.log(data,'======>>>>onGameStart');
+      })
+
+      pomelo.on('onMahjongs',function(data){
+          console.log(data,'======>>>>onMahjongs');
+      })
+
+  </script>
+</head>
+<body>
+<div class="g-doc">
+  <div class="g-banner" style="border:none">
+    <div class="logo">
+      <div class="img"></div>
+    </div>
+  </div>
+  <div class="g-background">
+    <div class="g-content">
+      Welcome to Pomelo
+    </div>
+  </div>
+  <div class="g-link">
+    Home:
+    <a href="https://github.com/NetEase/pomelo">https://github.com/NetEase/pomelo</a>
+  </div>
+  <div class="g-button">
+    <input type="button" value="进入房间" onclick="entryRoom()"/><br/>
+    <input type="button" value="获取房间列表" onclick="getUserRoomList()"/><br/>
+    <input type="button" value="创建房间" onclick="createRoom()"/><br/>
+    <input type="button" value="获取四个测试用户信息" onclick="show()"/><br/>
+    <input type="button" value="验证登录" onclick="checkLogin()"/><br/>
+    <input type="button" value="拉取用户微信头像等" onclick="getWXUserInfo()"/><br />
+  </div>
+</div>
+</body>
+</html>

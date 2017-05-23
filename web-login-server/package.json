@@ -1,0 +1,14 @@
+{
+  "name": "chatofpomelo",
+  "version": "0.0.1",
+  "private": false,
+  "dependencies": {
+    "body-parser": "*",
+    "bufferhelper": "*",
+    "ejs": "*",
+    "express": "*",
+    "iconv-lite": "*",
+    "mongoose": "*",
+    "xml2js": "^0.4.17"
+  }
+}
