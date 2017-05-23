@@ -12,14 +12,14 @@
   },
   "stage":{
     "room":[
-      {"id": "room-server-10", "host": "106.14.240.205", "port":7100},
-      {"id": "room-server-11", "host": "106.14.240.205", "port":7101},
-      {"id": "room-server-12", "host": "106.14.240.205", "port":7102}
+      {"id": "room-server-10", "host": "47.94.45.41", "port":7100},
+      {"id": "room-server-11", "host": "47.94.45.41", "port":7101},
+      {"id": "room-server-12", "host": "47.94.45.41", "port":7102}
     ],
     "connector":[
-      {"id": "connector-server-1", "host": "106.15.38.247","port":6000,"clientPort": 6100, "frontend": true},
-      {"id": "connector-server-2", "host": "106.15.38.247","port":6001,"clientPort": 6101, "frontend": true},
-      {"id": "connector-server-3", "host": "106.15.38.247","port":6002,"clientPort": 6102, "frontend": true}
+      {"id": "connector-server-1", "host": "47.94.45.41","port":6000,"clientPort": 6100, "frontend": true},
+      {"id": "connector-server-2", "host": "47.94.45.41","port":6001,"clientPort": 6101, "frontend": true},
+      {"id": "connector-server-3", "host": "47.94.45.41","port":6002,"clientPort": 6102, "frontend": true}
     ]
   },
   "production":{

@@ -12,10 +12,10 @@ if(env.indexOf('production') != -1){
     connectionString = `mongodb://${username}:${pwd}@${host}:${port}/${dbname}`;
     console.log('数据库连接线上环境');
 }else if(env.indexOf('stage') != -1){
-    host = '10.174.66.16';
-    let username = 'hongzhong';
-    let pwd = 'Yaojing1818';
-    connectionString = `mongodb://${username}:${pwd}@${host}:${port}/${dbname}`;
+    host = '47.94.45.41';
+    //let username = 'hongzhong';
+    //let pwd = 'Yaojing1818';
+    connectionString = `mongodb://${host}:${port}/${dbname}`
 }else{
     connectionString = `mongodb://${host}:${port}/${dbname}`
 }
