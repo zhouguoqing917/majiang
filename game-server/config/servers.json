@@ -1,7 +1,7 @@
 {
   "development":{
     "gate" : [
-      {"id": "gate-server-1", "host": "127.0.0.1","port":5000,"clientPort": 5100}
+      {"id": "gate-server-1", "host": "127.0.0.1","clientPort": 5100, "frontend": true}
     ],
     "room":[
       {"id": "room-server-10", "host": "127.0.0.1", "port":7100},

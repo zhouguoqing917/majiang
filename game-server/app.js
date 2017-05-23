@@ -36,6 +36,15 @@ app.configure('production|development|stage', function(){
     let globalErrHandler = require('./app/errHandler/globalErrHandler.js');
     app.set('errorHandler',globalErrHandler);
 });
+app.configure('production|development|stage', 'gate', function(){
+    app.filter(pomelo.filters.serial());
+    app.set('connectorConfig', {
+        connector : pomelo.connectors.hybridconnector,
+        //heartbeat : 2,
+        useDict : true,
+        useProtobuf : true
+    });
+});
 app.configure('production|development|stage', 'master', function(){
     app.filter(pomelo.filters.serial());
     app.set('connectorConfig', {
