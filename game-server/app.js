@@ -37,7 +37,6 @@ app.configure('production|development|stage', function(){
     app.set('errorHandler',globalErrHandler);
 });
 app.configure('production|development|stage', 'gate', function(){
-    app.filter(pomelo.filters.serial());
     app.set('connectorConfig', {
         connector : pomelo.connectors.hybridconnector,
         //heartbeat : 2,
