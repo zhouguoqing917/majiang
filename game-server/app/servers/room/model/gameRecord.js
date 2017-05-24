@@ -13,6 +13,7 @@ var Record = function(roomNo){
 
 Record.prototype.addRecord = function(round,type,user,mahjong){
     this[round] = this[round] || {
+
             actions : []
         }
     var obj = {

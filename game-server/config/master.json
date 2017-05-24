@@ -1,12 +1,12 @@
 {
   "development": {
-    "id": "master-server-1", "host": "127.0.0.1", "port": 6108
+    "id": "master-server-1", "host": "127.0.0.1", "port": 8108
   },
   "stage": {
-    "id": "master-server-1", "host": "47.94.45.41", "port": 6108
+    "id": "master-server-1", "host": "47.94.45.41", "port": 8108
   },
   "production": {
-    "id": "master-server-1", "host": "10.30.37.178", "port": 6108
+    "id": "master-server-1", "host": "10.30.37.178", "port": 8108
   }
 }
 

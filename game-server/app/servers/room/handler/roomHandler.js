@@ -34,9 +34,6 @@ handler.entryRoom = async function (msg, session, next) {
             await gameUserModel.update({_id:uid},{$set:{currRoomNo: null , roomId : null}}).exec();
             return next(null, {code: 400, msg: '房间不存在!'});
         }
-        //if(!room.getUserByUid(uid)){
-        //    return next(null, {code: 400, msg: '不在此房间!'});
-        //}
         const data = await room.entryRoom(roomNo, session);
         next(null, {code: 200, msg: '进入房间', data: data});
     } catch (ex) {

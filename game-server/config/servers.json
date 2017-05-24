@@ -1,28 +1,30 @@
 {
   "development":{
     "gate" : [
-      {"id": "gate-server-1", "host": "47.94.45.41","clientPort": 5100, "frontend": true}
+      {"id": "gate-server-1", "host": "127.0.0.1","clientPort": 5100, "frontend": true}
     ],
     "room":[
-      {"id": "room-server-10", "host": "47.94.45.41", "port":7100},
-      {"id": "room-server-11", "host": "47.94.45.41", "port":7101}
+      {"id": "room-server-10", "host": "127.0.0.1", "port":9100},
+      {"id": "room-server-11", "host": "127.0.0.1", "port":9101}
     ],
     "connector":[
-      {"id": "connector-server-1", "host": "47.94.45.41","port":6000,"clientPort": 6100, "frontend": true},
-      {"id": "connector-server-2", "host": "47.94.45.41","port":6001,"clientPort": 6101, "frontend": true},
-      {"id": "connector-server-3", "host": "47.94.45.41","port":6002,"clientPort": 6102, "frontend": true}
+      {"id": "connector-server-1", "host": "127.0.0.1","port":8000,"clientPort": 8100, "frontend": true},
+      {"id": "connector-server-2", "host": "127.0.0.1","port":8001,"clientPort": 8101, "frontend": true},
+      {"id": "connector-server-3", "host": "127.0.0.1","port":8002,"clientPort": 8102, "frontend": true}
     ]
   },
   "stage":{
+    "gate" : [
+      {"id": "gate-server-1", "host": "47.94.45.41","clientPort": 5100, "frontend": true}
+    ],
     "room":[
-      {"id": "room-server-10", "host": "47.94.45.41", "port":7100},
-      {"id": "room-server-11", "host": "47.94.45.41", "port":7101},
-      {"id": "room-server-12", "host": "47.94.45.41", "port":7102}
+      {"id": "room-server-10", "host": "47.94.45.41", "port":9100},
+      {"id": "room-server-11", "host": "47.94.45.41", "port":9101}
     ],
     "connector":[
-      {"id": "connector-server-1", "host": "47.94.45.41","port":6000,"clientPort": 6100, "frontend": true},
-      {"id": "connector-server-2", "host": "47.94.45.41","port":6001,"clientPort": 6101, "frontend": true},
-      {"id": "connector-server-3", "host": "47.94.45.41","port":6002,"clientPort": 6102, "frontend": true}
+      {"id": "connector-server-1", "host": "47.94.45.41","port":8000,"clientPort": 8100, "frontend": true},
+      {"id": "connector-server-2", "host": "47.94.45.41","port":8001,"clientPort": 8101, "frontend": true},
+      {"id": "connector-server-3", "host": "47.94.45.41","port":8002,"clientPort": 8102, "frontend": true}
     ]
   },
   "production":{

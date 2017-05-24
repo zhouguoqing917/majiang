@@ -27,23 +27,18 @@ let Room = function (app) {
     this.roomNo ;
     this.dice;
 
-    this.birdNum = 4;
-    this.addBird = 1;
+    this.roomType = 1;
     this.roundCount = 8;
     this.round = 0; //现在第几局
     this.currPlayUid ;//现在出牌的 玩家id
     this.currUserInaugurated ; //现在玩家接到的牌
     this.previousOut = null;//上一次打出的牌
-    this.onlyOneBird = false;//是否一字加码
-    this.is7dui = false;
-    this.isPeng = true ; //是否允许碰
     this.userHu = false; //如果有玩家可以胡牌 此房间 就不能接受 出牌 碰 杠 等接口访问
     this.agreeDissolve = [];//解散房间人数
     this.cannelDissove = [];//取消解散人数
     this.handlerDissolveUser = []; //已经做过解散操作的玩家
     this.dissUid = 0;
     this.result = {}; //用来存储每一局的结果
-    this.userPeng = false;//如果有玩家是在碰了拍 此时不能胡牌
     this.allResult = {};
     this.unGang = [];
     this.record = {};
@@ -58,26 +53,34 @@ roomPro = Room.prototype;
 roomPro.createRoom = async function (session, roomData) {
     let uid = session.uid;
     this.ownerUid = uid;
+
     //判断房卡数量是否可以扣除，如果可以，直接扣除
     const gameuser = await gameUserModel.findOne({_id: uid});
-    const useCardNumber = roomData.roundCount === 8 ? 1 : 2;
-    this.isPeng = roomData.isPeng ? true : false;
-    this.is7dui = roomData.is7dui ? true : false;
+    let useCardNumber = roomData.roundCount === 8 ? 4 : 8;
+    this.payType = roomData.payType || 1;//1,房主 2,AA
+    this.roomType = roomData.roomType || 1; //1,不是代开 2, 代开
+    this.huCount = roomData.huCount || 0;//需要多少番起胡
+
+    if(this.payType == 2){
+        useCardNumber = useCardNumber / 4 ;
+    }
     if (gameuser.roomCard < useCardNumber)
         throw '房卡不足';
 
-    const rooms = await roomManager.getRoomsForDatabase(uid);
-    let myRoomCount = rooms ? rooms.length : 0;
-    if(myRoomCount >= 10){ //最多创建10个房间
-        throw '创建房间已经达到上限';
+    if(this.roomType == 2){
+        const rooms = await roomManager.getRoomsForDatabase(uid);
+        let myRoomCount = rooms ? rooms.length : 0;
+        if(myRoomCount >= 3){ //最多创建10个房间
+            throw '创建房间已经达到上限';
+        }
+        //代开模式马上扣卡
+        gameuser.roomCard -= useCardNumber;
+        await gameUserModel.update({_id : uid}, {$set: gameuser});
     }
-
-    gameuser.roomCard -= useCardNumber;
-    await gameUserModel.update({_id : uid}, {$set: gameuser});
 
     const roomObject = {
         createUserId:'',
-        roomType:'hongzhong',
+        roomType:'hsmj',
         serverId:app.curServer.id,
         data:{},
         roomNo:0,
@@ -90,6 +93,7 @@ roomPro.createRoom = async function (session, roomData) {
     this.roomNo = roomNo;
     this.createTime = Date.now();
     this.status = 1;
+
     roomObject.roomNo = roomNo;
     roomObject.createUserId = uid;
     roomObject.status = 1;
@@ -100,54 +104,20 @@ roomPro.createRoom = async function (session, roomData) {
     const room = await roomModel.create(roomObject);
     roomManager.addRoom(this);
     this.roomId = room._id;
-    this.birdNum = roomData.birdNum;
-    this.addBird = roomData.addBird;
     this.roundCount = roomData.roundCount;
     // this.roundCount = 2;
-    this.onlyOneBird = roomData.onlyOneBird ? true : false;
-    this.check = new Check(this.is7dui);
+    this.check = new Check();
     //初始化麻将
     this.mahjong = new Mahjong();
 
-    //写入房卡消耗记录
-    await roomCardRecordModel.create({
-        aboutUserId: gameuser._id,
-        modifyType: 'system',
-        roomId : room._id,
-        preNumber: gameuser.roomCard + useCardNumber,
-        curNumber: -useCardNumber,
-        afterNumber: gameuser.roomCard,
-        description: `用户开房消耗`,
-        userCount : 0
-    });
-
     //游戏记录
     this.gameRecord = new GameRecord(roomNo);
-    return {roomNo};
-};
-
-/**
- * 获取房间号
- * @returns {string}
- */
-roomPro.getRoomNo = function () {
-    let sNo = this.sid.substr(this.sid.lastIndexOf('-') + 1);
-    let roomNo = sNo + uuid.generate(4, 10);
-    let room = roomManager.getRoomByRoomNo(roomNo);
-    if(room){
-        return this.getRoomNo();
+    if(this.roomType != 2){
+        this.entryRoom(roomNo,session);
+    }else{
+        return {roomNo};
     }
-    return roomNo;
-};
 
-roomPro.getData = function(){
-    let data = {};
-    for(let key in this){
-        if(typeof this[key]  != 'function'){
-            data[key] = this[key];
-        }
-    }
-    return data;
 };
 
 /**
@@ -165,6 +135,10 @@ roomPro.entryRoom = async function(roomNo,session){
         throw '已经有进入的房间';
     }
 
+    //代开房 不能进入自己的房间
+    if(this.roomType == 2 && this.createUserId == uid){
+        throw '不能进入自己的代开房间';
+    }
     //是否已经在房间内
     let isInRoom = false;
     for(let i = 0; i < room.users.length;i++){
@@ -210,12 +184,11 @@ roomPro.entryRoom = async function(roomNo,session){
     if(route == 'onUserLine'){
         this.roomChannel.sendMsgToRoomExceptUid(route,{code : 200 ,data : {uid : session.uid}},uArr);
     }else{
-        this.roomChannel.sendMsgToRoomExceptUid(route,this.getRoomUserInfoByUid(session.uid),uArr);
+        this.roomChannel.sendMsgToRoomExceptUid(route,{code : 200 ,data : this.getRoomUserInfoByUid(session.uid)},uArr);
     }
 
     let roomUsers = this.getRoomUserInfo();
     if(this.users.length == 4){
-        console.log(this.status,'=======???');
         if(this.status == 1 && user.mahjong.length == 0 && !this.isLice){
             this.isLice = true;
             this.round += 1;
@@ -224,20 +197,13 @@ roomPro.entryRoom = async function(roomNo,session){
             this.banker = bankerUid;
             this.dice = this.mahjong.diceRoller();
             let self = this;
-            setTimeout(function(){
-                if(self.users.length == 4){
-                    self.status = 2;
-                    self.changeUserStatus(2);
-                    console.log(self.users,'=======>>>>>this.use111');
-                    user.status = 2;
-                    self.licensing();
-                    self.roomChannel.sendMsgToRoom('onGameStart',{code : 200});
-                }else{
-                    self.round -= 1;
-                    self.status = 1;
-                    self.isLice = false;
-                }
-            },1000);
+            self.status = 2;
+            self.changeUserStatus(2);
+            user.status = 2;
+            self.licensing();
+            this.deductRoomCard();//扣除房卡
+            //扣除房卡
+            self.roomChannel.sendMsgToRoom('onGameStart',{code : 200});
         }else if(!this.isLice){
             let isAllReady = true;
             for(let i = 0 ; i < this.users.length; i ++){
@@ -245,6 +211,7 @@ roomPro.entryRoom = async function(roomNo,session){
                     isAllReady = false;
                 }
             }
+
             if(isAllReady && user.mahjong.length == 0){
                 this.isLice = true;
                 this.result = {};
@@ -254,10 +221,8 @@ roomPro.entryRoom = async function(roomNo,session){
 
                 this.dice = this.mahjong.diceRoller();
                 let self = this;
-                setTimeout(function(){
-                    self.licensing();
-                    self.roomChannel.sendMsgToRoom('onGameStart', {code: 200});
-                },1000);
+                self.licensing();
+                self.roomChannel.sendMsgToRoom('onGameStart', {code: 200});
             }
         }
     }
@@ -268,6 +233,73 @@ roomPro.entryRoom = async function(roomNo,session){
     await session.pushAll();
     return this.getRoomMessage(uid);
 };
+
+roomPro.deductRoomCard = async function(){
+    let useCardNumber = this.roundCount === 8 ? 4 : 8;
+    if(this.roomType == 2 || this.payType == 1){
+        let uid = this.ownerUid ;
+        let gameUser = gameUserModel.findOne({_id : uid});
+        gameUser.roomCard -= useCardNumber;
+        await gameUserModel.update({_id : uid}, {$set: gameUser});
+        //写入房卡消耗记录
+        await roomCardRecordModel.create({
+            aboutUserId: gameUser._id,
+            modifyType: 'system',
+            roomId : this.roomId,
+            preNumber: gameUser.roomCard + useCardNumber,
+            curNumber: -useCardNumber,
+            afterNumber: gameUser.roomCard,
+            description: `用户开房消耗`,
+            userCount : 0
+        });
+    }
+    if(this.payType == 2){
+        useCardNumber = useCardNumber / 4;
+        for(var i = 0; i < this.users.length; i ++){
+            var uid = this.users[i];
+            let gameUser = gameUserModel.findOne({_id : uid});
+            gameUser.roomCard -= useCardNumber;
+            await gameUserModel.update({_id : uid}, {$set: gameUser});
+            //写入房卡消耗记录
+            await roomCardRecordModel.create({
+                aboutUserId: gameUser._id,
+                modifyType: 'system',
+                roomId : this.roomId,
+                preNumber: gameUser.roomCard + useCardNumber,
+                curNumber: -useCardNumber,
+                afterNumber: gameUser.roomCard,
+                description: `用户AA开房消耗`,
+                userCount : 0
+            });
+        }
+    }
+};
+
+/**
+ * 获取房间号
+ * @returns {string}
+ */
+roomPro.getRoomNo = function () {
+    let sNo = this.sid.substr(this.sid.lastIndexOf('-') + 1);
+    let roomNo = sNo + uuid.generate(4, 10);
+    let room = roomManager.getRoomByRoomNo(roomNo);
+    if(room){
+        return this.getRoomNo();
+    }
+    return roomNo;
+};
+
+roomPro.getData = function(){
+    let data = {};
+    for(let key in this){
+        if(typeof this[key]  != 'function'){
+            data[key] = this[key];
+        }
+    }
+    return data;
+};
+
+
 
 roomPro.sendToRoomOwner = async function(){
     var connectors = global.app.getServersByType('connector');
@@ -308,20 +340,19 @@ roomPro.getRoomMessage = function(uid,isAll){
         currPlayUid : this.currPlayUid ,//现在出牌的 玩家id
         currUserInaugurated : this.currUserInaugurated , //现在玩家接到的牌
         previousOut : this.previousOut ,//上一次打出的牌
-        onlyOneBird : this.onlyOneBird ,//是否一字加码
-        isPeng : this.isPeng, // 是否允许碰
         userHu : this.userHu, //如果有玩家可以胡牌 此房间 就不能接受 出牌 碰 杠 等接口访问
         users : this.getRoomUserInfo(uid,isAll),
         dice : this.dice ,//骰子
         status : this.status,
         banker : this.banker,
         mahjongCount : this.mahjong.getPaiCount(),
-        userPeng : this.userPeng,
-        is7dui : this.is7dui,
         cannelDissove : this.cannelDissove,
         agreeDissolve : this.agreeDissolve,
         dissUid : this.dissUid,
-        dissCreateTime : this.dissCreateTime
+        dissCreateTime : this.dissCreateTime,
+        roomType : this.roomType,
+        payType : this.payType,
+        huCount : this.huCount
     };
     return obj;
 };
