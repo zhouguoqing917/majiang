@@ -47,6 +47,10 @@ let Room = function (app) {
     this.dissCreateTime ;
     this.isLice = false;
     this.gameRecord ;
+    this.maxHuCount;//最大胡牌翻数
+    this.payType ;//房卡支付类型 1,房主 2,AA
+    this.roomType ;//1,不是代开 2, 代开
+    this.huCount;//需要多少番起胡
 };
 roomPro = Room.prototype;
 
@@ -57,10 +61,10 @@ roomPro.createRoom = async function (session, roomData) {
     //判断房卡数量是否可以扣除，如果可以，直接扣除
     const gameuser = await gameUserModel.findOne({_id: uid});
     let useCardNumber = roomData.roundCount === 8 ? 4 : 8;
-    this.payType = roomData.payType || 1;//1,房主 2,AA
-    this.roomType = roomData.roomType || 1; //1,不是代开 2, 代开
-    this.huCount = roomData.huCount || 0;//需要多少番起胡
-
+    this.payType = roomData.payType || 1;
+    this.roomType = roomData.roomType || 1;
+    this.huCount = roomData.huCount || 0;
+    this.maxHuCount = roomData.maxHuCount || 300;
     if(this.payType == 2){
         useCardNumber = useCardNumber / 4 ;
     }
@@ -352,7 +356,8 @@ roomPro.getRoomMessage = function(uid,isAll){
         dissCreateTime : this.dissCreateTime,
         roomType : this.roomType,
         payType : this.payType,
-        huCount : this.huCount
+        huCount : this.huCount,
+        maxHuCount : this.maxHuCount
     };
     return obj;
 };
