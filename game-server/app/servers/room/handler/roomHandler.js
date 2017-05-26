@@ -274,7 +274,7 @@ handler.userReady = async function(msg, session, next){
             return next(null, {code: 400, msg: '不在此房间!'});
         }
         room.userReady(uid);
-        next(null, {code: 200, msg: '进入房间', data: {}});
+        next(null, {code: 200, msg: '', data: {}});
     } catch (ex) {
         next(null, {code: 500, msg: ex.message});
     }

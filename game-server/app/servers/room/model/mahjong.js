@@ -17,10 +17,17 @@ Mahjong.prototype.createMahjong = function(){
             mahjong.push(i + 20);
         }
     }
-    //99 为癞子
     for(let i = 0 ; i < 4 ; i ++){
-        mahjong.push(99);
+        mahjong.push(31);//东
+        mahjong.push(32);//南
+        mahjong.push(33);//西
+        mahjong.push(34);//北
+        mahjong.push(35);//白板
+
+        mahjong.push(41);//发财
+        mahjong.push(42);//红中
     }
+
     this.mahjong = mahjong;
 };
 
