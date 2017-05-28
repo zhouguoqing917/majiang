@@ -117,7 +117,7 @@ roomPro.createRoom = async function (session, roomData) {
     //游戏记录
     this.gameRecord = new GameRecord(roomNo);
     if(this.roomType != 2){
-        this.entryRoom(roomNo,session);
+        return this.entryRoom(roomNo,session);
     }else{
         return {roomNo};
     }
