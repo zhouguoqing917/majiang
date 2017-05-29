@@ -110,7 +110,7 @@ roomPro.createRoom = async function (session, roomData) {
     this.roomId = room._id;
     this.roundCount = roomData.roundCount;
     // this.roundCount = 2;
-    this.check = new Check();
+
     //初始化麻将
     this.mahjong = new Mahjong();
 
@@ -134,7 +134,6 @@ roomPro.entryRoom = async function(roomNo,session){
     let uid = session.uid;
     let room = roomManager.getRoomByRoomNo(roomNo);
     const gameuser = await gameUserModel.findOne({_id: uid});
-
     //进入AA房间需要判断房卡
     let useCardNumber = this.roundCount === 8 ? 4 : 8;
     useCardNumber = useCardNumber / 4;
@@ -182,7 +181,6 @@ roomPro.entryRoom = async function(roomNo,session){
 
     this.roomChannel.addUserToChannel(user);
 
-    user.status = 1;
     if(this.status  >= 2 ){
         user.status = 1;
     }
@@ -1132,6 +1130,7 @@ roomPro.userReady = function(uid){
         this.dice = this.mahjong.diceRoller();
         this.changeUserStatus(2);
         this.deductRoomCard();//扣除房卡
+        this.check = new Check(this.laizi);
         this.licensing();
         this.confirmLaizi();
         this.roomChannel.sendMsgToRoom('onGameStart',{code : 200});

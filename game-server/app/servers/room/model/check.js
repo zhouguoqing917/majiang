@@ -2,10 +2,8 @@
  * Created by Mrli on 17/5/8.
  */
 
-let Check = function(is7dui){
-    this.laiziRecord = [];
-    this.laiziCount = 0;
-    this.is7dui = is7dui || false;
+let Check = function(laizi){
+    this.laizi = 0;
 };
 //console.log = function(){}
 var max = 4;
@@ -15,9 +13,9 @@ let pro = Check.prototype ;
  * @param user
  * @returns {boolean}
  */
-
 pro.checkHu = function(user,pai){
     let mahjongs = user.mahjong;
+
     if(pai){
         mahjongs = mahjongs.concat([pai]);
     }
@@ -28,7 +26,6 @@ pro.checkHu = function(user,pai){
 
     let laiziCount = getLaiziCount(mahjongs);
     let allPai = transform(mahjongs);
-
 
     //check4个红中
     let count = 0;
@@ -96,12 +93,148 @@ pro.checkHu = function(user,pai){
     return result;
 };
 
-pro.checkHongZhong = function(user,pai){
-    if(user.mahjong.indexOf(99) == -1 && pai != 99){
-        return true
+/**
+ * 判断是否开口
+ * @param user
+ * @returns {boolean}
+ */
+pro.checkIsKaikou = function(user){
+    if(!user.chi.length){
+        return false;
     }
-    return false;
+
+    if(!user.peng.length){
+        return false;
+    }
+    let count = 0;
+    for(let i = 0; i < user.gang.length; i++){
+        if(user.gang[i].type != 1){
+            count += 1;
+        }
+    }
+    if(!count){
+        return false;
+    }
+    return true;
 };
+
+pro.jianjianghu = function(user,pais){
+    if(user.chi.length){
+        return false;
+    }
+    for(let i = 0; i < pais.length ; i++){
+        for(let j = 0; j < pais[i].length; j++){
+            if(pais[i][j] != 1 || pais[i][j] != 4 || pais[i][j] != 7){
+                return false;
+            }
+
+            if(i == 3 && pais[i][j] > 0){
+                return false;
+            }
+        }
+    }
+
+    for(let i = 0; i < user.gang.length ; i ++){
+        if(user.gang[i].pai[0] >= 40 || user.gang[i].pai[0] % 10 != 1 || user.gang[i].pai[0] % 10  != 4 || user.gang[i].pai[0] % 10  != 7){
+            return false;
+        }
+    }
+
+    for(let i = 0; i < user.peng.length ; i ++){
+        if(user.gang[i].pai[0] >= 40 || user.peng[i].pai[0] % 10 != 1 || user.peng[i].pai[0] % 10  != 4 || user.peng[i].pai[0] % 10  != 7){
+            return false;
+        }
+    }
+    return 3;
+}
+
+pro.pengpenghu = function(user,pais,laiziCount){
+    if(user.chi.length){
+        return false;
+    }
+    pais = [].concat(pais);
+    for(let i = 0; i < pais.length ; i++){
+        for(let j = 0; j < pais[i].length; j++){
+            if(pais[i][j] > 3){
+                pais[i][j] -= 3;
+            }
+        }
+    }
+
+    return 4;
+}
+
+
+pro.qingyise = function(user,pais){
+    let type;
+    let temp = false;
+    for(let i = 0; i < pais.length ; i++){
+        for(let j = 0; j < pais[i].length; j++){
+            if(pais[i][j] > 0 && !temp){
+                temp = true;
+                type = i ;
+            }
+            if(temp && i != type){
+                return false;
+            }
+        }
+    }
+
+
+    for(let i = 0; i < user.gang.length ; i ++){
+        if(type == 0 && user.gang[i].pai[0] > 10){
+            return false;
+        }
+        if(type == 1 && user.gang[i].pai[0] < 10 && user.gang[i].pai[0] > 20){
+            return false;
+        }
+        if(type == 2 && user.gang[i].pai[0] < 20 && user.gang[i].pai[0] > 30){
+            return false;
+        }
+        if(type == 3 && user.gang[i].pai[0] < 30 ){
+            return false;
+        }
+    }
+
+    for(let i = 0; i < user.peng.length ; i ++){
+        if(type == 0 && user.peng[i].pai[0] > 10){
+            return false;
+        }
+        if(type == 1 && user.peng[i].pai[0] < 10 && user.peng[i].pai[0] > 20){
+            return false;
+        }
+        if(type == 2 && user.peng[i].pai[0] < 20 && user.peng[i].pai[0] > 30){
+            return false;
+        }
+        if(type == 3 && user.peng[i].pai[0] < 30 ){
+            return false;
+        }
+    }
+
+    for(let i = 0; i < user.chi.length ; i ++){
+        if(type == 0 && user.chi[i].pai[0] > 10){
+            return false;
+        }
+        if(type == 1 && user.chi[i].pai[0] < 10 && user.chi[i].pai[0] > 20){
+            return false;
+        }
+        if(type == 2 && user.chi[i].pai[0] < 20 && user.chi[i].pai[0] > 30){
+            return false;
+        }
+        if(type == 3 && user.chi[i].pai[0] < 30 ){
+            return false;
+        }
+    }
+
+    if(type < 3){
+        return 1
+    }else{
+        return 2;
+    }
+};
+
+
+
 
 /**
  * 检测杠牌

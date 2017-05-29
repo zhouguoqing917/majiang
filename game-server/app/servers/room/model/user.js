@@ -14,7 +14,8 @@ let User = function(session){
     this.score = 0;
     this.mahjong = [];
     this.peng = [];
-    this.gang = [];//外杠
+    this.gang = [];
+    this.chi = [];
     this.playOutMahjong = [];
     this.status = 0; //玩家准备状态 0 没有准备 1 已经准备  2,游戏中 3,离线
     this.isBanker = 0; //庄家: 0 不是 1 是
@@ -86,6 +87,21 @@ pro.addPengToUser = function(pai,uid){
         }
     }
     this.peng.push({
+        uid : uid,
+        pai : [pai,pai,pai]
+    });
+};
+
+pro.addChiToUser = function(pais,uid){
+    //let arr = [];
+    //let count = 0;
+    //for(let i = this.mahjong.length - 1; i >= 0 ; i--){
+    //    if(this.mahjong[i] == pai && count < 2){
+    //        count += 1;
+    //        this.mahjong.splice(i,1);
+    //    }
+    //}
+    this.chi.push({
         uid : uid,
         pai : [pai,pai,pai]
     });
