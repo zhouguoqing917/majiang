@@ -85,7 +85,7 @@ roomPro.createRoom = async function (session, roomData) {
 
     const roomObject = {
         createUserId:'',
-        roomType:'hsmj',
+        roomType:this.roomType,
         serverId:app.curServer.id,
         data:{},
         roomNo:0,
@@ -240,6 +240,7 @@ roomPro.deductRoomCard = async function(){
                 curNumber: -useCardNumber,
                 afterNumber: gameUser.roomCard,
                 description: `用户AA开房消耗`,
+                roomType : this.roomType,
                 userCount : 0
             });
         }
