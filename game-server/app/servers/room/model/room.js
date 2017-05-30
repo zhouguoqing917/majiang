@@ -61,7 +61,8 @@ roomPro.createRoom = async function (session, roomData) {
 
     //判断房卡数量是否可以扣除，如果可以，直接扣除
     const gameuser = await gameUserModel.findOne({_id: uid});
-    let useCardNumber = roomData.roundCount === 8 ? 4 : 8;
+    roomData.roomCount = roomData.roomCount || 8;
+    let useCardNumber = roomData.roomCount === 8 ? 4 : 8;
     this.roomType = roomData.roomType || 1;
     this.huCount = roomData.huCount || 0;
     this.maxHuCount = roomData.maxHuCount || 300;
@@ -74,7 +75,7 @@ roomPro.createRoom = async function (session, roomData) {
     if(this.roomType == 2){
         const rooms = await roomManager.getRoomsForDatabase(uid);
         let myRoomCount = rooms ? rooms.length : 0;
-        if(myRoomCount >= 3){ //最多创建10个房间
+        if(myRoomCount >= 3){ //创建房间上限
             throw '创建房间已经达到上限';
         }
         //代开模式马上扣卡
@@ -108,7 +109,7 @@ roomPro.createRoom = async function (session, roomData) {
     const room = await roomModel.create(roomObject);
     roomManager.addRoom(this);
     this.roomId = room._id;
-    this.roundCount = roomData.roundCount;
+    this.roundCount = roomData.roomCount;
     // this.roundCount = 2;
 
     //初始化麻将
@@ -303,8 +304,6 @@ roomPro.changeUserStatus = function(status ){
 roomPro.getRoomMessage = function(uid,isAll){
     let obj = {
         roomNo : this.roomNo ,
-        birdNum : this.birdNum ,
-        addBird : this.addBird ,
         roundCount : this.roundCount ,
         round : this.round , //现在第几局
         currPlayUid : this.currPlayUid ,//现在出牌的 玩家id

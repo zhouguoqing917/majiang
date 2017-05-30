@@ -11,11 +11,121 @@ let pro = Check.prototype ;
 /**
  * 检测胡牌
  * @param user
- * @returns {boolean}
+ * @returns Array 1,屁胡 2,碰碰胡 ,3全球人, 4 , 将将胡 ,5, 清一色 , 6 风一色
  */
 pro.checkHu = function(user,pai){
+    //是否开口
+    let isKaikou = this.checkIsKaikou(user);
+    if(!isKaikou){
+        return false;
+    }
+    let isHu = this.checkHasJiang(user,pai);
+    let laziCount = getLaiziCount(mahjongs);
+    let huType = [];
+    if(isHu){
+        //判断大胡
+        let dahuArr = this.checkDaHu(user,pai);
+        if(dahuArr && dahuArr.length){
+            huType = dahuArr.concat(huType);
+        }else if(laziCount == 1){
+            //屁胡
+            huType.push(1)
+        }
+    }
+    isHu = this.checkUnHasJiang(user,pai);
+    if(isHu){
+        let dahuArr = this.checkDaHu(user,pai);
+        if(dahuArr && dahuArr.length){
+            huType = dahuArr.concat(huType);
+        }
+    }
+    return huType;
+};
+
+pro.checkDaHu = function(user,pai){
     let mahjongs = user.mahjong;
 
+    if(pai){
+        mahjongs = mahjongs.concat([pai]);
+    }
+
+    let allPai = transform(mahjongs);
+    let huType = [];
+    let isHu = this.jianjianghu(user,allPai);
+    if(isHu){
+        huType.push(isHu);
+    }
+    isHu = this.qingyise(user,allPai);
+    if(isHu){
+        huType.push(isHu);
+    }
+
+    isHu = this.pengpenghu(user,allPai);
+    if(isHu){
+        huType.push(isHu);
+    }
+
+    isHu = this.quanqiuren(user);
+    if(isHu){
+        huType.push(isHu);
+    }
+    return huType;
+};
+
+pro.checkHasJiang = function(user,pai){
+    let mahjongs = user.mahjong;
+    if(pai){
+        mahjongs = mahjongs.concat([pai]);
+    }
+
+    if(mahjongs.length % 3 != 2){
+        return false;
+    }
+
+    let laiziCount = getLaiziCount(mahjongs);
+    let allPai = transform(mahjongs);
+    let doubleCount = getDoubleJiangPos(allPai);
+    let result = false;
+    if(doubleCount.length > 0 && !result){
+        let laiziCount = getLaiziCount(mahjongs);
+        for(let i = 0 ; i < doubleCount.length; i++){
+            max = 4;
+            let temp = cloneMahjong(allPai);
+            clearDouble(doubleCount[i],temp);
+            let needLaiziCount = clearAll(temp);
+            console.log(needLaiziCount,'======>>>>');
+            if(needLaiziCount == laiziCount){
+                result = true;
+            }
+        }
+    }
+
+    if(laiziCount > 0 ){
+        let may = getDoubleJiangAndLaiziCount(allPai);
+        laiziCount -= 1;
+        for(let i = 0 ; i < may.length; i ++){
+            //console.log(may[i],'=============================>>>>>>>>>>',allPai);
+            max = 4;
+            let temp = cloneMahjong(allPai);
+            temp[may[i][0]][may[i][1]] += 1;
+            clearDouble(may[i],temp);
+            //console.log(temp,'=====>>temp');
+            let needLaiziCount = clearAll(temp);
+            //console.log(max,'=====>>???',laiziCount);
+            if(needLaiziCount == laiziCount){
+                result = true;
+            }
+            if(result ){
+                break
+            }
+        }
+    }
+
+    return result;
+};
+
+pro.checkUnHasJiang = function(user,pai){
+    let mahjongs = user.mahjong;
     if(pai){
         mahjongs = mahjongs.concat([pai]);
     }
@@ -27,31 +137,23 @@ pro.checkHu = function(user,pai){
     let laiziCount = getLaiziCount(mahjongs);
     let allPai = transform(mahjongs);
 
-    //check4个红中
-    let count = 0;
-    for(var i = 0 ; i < mahjongs.length;i++){
-        if(mahjongs[i] == 99){
-            count += 1;
-        }
-    }
-
-    if(count >= 1 && mahjongs.length == 2){
-        return true;
-    }
-
-    if(count >= 4){
-        return true;
-    }
-
-    var have7dui = this.check7dui(allPai,laiziCount);
-    if(this.is7dui && have7dui){
-        return true;
-    }
-
     let doubleCount = getDoublePos(allPai);
     let threeCount = getThreePosArr(allPai);
     doubleCount = doubleCount.concat(threeCount);
     let result = false;
+
+    if(doubleCount.length > 0 && !result){
+        let laiziCount = getLaiziCount(mahjongs);
+        for(let i = 0 ; i < doubleCount.length; i++){
+            max = 4;
+            let temp = cloneMahjong(allPai);
+            clearDouble(doubleCount[i],temp);
+            let needLaiziCount = clearAll(temp);
+            if(needLaiziCount == laiziCount){
+                result = true;
+            }
+        }
+    }
 
     if(laiziCount > 0 ){
         let may = getDoubleAndLaiziCount(allPai);
@@ -74,22 +176,6 @@ pro.checkHu = function(user,pai){
         }
     }
 
-    if(doubleCount.length > 0 && !result){
-        let laiziCount = getLaiziCount(mahjongs);
-        for(let i = 0 ; i < doubleCount.length; i++){
-            max = 4;
-            //console.log(doubleCount[i],'=============================>>>>>>>>>>',allPai);
-            let temp = cloneMahjong(allPai);
-            clearDouble(doubleCount[i],temp);
-            //console.log(temp,'=====>>temp');
-            let needLaiziCount = clearAll(temp);
-            //console.log(max,'=====>>???',laiziCount);
-            if(needLaiziCount == laiziCount){
-                result = true;
-            }
-        }
-    }
-
     return result;
 };
 
@@ -100,11 +186,11 @@ pro.checkHu = function(user,pai){
  */
 pro.checkIsKaikou = function(user){
     if(!user.chi.length){
-        return false;
+        return true;
     }
 
-    if(!user.peng.length){
-        return false;
+    if(user.peng.length){
+        return true;
     }
     let count = 0;
     for(let i = 0; i < user.gang.length; i++){
@@ -112,10 +198,10 @@ pro.checkIsKaikou = function(user){
             count += 1;
         }
     }
-    if(!count){
-        return false;
+    if(count){
+        return true;
     }
-    return true;
+    return false;
 };
 
 pro.jianjianghu = function(user,pais){
@@ -145,23 +231,18 @@ pro.jianjianghu = function(user,pais){
             return false;
         }
     }
-    return 3;
+    return 4;
 }
 
 pro.pengpenghu = function(user,pais,laiziCount){
     if(user.chi.length){
         return false;
     }
-    pais = [].concat(pais);
-    for(let i = 0; i < pais.length ; i++){
-        for(let j = 0; j < pais[i].length; j++){
-            if(pais[i][j] > 3){
-                pais[i][j] -= 3;
-            }
-        }
+    let needCount = getFengNeedCount(pais);
+    if(needCount != laiziCount){
+        return false;
     }
-
-    return 4;
+    return 2;
 }
 
 
@@ -227,12 +308,36 @@ pro.qingyise = function(user,pais){
     }
 
     if(type < 3){
-        return 1
+        return 5
     }else{
-        return 2;
+        return 6;
     }
 };
 
+pro.quanqiuren = function(user,pai){
+    let mahjong = user.mahjong;
+    let allMahjong = mahjong.concat(pai);
+    if(allMahjong.length != 2){
+        return false;
+    }
+    let laiziCount = getLaiziCount(allMahjong);
+    if(laiziCount == 2){
+        return 5;
+    }
+
+    for(let i = 0 ; i < allMahjong.length ; i ++){
+        if(allMahjong[i] > 40){
+            return false;
+        }
+        if(allMahjong[i] == this.laizi){
+            continue;
+        }
+        if(allMahjong[i] % 10 != 1 || allMahjong[i] % 10 != 4 || allMahjong[i] % 10 != 7){
+            return false;
+        }
+    }
+    return 3;
+}
 
 
 
@@ -257,24 +362,6 @@ pro.checkWaiGang = function(user,pai){
     return false;
 };
 
-pro.check7dui = function(allPai,laiziCount){
-    let duizi = 0;
-    for(let i = 0 ; i < allPai.length; i ++){
-        for(let j = 0; j < allPai[i].length; j ++){
-            if(allPai[i][j] == 4){
-                duizi += 2;
-            }else if(allPai[i][j] >= 2){
-                duizi += 1;
-            }
-        }
-    }
-
-    let hasLaizi = 7 - duizi;
-    if(hasLaizi <= laiziCount){
-        return true;
-    }
-    return false;
-};
 
 /**
  * 检测杠牌
@@ -369,16 +456,33 @@ let getDoublePos = function(arr){
     }
     return doubArr;
 };
+let getDoubleJiangPos = function(arr){
+    console.log(arr)
+    let doubArr = [];
+    for(let i = 0 ; i < arr.length ; i++){
+        if(i > 2){
+            break;
+        }
+        for(let j = 0 ; j < arr[i].length ; j ++ ){
+            if(arr[i][j] >= 2 && ( j == 1 || j == 4 || j == 7)){
+                let temp = [i, j];
+                doubArr.push(temp);
+            }
+        }
+    }
+    return doubArr;
+};
 
 let transform = function(pai){
     let arr = [
         [0,0,0,0,0,0,0,0,0],//万
         [0,0,0,0,0,0,0,0,0],//硕
-        [0,0,0,0,0,0,0,0,0]//筒
+        [0,0,0,0,0,0,0,0,0],//筒
+        [0,0,0,0,0,0,0,0,0] //字
     ];
 
     for(let i = 0; i < pai.length; i++){
-        if(pai[i] != 99){
+        if(pai[i] != this.laizi){
             let type = getType(pai[i]);
             let num = pai[i] % 10 - 1;
             arr[type][num] += 1;
@@ -399,6 +503,22 @@ let getDoubleAndLaiziCount = function(allPai){
     return arr;
 };
 
+let getDoubleJiangAndLaiziCount = function(allPai){
+    let arr = [];
+    for(let i = 0 ; i < allPai.length;i++){
+        if(i > 2){
+            break;
+        }
+        for(let j = 0 ; j < allPai[i].length;j++){
+            if(allPai[i][j] != 0 && (j == 1 || j == 4 || j == 7)){
+                arr.push([i,j]);
+            }
+        }
+    }
+    return arr;
+};
+
+
 
 let getType = function(num){
     if(num > 0 && num < 10){
@@ -412,12 +532,15 @@ let getType = function(num){
     if(num > 20 && num < 30){
         return 2;
     }
+    if(num > 30 && num < 40){
+        return 3;
+    }
 };
 
 let getLaiziCount = function(mahjongs){
     let laiziCount = 0;
     for(let i = 0 ; i < mahjongs.length; i++){
-        if(mahjongs[i] == 99){
+        if(mahjongs[i] == this.laizi){
             laiziCount += 1;
         }
     }
@@ -457,10 +580,10 @@ let clearThree = function(pais,index){
         }
     }
 };
-let clear = function(pais,index){
-    getNeedCount(pais);
-    return max;
-};
+//let clear = function(pais,index){
+//    getNeedCount(pais);
+//    return max;
+//};
 
 
 
@@ -485,7 +608,11 @@ let clearAll = function(allPai){
     var allNeed = 0;
     for(var i = 0; i < allPai.length;i++){
         max = 4;
-        clear(allPai[i],i);
+        if(i < 3){
+            getNeedCount(allPai[i]);
+        }else{
+            getFengNeedCount(allPai[i])
+        }
         allNeed += max;
     }
     return allNeed;
@@ -518,7 +645,6 @@ let getNeedCount = function(pais,needCount){
                     }
                 }
             }else if(pais[i] == 2 || (pais[i + 1] == 0 && pais[i + 1] != undefined  && pais[i + 2] > 0 && pais[i + 2] != undefined) || (pais[i + 1] > 0 && pais[i + 1] != undefined)){
-                //console.log(2222,pais);
                 needCount += 1;
                 if(pais[i] == 2){
                     clone = [].concat(pais);
@@ -594,6 +720,31 @@ let getNeedCount = function(pais,needCount){
         }
     }
 
+    return needCount;
+};
+
+let getFengNeedCount = function(pais,needCount){
+    needCount = needCount || 0;
+    var arr = [];
+    var clone ;
+    for(var i = 0; i < pais.length; i ++){
+        if(pais[i] > 0){
+            //一张单牌需要两个癞子
+            if(pais[i] == 1){
+                pais[i] -= 1;
+                needCount += 2;
+            }else if(pais[i] == 2){
+                pais[i] -= 2;
+                needCount += 1;
+            }else if(pais[i] == 3){
+                pais[i] -= 3;
+            }else if(pais[i] == 4){
+                pais[i] -= 3;
+                needCount += 2;
+            }
+        }
+    }
+    max += needCount;
     return needCount;
 };
 
@@ -736,16 +887,19 @@ var test = function(){
     }
 };
 
-//var member = {
-//    mahjong : [99,99]
-//}
-//////console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
-//var start = Date.now();
-////console.log(checks.canHu(member));
-//console.log(checks.checkHu(member));
-//console.log(Date.now() - start);
+var member = {
+    mahjong : [31,31,31,2,2,12,13,14,15,16,17],
+    chi : [],
+    peng : [5,5,5],
+    gang : []
+}
+////console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
+var start = Date.now();
+//console.log(checks.canHu(member));
+console.log(checks.checkHu(member));
+console.log(Date.now() - start);
 //clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
-//console.log(getNeedCount([ 0, 0, 0, 0, 0, 0, 0, 0, 1 ] ,0))
+//console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))
 //console.log(max);
 //test();
 
