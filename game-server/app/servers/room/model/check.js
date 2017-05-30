@@ -613,6 +613,7 @@ let clearAll = function(allPai){
         }else{
             getFengNeedCount(allPai[i])
         }
+        console.log(max,'=======>>>max',i);
         allNeed += max;
     }
     return allNeed;
@@ -744,7 +745,7 @@ let getFengNeedCount = function(pais,needCount){
             }
         }
     }
-    max += needCount;
+    max = needCount;
     return needCount;
 };
 
