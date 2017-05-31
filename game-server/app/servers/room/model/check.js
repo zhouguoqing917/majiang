@@ -65,12 +65,12 @@ pro.checkHu = function(user,pai){
 };
 pro.hasHongzhong = function(mahjongs){
     for(let i = 0; i < mahjongs.length; i++){
-        if(mahjongs[i] == 42){
+        if(mahjongs[i] == 42 || mahjongs[i] == 41){
             return true;
         }
     }
     return false;
-}
+};
 
 pro.checkDaHu = function(user,pai,laiziCount){
     let mahjongs = user.mahjong;
@@ -376,7 +376,7 @@ pro.qingyise = function(user,pai,pais){
     if(type < 3){
         return 5
     }
-    return fale;
+    return false;
 };
 
 pro.fengyise = function(user,pai){
