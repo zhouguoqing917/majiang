@@ -3,7 +3,7 @@
  * 玩家用户类  一些数据格式
  */
 
-let User = function(session){
+let User = function(session,roomCard){
     this.uid = session.uid;
     this.sid = session.get('sid');//fontend server id
     let userInfo = session.get('userinfo');
@@ -23,6 +23,7 @@ let User = function(session){
     this.id = userInfo.id;
     this.latitude = userInfo.latitude;
     this.longitude = userInfo.longitude;
+    this.roomCard = roomCard;
 };
 
 pro = User.prototype;

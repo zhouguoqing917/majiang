@@ -14,3 +14,27 @@
 [2017-05-28 08:14:45.450] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8108
 [2017-05-28 08:14:45.474] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8108
 [2017-05-28 08:14:45.476] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8108
+[2017-05-31 11:34:23.624] [INFO] pomelo-admin - [32m[MqttServer] [39m[MqttServer] listen on 8108
+[2017-05-31 11:34:23.698] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "master", "127.0.0.1", 8108
+[2017-05-31 11:34:26.077] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "gate", "127.0.0.1", 8108
+[2017-05-31 11:34:26.310] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "room", "127.0.0.1", 8108
+[2017-05-31 11:34:26.364] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "room", "127.0.0.1", 8108
+[2017-05-31 11:34:26.341] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8108
+[2017-05-31 11:34:26.353] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8108
+[2017-05-31 11:34:26.456] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8108
+[2017-05-31 20:18:58.173] [INFO] pomelo-admin - [32m[MqttServer] [39m[MqttServer] listen on 8108
+[2017-05-31 20:18:58.275] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "master", "127.0.0.1", 8108
+[2017-05-31 20:19:01.275] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "gate", "127.0.0.1", 8108
+[2017-05-31 20:19:01.387] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "room", "127.0.0.1", 8108
+[2017-05-31 20:19:01.408] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "room", "127.0.0.1", 8108
+[2017-05-31 20:19:01.480] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8108
+[2017-05-31 20:19:01.461] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8108
+[2017-05-31 20:19:01.480] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8108
+[2017-05-31 20:28:26.358] [INFO] pomelo-admin - [32m[MqttServer] [39m[MqttServer] listen on 8108
+[2017-05-31 20:28:26.562] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "master", "127.0.0.1", 8108
+[2017-05-31 20:28:28.778] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "room", "127.0.0.1", 8108
+[2017-05-31 20:28:28.736] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "gate", "127.0.0.1", 8108
+[2017-05-31 20:28:28.819] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "room", "127.0.0.1", 8108
+[2017-05-31 20:28:28.900] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8108
+[2017-05-31 20:28:28.939] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8108
+[2017-05-31 20:28:28.993] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8108

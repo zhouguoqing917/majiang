@@ -169,6 +169,9 @@ RoomManager.prototype.clearRoom = function(){
 RoomManager.prototype.returnRoomCard = async function(uid,roomId){
     let user = await gameUserModel.findOne({_id : uid});
     let roomCardRecord = await roomCardRecordModel.findOne({roomId : roomId});
+    if(!roomCardRecord){
+        return;
+    }
     let curNumber = roomCardRecord.curNumber;
     let preRoomCard = user.roomCard;
     if(curNumber < 0){

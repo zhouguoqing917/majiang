@@ -171,7 +171,7 @@ roomPro.entryRoom = async function(roomNo,session){
     let user;
     let route = 'onUserEntry';
     if(!isInRoom){
-        user = new User(session);
+        user = new User(session,gameuser.roomCard);
         this.users.push(user);
         this.sendToRoomOwner();
     }else{
@@ -179,7 +179,6 @@ roomPro.entryRoom = async function(roomNo,session){
         user = this.getUserByUid(uid);
         user.sid = session.get('sid');
     }
-
     this.roomChannel.addUserToChannel(user);
 
     if(this.status  >= 2 ){
@@ -324,7 +323,8 @@ roomPro.getRoomMessage = function(uid,isAll){
         huCount : this.huCount,
         maxHuCount : this.maxHuCount,
         laizi : this.laizi,
-        laizi : this.laizipi
+        laizi : this.laizipi,
+        ownerUid : this.ownerUid
     };
     return obj;
 };

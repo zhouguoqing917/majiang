@@ -22,7 +22,7 @@
           var pomelo = window.pomelo;
 //          var host = "47.94.45.41";
           var host = "127.0.0.1";
-          var port = "6100";
+          var port = "8100";
           pomelo.init({
               host: host,
               port: port,
@@ -32,12 +32,12 @@
           });
       };
 
-//      function createRoom(){
-//          pomelo.request("room.roomHandler.createRoom", {}, function(data) {
-//              console.log(`${data.msg}:${JSON.stringify(data.data)}`);
-//              roomNo = data.data.roomNo;
-//          });
-//      }
+      function createRoom(){
+          pomelo.request("room.roomHandler.createRoom", {}, function(data) {
+              console.log(`${data.msg}:${JSON.stringify(data.data)}`);
+              roomNo = data.data.roomNo;
+          });
+      }
 //
 //      function getUserRoomList(){
 //          pomelo.request("room.roomHandler.getUserRoomList", {}, function(data) {

@@ -62,7 +62,7 @@ app.configure('production|development|stage', 'connector', function(){
 
     app.set('connectorConfig', {
         connector : pomelo.connectors.hybridconnector,
-        heartbeat : 6,
+        heartbeat : 3,
         useDict : true,
         useProtobuf : true
     });
