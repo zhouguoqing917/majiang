@@ -93,7 +93,7 @@ RoomManager.prototype.getRoomsForDatabase = async function(uid){
  * 30秒 清楚过期房间
  */
 RoomManager.prototype.clearRoom = function(){
-    const outTime = 10 * 60 * 1000;
+    const outTime = 30 * 60 * 1000;
     const outTime2 = 40 * 60 * 1000;
     let self = this;
     setInterval(async function(){

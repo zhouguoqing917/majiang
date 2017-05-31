@@ -609,6 +609,7 @@ roomPro.isLicensing = function(uid,pai){
             user.isAction = true;
         }
 
+
         let keys = Object.keys(this.previousOut);
         let preUid =  keys[0];
         //上个玩家的牌是否是杠
