@@ -848,11 +848,11 @@ roomPro.handlerPeng = function(uid){
     let preUser = this.getUserByUid(previousUid);
     preUser.clearOutMahjongByNum(mahjong);
     this.currPlayUid = uid;
-    user.addPengToUser(mahjong,previousUid);
+    let mahjongs = user.addPengToUser(mahjong,previousUid);
     this.gameRecord.addRecord(this.round,4,user,mahjong);
 
     //pengUid 碰牌玩家  bePengUid被碰牌玩家
-    this.roomChannel.sendMsgToRoom('onPeng',{code : 200 ,data : {pengUid : uid , bePengUid : previousUid,mahjong : mahjong}})
+    this.roomChannel.sendMsgToRoom('onPeng',{code : 200 ,data : {pengUid : uid , bePengUid : previousUid,mahjongs : mahjongs}})
 };
 
 roomPro.clearOptions = function(){
