@@ -1024,10 +1024,10 @@ var member = {
     }]
 }
 ////console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
-var start = Date.now();
-//console.log(checks.canHu(member));
-console.log(checks.checkHu(member));
-console.log(Date.now() - start);
+//var start = Date.now();
+////console.log(checks.canHu(member));
+//console.log(checks.checkHu(member));
+//console.log(Date.now() - start);
 //clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 //console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))
 //console.log(max);

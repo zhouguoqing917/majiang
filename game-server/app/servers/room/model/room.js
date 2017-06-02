@@ -1354,7 +1354,6 @@ roomPro.handlerChi = function(uid,mahjongs){
         throw '自己不能吃自己的牌';
     }
     let mahjong = obj[previousUid];
-    let user = this.getUserByUid(uid);
 
     let temp = false;
     //判断能不能吃
