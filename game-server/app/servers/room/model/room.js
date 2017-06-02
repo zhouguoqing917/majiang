@@ -562,9 +562,9 @@ roomPro.playMahjong = async function(uid,pai){
         throw '不是可以出牌的玩家';
     }
 
-    if(this.userHu){
-        throw '有可以胡的玩家不能出牌';
-    }
+    //if(this.userHu){
+    //    throw '有可以胡的玩家不能出牌';
+    //}
 
     let user = this.getUserByUid(uid);
     //判断玩家是否拥有此张牌
@@ -590,65 +590,49 @@ roomPro.playMahjong = async function(uid,pai){
 
 roomPro.isLicensing = function(uid,pai){
     let isCanLicensing = true;
-    let isPeng = this.isPeng;
-
-    //判断出的这张牌 其它玩家是否可以碰 是否可以杠
+    //判断出的这张牌 其它玩家是否 吃 碰 杠 胡
+    let nextUser = this.getNextUserByUid(uid);
     for(let i = 0 ; i < this.users.length; i++){
         let user = this.users[i];
         if(uid == user.uid){
             continue;
         }
 
+        if(this.check.checkHu(user,pai) ){
+            isCanLicensing = false;
+            user.isAction = user.isAction || 8;
+        }
+
         if(this.check.checkWaiGang(user,pai)){
-            user.isAction = true;
+            user.isAction = user.isAction || 4;
             isCanLicensing = false;
         }
 
-        if(this.check.checkPeng(user,pai) && isPeng){
+        if(this.check.checkPeng(user,pai)){
             isCanLicensing = false;
-            user.isAction = true;
+            user.isAction = user.isAction || 2;
         }
 
-
-        let keys = Object.keys(this.previousOut);
-        let preUid =  keys[0];
-        //上个玩家的牌是否是杠
-        let preUser = this.getUserByUid(preUid);
-        let preIsGang = false;
-        for(let i = 0 ; i < preUser.gang.length; i ++){
-            if(preUser.gang[i].pai[0] == pai){
-                preIsGang = true;
-            }
-        }
-
-        if(preIsGang && this.check.checkHu(user,pai)){
+        if( nextUser.uid == this.users[i].uid && this.check.checkChi(user,pai).length  > 0 ){
             isCanLicensing = false;
-            user.isAction = true;
-            this.userHu = {};
-            this.userHu[user.uid] = pai;
+            user.isAction = user.isAction || 1;
         }
     }
 
-    if(this.userHu){
+    if(!isCanLicensing){
         return ;
     }
+
     if(this.isRoundOver()){
-
         let keys = Object.keys(this.previousOut);
-        // this.roundInit();
-
         let preUid =  keys[0];
         this.banker = preUid;
         this.getUserByUid(preUid).isBanker = 1;
         return this.handlerHu(uid,true);
-        // return this.roomChannel.sendMsgToRoom('onFlow',{code : 200});
     }
+
     //是否可以发牌给下一个玩家
     if(isCanLicensing && !this.isRoundOver()){
-        let outUid = Object.keys(this.previousOut)[0];
-        let user = this.getUserByUid(outUid);
-        let nextUser = this.getNextUserByUid(outUid);
-
         this.currPlayUid = nextUser.uid;
         let uArr = this.getExceptUids(nextUser.uid);
         let mahjong ;
@@ -777,6 +761,14 @@ roomPro.handlerGang = function(uid,pai){
     if(!Object || !Object.keys(gangObj).length){
         throw '不能杠或者参数错误';
     }
+
+    for(let i = 0 ; i < this.users[i].length; i++){
+        if(this.users[i].uid != uid && (this.users[i].isAction & 8) == 8){
+            return;
+        }
+    }
+    this.clearOptions();
+
     user.addGangToUser(mahjong,beUid,gangObj.type);
     let  isCanLicensing = false;
     if(gangObj.type == 2){
@@ -823,13 +815,8 @@ roomPro.handlerGang = function(uid,pai){
 /**
  * 处理碰牌
  * @uid userId
- * 分为内杠和外杠
  */
 roomPro.handlerPeng = function(uid){
-    let isPeng = this.isPeng;
-    if(!isPeng){
-        return '此局不能碰'
-    }
     let obj = this.previousOut;
     if(!obj){
         return '不能碰';
@@ -841,23 +828,39 @@ roomPro.handlerPeng = function(uid){
     if(previousUid == uid){
         throw '自己不能碰自己的牌';
     }
+
     let mahjong = obj[previousUid];
     let user = this.getUserByUid(uid);
     let havePeng = this.check.checkPeng(user,mahjong);
     if(!havePeng){
         throw '非法碰牌 uid : ' + uid + ' pai : ' + mahjong;
     }
+
+    //判断有没有胡的 玩家为操作
+    for(let i = 0 ; i < this.users[i].length; i++){
+        if(this.users[i].uid != uid && (this.users[i].isAction & 8) == 8){
+            return;
+        }
+    }
+    this.clearOptions();
     this.userPeng = true;
+
     let preUser = this.getUserByUid(previousUid);
     preUser.clearOutMahjongByNum(mahjong);
     this.currPlayUid = uid;
     user.addPengToUser(mahjong,previousUid);
     this.gameRecord.addRecord(this.round,4,user,mahjong);
+
     //pengUid 碰牌玩家  bePengUid被碰牌玩家
     this.roomChannel.sendMsgToRoom('onPeng',{code : 200 ,data : {pengUid : uid , bePengUid : previousUid,mahjong : mahjong}})
 };
 
-
+roomPro.clearOptions = function(){
+    for(let i = 0 ; i < this.users.length ; i++){
+        this.users[i].isAction = 0;
+        this.users[i].options = 0;
+    }
+}
 /**
  * 胡牌
  * @param uid
@@ -1324,6 +1327,62 @@ roomPro.forceDissolveRoom = async function(){
     }else{
         await roomModel.update({_id : this.roomId},{status : 5});
     }
+};
+
+/**
+ * 吃牌
+ * @type {Function}
+ */
+roomPro.handlerChi = function(uid,mahjongs){
+    let user = this.getUserByUid(uid);
+    //判断玩家是否拥有此张牌
+    for(let i = 0; i <  mahjongs.length; i++){
+        if(user.mahjong.indexOf(mahjongs[i]) == -1){
+            throw '玩家没有此张牌';
+        }
+    }
+
+    let obj = this.previousOut;
+    if(!obj){
+        return '不能吃';
+    }
+    let keys = Object.keys(obj);
+    let previousUid = keys[0];
+
+    //如果自己是自己 则不能吃
+    if(previousUid == uid){
+        throw '自己不能吃自己的牌';
+    }
+    let mahjong = obj[previousUid];
+    let user = this.getUserByUid(uid);
+
+    let temp = false;
+    //判断能不能吃
+    if(mahjongs.indexOf(mahjong + 1) != -1 && mahjongs.indexOf(mahjong + 2) != -1 ){
+        temp = true;
+    }else if(mahjongs.indexOf(mahjong + 1) != -1 && mahjongs.indexOf(mahjong - 1) != -1 ){
+        temp = true;
+    }else if(mahjongs.indexOf(mahjong - 1) != -1 && mahjongs.indexOf(mahjong - 2) != -1 ){
+        temp = true;
+    }
+    if(!temp){
+        throw '非法持牌';
+    }
+
+    //判断其它玩家
+    for(let i = 0 ; i < this.users.length; i ++){
+        if(this.users[i].uid != uid && (this.users[i].isAction != 0 || this.users[i].options != 0 )){
+            return ;
+        }
+    }
+    this.clearOptions();
+    let preUser = this.getUserByUid(previousUid);
+    preUser.clearOutMahjongByNum(mahjong);
+    this.currPlayUid = uid;
+    mahjongs = user.addChiToUser(previousUid,mahjongs,mahjong);
+    this.gameRecord.addRecord(this.round,8,user,mahjong);
+    //pengUid 碰牌玩家  bePengUid被碰牌玩家
+    this.roomChannel.sendMsgToRoom('onChi',{code : 200 ,data : {chiUid : uid , beChiUid : previousUid,mahjong : mahjongs}})
 };
 
 module.exports = Room;

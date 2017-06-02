@@ -525,6 +525,29 @@ pro.checkPeng = function(user,pai){
     return false;
 };
 
+pro.checkChi = function(user,pai){
+    let mahjongs = user.mahjong;
+    let arr = [];
+    if(mahjongs.index(pai + 1) != -1 &&  mahjongs.index(pai + 2) != -1 &&  pai < 30){
+        arr.push(pai);
+        arr.push(pai + 1);
+        arr.push(pai + 2);
+    }
+
+    if(mahjongs.index(pai + 1) != -1 &&  mahjongs.index(pai - 1) != -1 &&  pai < 30){
+        arr.push(pai - 1);
+        arr.push(pai);
+        arr.push(pai + 1);
+    }
+
+    if(mahjongs.index(pai - 1) != -1 &&  mahjongs.index(pai - 2) != -1 &&  pai < 30){
+        arr.push(pai - 1);
+        arr.push(pai - 2);
+        arr.push(pai);
+    }
+    return arr;
+}
+
 let clearDouble = function(jiangPos , allPai){
     allPai[jiangPos[0]][jiangPos[1]] -= 2;
     if(allPai[jiangPos[0]][jiangPos[1]] < 0){

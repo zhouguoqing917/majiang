@@ -19,11 +19,12 @@ let User = function(session,roomCard){
     this.playOutMahjong = [];
     this.status = 0; //玩家准备状态 0 没有准备 1 已经准备  2,游戏中 3,离线
     this.isBanker = 0; //庄家: 0 不是 1 是
-    this.isAction = false;//用于判断玩家是否可以进行操作
+    this.isAction = 0;//玩家权限操作 吃 1 碰 2 杠 4 胡 8
     this.id = userInfo.id;
     this.latitude = userInfo.latitude;
     this.longitude = userInfo.longitude;
     this.roomCard = roomCard;
+    this.options = 0;
 };
 
 pro = User.prototype;
@@ -91,21 +92,28 @@ pro.addPengToUser = function(pai,uid){
         uid : uid,
         pai : [pai,pai,pai]
     });
+    return [pai,pai,pai];
 };
 
-pro.addChiToUser = function(pais,uid){
-    //let arr = [];
-    //let count = 0;
-    //for(let i = this.mahjong.length - 1; i >= 0 ; i--){
-    //    if(this.mahjong[i] == pai && count < 2){
-    //        count += 1;
-    //        this.mahjong.splice(i,1);
-    //    }
-    //}
+pro.addChiToUser = function(uid,pais,pai){
+    let arr = [];
+    let temp1 = false;
+    let temp2 = false;
+    for(let i = this.mahjong.length - 1; i >= 0 ; i--){
+        if(this.mahjong[i] == pais[0] && !temp1){
+            this.mahjong.splice(i,1);
+        }
+
+        if(this.mahjong[i] == pais[1] && !temp2){
+            this.mahjong.splice(i,1);
+        }
+    }
+    pais.splice(1,0,pai);
     this.chi.push({
         uid : uid,
-        pai : [pai,pai,pai]
+        pai : pais
     });
+    return pais;
 };
 
 pro.clearOutMahjongByNum = function(pai){

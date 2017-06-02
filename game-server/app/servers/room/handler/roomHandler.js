@@ -115,7 +115,29 @@ handler.playMahjong = async function(msg, session, next){
     }
     try {
         let data = await room.playMahjong(uid,msg.mahjong);
-        next(null, {code: 200, msg: '出牌',data : data});
+        next(null, {code: 200, msg: '出牌'});
+    } catch (ex) {
+        console.error(ex,'=====>>>');
+        next(null, {code: 500, msg: ex});
+    }
+};
+
+handler.handlerChi = async function(msg, session, next){
+    let roomNo = msg.roomNo;
+    if (!roomNo || !msg.mahjongs || !msg.mahjongs.length) {
+        return next(null, {code: 500, msg: '参数错误!'});
+    }
+    let room = roomManager.getRoomByRoomNo(roomNo);
+    if(!room){
+        return next(null, {code: 500, msg: '房间不存在!'});
+    }
+    let uid = session.uid;
+    if(!room.getUserByUid(uid)){
+        return next(null, {code: 400, msg: '不在此房间!'});
+    }
+    try {
+        let data = await room.handlerChi(uid,msg.mahjongs);
+        next(null, {code: 200, msg: '吃'});
     } catch (ex) {
         console.error(ex,'=====>>>');
         next(null, {code: 500, msg: ex});

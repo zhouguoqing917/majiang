@@ -22,6 +22,7 @@ Record.prototype.addRecord = function(round,type,user,mahjong){
         mahjongs : user.mahjong.concat([]),
         peng : user.peng.concat([]),
         gang : user.gang.concat([]),
+        chi : user.chi.concat([]),
         uid : user.uid
     };
 
@@ -57,6 +58,11 @@ Record.prototype.addRecord = function(round,type,user,mahjong){
     if(type == 7){
         obj.mahjong = mahjong;
         obj.des = '过';
+    }
+
+    if(type == 8){
+        obj.mahjong = mahjong;
+        obj.des = '吃';
     }
     this[round].actions.push(obj);
 };
