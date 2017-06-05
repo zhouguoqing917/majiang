@@ -181,12 +181,10 @@ roomPro.entryRoom = async function(roomNo,session){
     }
     this.roomChannel.addUserToChannel(user);
 
-    if(this.status  >= 2 ){
-        user.status = 1;
-    }
-
     if(user.mahjong.length || this.isLice){
         user.status = 2;
+    }else{
+        user.status = 1;
     }
 
     //将进入房间的玩家push 给房间内的人
