@@ -861,6 +861,7 @@ roomPro.clearOptions = function(){
         this.users[i].options = 0;
     }
 }
+
 /**
  * 胡牌
  * @param uid
@@ -1137,7 +1138,13 @@ roomPro.userReady = function(uid){
         this.check = new Check(this.laizi);
         this.licensing();
         this.confirmLaizi();
-        this.roomChannel.sendMsgToRoom('onGameStart',{code : 200});
+        for(let i = 0 ; i < this.users.length; i ++){
+            let fun = function(user){
+                this.roomChannel.sendMsgToMem('onGameStart',{code : 200 , data : this.getRoomMessage(user.uid)},user);
+            };
+            fun(this.users[i]);
+        }
+
     }
 };
 

@@ -244,9 +244,11 @@ pro.jianjianghu = function(user,pai){
     }
 
     let pais = this.transform(mahjongs);
+    console.log(pais,'=====>>>pais');
     for(let i = 0; i < pais.length ; i++){
         for(let j = 0; j < pais[i].length; j++){
-            if(pais[i][j] > 0 && (j != 1|| j != 4 || j != 7)){
+            if(pais[i][j] > 0 && (j != 1 && j != 4 && j != 7)){
+                console.log(11111,j);
                 return false;
             }
 
@@ -257,18 +259,21 @@ pro.jianjianghu = function(user,pai){
     }
 
     for(let i = 0; i < user.gang.length ; i ++){
-        if(user.gang[i].pai[0] >= 40 || user.gang[i].pai[0] % 10 != 1 || user.gang[i].pai[0] % 10  != 4 || user.gang[i].pai[0] % 10  != 7){
+        if(user.gang[i].pai[0] >= 40 || (user.gang[i].pai[0] % 10 != 2 && user.gang[i].pai[0] % 10  != 5 && user.gang[i].pai[0] % 10  != 8)){
+            console.log(3333,user.gang[i].pai[0]);
             return false;
         }
     }
 
     for(let i = 0; i < user.peng.length ; i ++){
-        if(user.peng[i].pai[0] >= 40 && (user.peng[i].pai[0] % 10 != 1 || user.peng[i].pai[0] % 10  != 4 || user.peng[i].pai[0] % 10  != 7)){
+        if(user.peng[i].pai[0] >= 40 && (user.peng[i].pai[0] % 10 != 2 && user.peng[i].pai[0] % 10  != 5 && user.peng[i].pai[0] % 10  != 8)){
+            console.log(4444);
             return false;
         }
     }
     return 4;
 }
+
 
 pro.pengpenghu = function(user,pais,laiziCount,pai){
     if(user.chi.length){
@@ -306,7 +311,7 @@ pro.qingyise = function(user,pai,pais){
                 temp = true;
                 type = i ;
             }
-            if(temp && i != type){
+            if(temp && i != type && pais[i][j] > 0){
                 return false;
             }
         }
