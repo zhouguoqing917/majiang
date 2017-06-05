@@ -323,7 +323,7 @@ roomPro.getRoomMessage = function(uid,isAll){
         huCount : this.huCount,
         maxHuCount : this.maxHuCount,
         laizi : this.laizi,
-        laizi : this.laizipi,
+        laizipi : this.laizipi,
         ownerUid : this.ownerUid
     };
     return obj;
@@ -1133,6 +1133,7 @@ roomPro.userReady = function(uid){
         this.result = {};
         this.round += 1;
         this.dice = this.mahjong.diceRoller();
+        this.banker = this.whoIsBanker();
         this.changeUserStatus(2);
         this.deductRoomCard();//扣除房卡
         this.check = new Check(this.laizi);
