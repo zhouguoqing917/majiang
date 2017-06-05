@@ -1116,7 +1116,7 @@ roomPro.isInBird = function(arr){
 
 roomPro.userReady = function(uid){
     let user = this.getUserByUid(uid);
-    if(user.status >= 1){
+    if(user.status == 1){
         throw '玩家已经准备!';
     }
     user.status = 1;
