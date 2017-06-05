@@ -1138,13 +1138,13 @@ roomPro.userReady = function(uid){
         this.check = new Check(this.laizi);
         this.licensing();
         this.confirmLaizi();
+        let self = this;
         for(let i = 0 ; i < this.users.length; i ++){
             let fun = function(user){
-                this.roomChannel.sendMsgToMem('onGameStart',{code : 200 , data : this.getRoomMessage(user.uid)},user);
+                self.roomChannel.sendMsgToMem('onGameStart',{code : 200 , data : this.getRoomMessage(user.uid)},user);
             };
             fun(this.users[i]);
         }
-
     }
 };
 
