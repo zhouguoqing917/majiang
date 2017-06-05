@@ -177,16 +177,14 @@ roomPro.entryRoom = async function(roomNo,session){
     }else{
         route = 'onUserLine';
         user = this.getUserByUid(uid);
+        user.status = 1;
         user.sid = session.get('sid');
     }
     this.roomChannel.addUserToChannel(user);
 
     if(user.mahjong.length || this.isLice){
         user.status = 2;
-    }else{
-        user.status = 1;
     }
-
     //将进入房间的玩家push 给房间内的人
     let uArr = this.getExceptUids(session.uid);
     if(route == 'onUserLine'){
