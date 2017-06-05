@@ -1141,7 +1141,7 @@ roomPro.userReady = function(uid){
         let self = this;
         for(let i = 0 ; i < this.users.length; i ++){
             let fun = function(user){
-                self.roomChannel.sendMsgToMem('onGameStart',{code : 200 , data : this.getRoomMessage(user.uid)},user);
+                self.roomChannel.sendMsgToMem('onGameStart',{code : 200 , data : self.getRoomMessage(user.uid)},user);
             };
             fun(this.users[i]);
         }

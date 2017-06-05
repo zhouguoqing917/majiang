@@ -298,7 +298,7 @@ handler.userReady = async function(msg, session, next){
         room.userReady(uid);
         next(null, {code: 200, msg: '', data: {}});
     } catch (ex) {
-        next(null, {code: 500, msg: ex});
+        next(null, {code: 500, msg: '已经准备'});
     }
 };
 
