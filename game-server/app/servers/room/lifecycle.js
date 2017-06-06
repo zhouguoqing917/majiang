@@ -39,7 +39,6 @@ module.exports.beforeStartup = async function(app, cb) {
                     console.log('=======>>>返回房卡成功',user._id,curNumber);
                 }
             }
-
         }catch (e){
             console.log('=======>>>返回房卡成功');
         }

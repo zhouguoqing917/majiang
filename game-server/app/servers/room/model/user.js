@@ -25,6 +25,7 @@ let User = function(session,roomCard){
     this.longitude = userInfo.longitude;
     this.roomCard = roomCard;
     this.options = 0;
+    this.readyChi = [];
 };
 
 pro = User.prototype;

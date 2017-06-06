@@ -14,6 +14,9 @@ const Mahjong = require('./mahjong.js');
 let mailModel = require('../../../util/mail.js');
 let GameRecord = require('./gameRecord.js');
 
+//todo 癞子打出去 红中 发财 算是杠
+
+
 var Check = require('./check.js');
 let Room = function (app) {
     this.sid = app.getServerId();
@@ -360,6 +363,7 @@ roomPro.getRoomUserInfo = function(uid,isAll){
             mahjong : [],
             peng :  user.peng,
             gang : user.gang,
+            chi : user.chi,
             status : user.status,
             uid : user.uid,
             playOutMahjong : user.playOutMahjong,
@@ -367,6 +371,7 @@ roomPro.getRoomUserInfo = function(uid,isAll){
             latitude : user.latitude,
             longitude : user.longitude
         };
+
         if(this.users[i].uid == uid || isAll){
             obj.mahjong = user.mahjong;
         }else{
@@ -709,16 +714,65 @@ roomPro.cannelAction = function(uid){
     if(!this.previousOut || !Object.keys(this.previousOut).length){
         return;
     }
-    let key = Object.keys(this.previousOut)[0];
-    let pai = this.previousOut[key];
-    if(this.check.checkGang(user,pai)){
-        this.unGang.push(pai);
-    }
 
     if(user.mahjong.length % 3 == 2 || !user.isAction){
         return;
     }
-    user.isAction = false;
+
+    let key = Object.keys(this.previousOut)[0];
+    let mahjong = this.previousOut[key];
+    let action = user.isAction;
+    user.isAction = 0;
+    user.options = 0;
+    user.readyChi = [];
+    let lowLevel = action / 2;
+
+    let maxOption = 0;
+    let maxOptionUid = null;
+    let maxIsAction = 0;
+
+    for(let i = 0 ; i < this.users.length; i ++){
+        let user = this.users[i];
+        if(user.options > maxOption ){
+            maxOption = user.options;
+            maxOptionUid = user.uid;
+        }
+
+        if(user.isAction > maxIsAction){
+            maxIsAction = user.isAction;
+        }
+    }
+
+    if(maxOption > maxIsAction){
+        if(maxOption == 1){
+            let handlerUser = this.getUserByUid(key);
+            let chiArr = handlerUser.readyChi;
+            console.log(chiArr,'======>>>chiArr');
+            this.clearOptions();
+            return this.handlerChi(key,chiArr);
+        }
+
+        if(maxOption == 2){
+            this.clearOptions();
+            return this.handlerPeng(key);
+        }
+
+        if(maxOption == 4){
+            this.clearOptions();
+            return this.handlerGang(key,mahjong);
+        }
+    }
+
+    let isAllHandler = true;
+    for(let i = 0 ; i < this.users.length; i ++){
+        if(this.users[i].isAction != 0 || this.users[i].options != 0){
+            isAllHandler = false;
+            break;
+        }
+    }
+    if(!isAllHandler){
+        return ;
+    }
     this.gameRecord.addRecord(this.round,7,user);
     this.isLicensing(uid);
 };
@@ -855,6 +909,7 @@ roomPro.clearOptions = function(){
     for(let i = 0 ; i < this.users.length ; i++){
         this.users[i].isAction = 0;
         this.users[i].options = 0;
+        this.users[i].readyChi = [];
     }
 }
 
@@ -1125,7 +1180,7 @@ roomPro.userReady = function(uid){
         }
     }
 
-    if(isAllReady){
+    if(isAllReady && this.users.length == 4){
         this.result = {};
         this.round += 1;
         this.dice = this.mahjong.diceRoller();
@@ -1369,15 +1424,17 @@ roomPro.handlerChi = function(uid,mahjongs){
         temp = true;
     }
     if(!temp){
-        throw '非法持牌';
+        throw '非法吃牌';
     }
 
     //判断其它玩家
     for(let i = 0 ; i < this.users.length; i ++){
         if(this.users[i].uid != uid && (this.users[i].isAction != 0 || this.users[i].options != 0 )){
+            user.readyChi = mahjongs;
             return ;
         }
     }
+
     this.clearOptions();
     let preUser = this.getUserByUid(previousUid);
     preUser.clearOutMahjongByNum(mahjong);
