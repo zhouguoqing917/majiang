@@ -581,6 +581,7 @@ roomPro.playMahjong = async function(uid,pai){
         //推送杠广播
         this.roomChannel.sendMsgToRoom('onLaiziGang',{code : 200 ,data : { gangUid : uid , beGangUid : uid,mahjong : pai}});
         this.gameRecord.addRecord(this.round,5,user,pai);
+        user.addLaiziGang(this.laizi,pai);
         //给玩家一张牌
         if(this.isRoundOver()){
             //todo  房间内信息 初始化 当前玩家坐庄
@@ -958,11 +959,10 @@ roomPro.handlerHu = async function(uid,isFlow){
         throw '碰了之后不能胡';
     }
 
+
     //判断上一次出牌的玩家是不是自己
     let user = this.getUserByUid(uid);
-    let pai , preUid,bridMahjongs = [], inBird,inBirdCount ,isZimo = true ;
-    let huUidArr = [];
-    let otherIsHu = false;
+    let pai , preUid, isZimo = 1 ;//1为 自摸  2, 抢杠 3,别人放炮i
     let preBanker = this.banker;
     //算分 抓码 算杠 房间初始化(麻将 局数 玩家牌 庄家判定) 讲数据推送至客户端
     for(let i = 0 ; i < this.users.length;i++){
@@ -972,6 +972,9 @@ roomPro.handlerHu = async function(uid,isFlow){
         this.result[this.users[i].uid]['peng'] = this.users[i].peng;
         this.result[this.users[i].uid]['score'] = this.users[i].score;
         this.result[this.users[i].uid]['nickname'] = this.users[i].nickname;
+        this.result[this.users[i].uid]['zimoCount'] = 0;
+        this.result[this.users[i].uid]['fangchongCount'] = 0;
+        this.result[this.users[i].uid]['kaikouCount'] = 0;
     }
 
     //如果可以胡牌 判断是自摸还是抢杠
@@ -992,9 +995,6 @@ roomPro.handlerHu = async function(uid,isFlow){
                     user.gang.splice(i,1);
                 }
             }
-            if(!preIsGang){
-                throw '不能胡不是杠的牌';
-            }
             isZimo = false;
             otherIsHu = true;
             pai = this.previousOut[preUid]
@@ -1003,30 +1003,6 @@ roomPro.handlerHu = async function(uid,isFlow){
             throw '非法胡牌操作'
         }
 
-        let count = 2;
-        let haveHongzhong = false;
-        if(this.check.checkHongZhong(user,pai)){
-            haveHongzhong = true;
-        }
-
-        if(this.onlyOneBird){
-            bridMahjongs = this.mahjong.getMahjongByCount(1);
-            let num = this.mahjong.getPaiNum(bridMahjongs[0]);
-            //let bridCount = 0;
-            //bridCount = haveHongzhong ? this.addBird : 0;
-            //bridMahjongs = this.mahjong.getMahjongByCount(bridCount);
-            //inBird = this.isInBird(bridMahjongs);
-            //num += inBird.length;
-            inBirdCount = 1;
-            count += num ;
-        }else{
-            let bridCount = this.birdNum;
-            bridCount += haveHongzhong ? this.addBird : 0;
-            bridMahjongs = this.mahjong.getMahjongByCount(bridCount);
-            inBird = this.isInBird(bridMahjongs);
-            inBirdCount = inBird.length;
-            count += inBird.length * 2;
-        }
 
         let haveUserHu = false;
         for(let x = 0 ; x < this.users.length; x++){

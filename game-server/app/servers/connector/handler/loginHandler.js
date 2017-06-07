@@ -128,7 +128,6 @@ handler.checkLogin = async function(msg, session, next) {
                 console.log(`新用户加入，绑定session到服务器${this.app.curServer.id}`);
         });
         session.on('closed', onUserLeave.bind(this, session));
-
         gameUserModel.update({_id:gameUser._id},{$set:{ipaddress:gameUser.ipaddress , loginTime : new Date(),loginTimes : loginTimes,latitude : latitude,longitude : longitude}}).exec();
 
         var data = {

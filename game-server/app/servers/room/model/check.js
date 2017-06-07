@@ -533,19 +533,19 @@ pro.checkPeng = function(user,pai){
 pro.checkChi = function(user,pai){
     let mahjongs = user.mahjong;
     let arr = [];
-    if(mahjongs.index(pai + 1) != -1 &&  mahjongs.index(pai + 2) != -1 &&  pai < 30){
+    if(mahjongs.indexOf(pai + 1) != -1 &&  mahjongs.indexOf(pai + 2) != -1 &&  pai < 30){
         arr.push(pai);
         arr.push(pai + 1);
         arr.push(pai + 2);
     }
 
-    if(mahjongs.index(pai + 1) != -1 &&  mahjongs.index(pai - 1) != -1 &&  pai < 30){
+    if(mahjongs.indexOf(pai + 1) != -1 &&  mahjongs.indexOf(pai - 1) != -1 &&  pai < 30){
         arr.push(pai - 1);
         arr.push(pai);
         arr.push(pai + 1);
     }
 
-    if(mahjongs.index(pai - 1) != -1 &&  mahjongs.index(pai - 2) != -1 &&  pai < 30){
+    if(mahjongs.indexOf(pai - 1) != -1 &&  mahjongs.indexOf(pai - 2) != -1 &&  pai < 30){
         arr.push(pai - 1);
         arr.push(pai - 2);
         arr.push(pai);
@@ -1016,7 +1016,7 @@ var test = function(){
 };
 
 var member = {
-    mahjong : [31,31,31,32,32],
+    mahjong : [21,23,31,32,32],
     chi : [{
         pai : []
     }],
@@ -1028,13 +1028,13 @@ var member = {
         pai : [34,34,34,34]
     }]
 }
-////console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
-//var start = Date.now();
-////console.log(checks.canHu(member));
-//console.log(checks.checkHu(member));
-//console.log(Date.now() - start);
+//console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
+var start = Date.now();
+//console.log(checks.canHu(member));
+console.log(checks.checkChi(member,22));
+console.log(Date.now() - start);
 //clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 //console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))
-//console.log(max);
+console.log(max);
 //test();
 

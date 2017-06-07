@@ -142,12 +142,50 @@ pro.getFanNum  = function(){
     if(this.peng.length){
         isKaikou = true;
     }
-    let count = 0;
+    let anGang = 0;
+    let mingGang = 0;
     for(let i = 0; i < this.gang.length; i++){
         if(this.gang[i].type != 1){
-            count += 1;
+            anGang += 1;
+            isKaikou = true;
+        }
+        if(this.gang[i].type == 1){
+            mingGang += 1;
         }
     }
+    let isBanker = this.isBanker;
+    if(isKaikou){
+        this.funNum = this.funNum * 2;
+    }
+    if(anGang){
+        this.funNum = this.funNum * anGang * 4;
+    }
+    if(mingGang){
+        this.funNum = this.funNum * mingGang * 2;
+    }
 
+    if(this.gangHongzhong){
+        this.funNum = this.funNum * this.gangHongzhong * 2;
+    }
+
+    if(this.gangFacai){
+        this.funNum = this.funNum * this.gangFacai * 2;
+    }
+
+    if(this.gangLaizi){
+        this.funNum = this.funNum * this.gangLaizi * 4;
+    }
 };
+
+pro.addLaiziGang = function(laizi,pai){
+    if(laizi == pai){
+        this.gangLaizi += 1;
+    }
+    if(41 == pai){
+        this.gangFacai += 1;
+    }
+    if(42 == pai){
+        this.gangHongzhong += 1;
+    }
+}
 module.exports = User;
