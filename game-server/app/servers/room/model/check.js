@@ -2,12 +2,12 @@
  * Created by Mrli on 17/5/8.
  */
 
-let Check = function(laizi){
+var Check = function(laizi){
     this.laizi = laizi;
 };
 //console.log = function(){}
 var max = 4;
-let pro = Check.prototype ;
+var pro = Check.prototype ;
 /**
  * 检测胡牌
  * @param user
@@ -15,30 +15,30 @@ let pro = Check.prototype ;
  */
 pro.checkHu = function(user,pai){
     //是否开口
-    let isKaikou = this.checkIsKaikou(user);
-    console.log(isKaikou);
+    var isKaikou = this.checkIsKaikou(user);
     if(!isKaikou){
         return false;
     }
 
-    let isHu = this.checkHasJiang(user,pai);
-    let mahjongs = user.mahjong;
+    var mahjongs = user.mahjong;
     if(pai){
         mahjongs = mahjongs.concat([pai]);
     }
     //是否有红中
-    let hasHongzhong = this.hasHongzhong(mahjongs);
+    var hasHongzhong = this.hasHongzhong(mahjongs);
     if(hasHongzhong){
         return false;
     }
+
+    var isHu = this.checkHasJiang(user,pai);
     mahjongs = [].concat(mahjongs);
 
-    let laziCount = this.getLaiziCount(mahjongs);
+    var laziCount = this.getLaiziCount(mahjongs);
     console.log(laziCount,'====>>laziCount')
-    let huType = [];
+    var huType = [];
     if(isHu){
         //判断大胡
-        let dahuArr = this.checkDaHu(user,pai,laziCount);
+        var dahuArr = this.checkDaHu(user,pai,laziCount);
         if(dahuArr && dahuArr.length){
             huType = dahuArr.concat(huType);
         }else if(laziCount <= 1){
@@ -48,9 +48,9 @@ pro.checkHu = function(user,pai){
     }
     isHu = this.checkUnHasJiang(user,pai);
     if(isHu){
-        let dahuArr = this.checkDaHu(user,pai,laziCount);
+        var dahuArr = this.checkDaHu(user,pai,laziCount);
         if(dahuArr && dahuArr.length){
-            for(let i = 0 ; i < dahuArr.length; i ++){
+            for(var i = 0 ; i < dahuArr.length; i ++){
                 if(huType.indexOf(dahuArr[i]) == -1){
                     huType.push(dahuArr[i]);
                 }
@@ -64,7 +64,7 @@ pro.checkHu = function(user,pai){
     return huType;
 };
 pro.hasHongzhong = function(mahjongs){
-    for(let i = 0; i < mahjongs.length; i++){
+    for(var i = 0; i < mahjongs.length; i++){
         if(mahjongs[i] == 42 || mahjongs[i] == 41){
             return true;
         }
@@ -73,15 +73,15 @@ pro.hasHongzhong = function(mahjongs){
 };
 
 pro.checkDaHu = function(user,pai,laiziCount){
-    let mahjongs = user.mahjong;
-
+    var mahjongs = user.mahjong;
     if(pai){
         mahjongs = mahjongs.concat([pai]);
     }
+
     mahjongs = [].concat(mahjongs);
-    let allPai = this.transform(mahjongs);
-    let huType = [];
-    isHu = this.qingyise(user,pai,allPai);
+    var allPai = this.transform(mahjongs);
+    var huType = [];
+    var isHu = this.qingyise(user,pai,allPai);
     if(isHu){
         huType.push(isHu);
     }
@@ -99,7 +99,7 @@ pro.checkDaHu = function(user,pai,laiziCount){
 };
 
 pro.checkHasJiang = function(user,pai){
-    let mahjongs = user.mahjong;
+    var mahjongs = user.mahjong;
     if(pai){
         mahjongs = mahjongs.concat([pai]);
     }
@@ -108,20 +108,20 @@ pro.checkHasJiang = function(user,pai){
         return false;
     }
 
-    let laiziCount = this.getLaiziCount(mahjongs);
+    var laiziCount = this.getLaiziCount(mahjongs);
     if(laiziCount == mahjongs.length && mahjongs.length == 2){
         return true;
     }
-    let allPai = this.transform(mahjongs);
-    let doubleCount = getDoubleJiangPos(allPai);
-    let result = false;
+    var allPai = this.transform(mahjongs);
+    var doubleCount = getDoubleJiangPos(allPai);
+    var result = false;
     if(doubleCount.length > 0 && !result){
-        let laiziCount = this.getLaiziCount(mahjongs);
-        for(let i = 0 ; i < doubleCount.length; i++){
+        var laiziCount = this.getLaiziCount(mahjongs);
+        for(var i = 0 ; i < doubleCount.length; i++){
             max = 4;
-            let temp = cloneMahjong(allPai);
+            var temp = cloneMahjong(allPai);
             clearDouble(doubleCount[i],temp);
-            let needLaiziCount = clearAll(temp);
+            var needLaiziCount = clearAll(temp);
             console.log(needLaiziCount,laiziCount,'====>>>??');
             if(needLaiziCount == laiziCount || (needLaiziCount == 0 && laiziCount == 3)){
                 result = true;
@@ -131,16 +131,16 @@ pro.checkHasJiang = function(user,pai){
     }
 
     if(laiziCount > 0 ){
-        let may = getDoubleJiangAndLaiziCount(allPai);
+        var may = getDoubleJiangAndLaiziCount(allPai);
         laiziCount -= 1;
-        for(let i = 0 ; i < may.length; i ++){
+        for(var i = 0 ; i < may.length; i ++){
             //console.log(may[i],'=============================>>>>>>>>>>',allPai);
             max = 4;
-            let temp = cloneMahjong(allPai);
+            var temp = cloneMahjong(allPai);
             temp[may[i][0]][may[i][1]] += 1;
             clearDouble(may[i],temp);
             //console.log(temp,'=====>>temp');
-            let needLaiziCount = clearAll(temp);
+            var needLaiziCount = clearAll(temp);
             //console.log(max,'=====>>???',laiziCount);
             if(needLaiziCount == laiziCount || (needLaiziCount == 0 && laiziCount == 3)){
                 result = true;
@@ -155,7 +155,7 @@ pro.checkHasJiang = function(user,pai){
 };
 
 pro.checkUnHasJiang = function(user,pai){
-    let mahjongs = user.mahjong;
+    var mahjongs = user.mahjong;
     if(pai){
         mahjongs = mahjongs.concat([pai]);
     }
@@ -164,21 +164,21 @@ pro.checkUnHasJiang = function(user,pai){
         return false;
     }
 
-    let laiziCount = this.getLaiziCount(mahjongs);
-    let allPai = this.transform(mahjongs);
+    var laiziCount = this.getLaiziCount(mahjongs);
+    var allPai = this.transform(mahjongs);
 
-    let doubleCount = getDoublePos(allPai);
-    let threeCount = getThreePosArr(allPai);
+    var doubleCount = getDoublePos(allPai);
+    var threeCount = getThreePosArr(allPai);
     doubleCount = doubleCount.concat(threeCount);
-    let result = false;
+    var result = false;
 
     if(doubleCount.length > 0 && !result){
-        let laiziCount = this.getLaiziCount(mahjongs);
-        for(let i = 0 ; i < doubleCount.length; i++){
+        var laiziCount = this.getLaiziCount(mahjongs);
+        for(var i = 0 ; i < doubleCount.length; i++){
             max = 4;
-            let temp = cloneMahjong(allPai);
+            var temp = cloneMahjong(allPai);
             clearDouble(doubleCount[i],temp);
-            let needLaiziCount = clearAll(temp);
+            var needLaiziCount = clearAll(temp);
             if(needLaiziCount == laiziCount){
                 result = true;
             }
@@ -186,16 +186,16 @@ pro.checkUnHasJiang = function(user,pai){
     }
 
     if(laiziCount > 0 ){
-        let may = getDoubleAndLaiziCount(allPai);
+        var may = getDoubleAndLaiziCount(allPai);
         laiziCount -= 1;
-        for(let i = 0 ; i < may.length; i ++){
+        for(var i = 0 ; i < may.length; i ++){
             //console.log(may[i],'=============================>>>>>>>>>>',allPai);
             max = 4;
-            let temp = cloneMahjong(allPai);
+            var temp = cloneMahjong(allPai);
             temp[may[i][0]][may[i][1]] += 1;
             clearDouble(may[i],temp);
             //console.log(temp,'=====>>temp');
-            let needLaiziCount = clearAll(temp);
+            var needLaiziCount = clearAll(temp);
             //console.log(max,'=====>>???',laiziCount);
             if(needLaiziCount == laiziCount){
                 result = true;
@@ -222,8 +222,8 @@ pro.checkIsKaikou = function(user){
     if(user.peng.length){
         return true;
     }
-    let count = 0;
-    for(let i = 0; i < user.gang.length; i++){
+    var count = 0;
+    for(var i = 0; i < user.gang.length; i++){
         if(user.gang[i].type != 1){
             count += 1;
         }
@@ -238,15 +238,15 @@ pro.jianjianghu = function(user,pai){
     if(user.chi.length){
         return false;
     }
-    let mahjongs = user.mahjong ;
+    var mahjongs = user.mahjong ;
     if(pai){
         mahjongs.concat(pai);
     }
 
-    let pais = this.transform(mahjongs);
+    var pais = this.transform(mahjongs);
     console.log(pais,'=====>>>pais');
-    for(let i = 0; i < pais.length ; i++){
-        for(let j = 0; j < pais[i].length; j++){
+    for(var i = 0; i < pais.length ; i++){
+        for(var j = 0; j < pais[i].length; j++){
             if(pais[i][j] > 0 && (j != 1 && j != 4 && j != 7)){
                 console.log(11111,j);
                 return false;
@@ -258,14 +258,14 @@ pro.jianjianghu = function(user,pai){
         }
     }
 
-    for(let i = 0; i < user.gang.length ; i ++){
+    for(var i = 0; i < user.gang.length ; i ++){
         if(user.gang[i].pai[0] >= 40 || (user.gang[i].pai[0] % 10 != 2 && user.gang[i].pai[0] % 10  != 5 && user.gang[i].pai[0] % 10  != 8)){
             console.log(3333,user.gang[i].pai[0]);
             return false;
         }
     }
 
-    for(let i = 0; i < user.peng.length ; i ++){
+    for(var i = 0; i < user.peng.length ; i ++){
         if(user.peng[i].pai[0] >= 40 && (user.peng[i].pai[0] % 10 != 2 && user.peng[i].pai[0] % 10  != 5 && user.peng[i].pai[0] % 10  != 8)){
             console.log(4444);
             return false;
@@ -279,7 +279,7 @@ pro.pengpenghu = function(user,pais,laiziCount,pai){
     if(user.chi.length){
         return false;
     }
-    let mahjongs = user.mahjong;
+    var mahjongs = user.mahjong;
     if(pai){
         mahjongs = mahjongs.concat(pai);
     }
@@ -287,8 +287,8 @@ pro.pengpenghu = function(user,pais,laiziCount,pai){
         return 2;
     }
 
-    let needCount = 0;
-    for(let i = 0; i < pais.length; i ++){
+    var needCount = 0;
+    for(var i = 0; i < pais.length; i ++){
         needCount += getFengNeedCount(pais[i]);
     }
     needCount -= 1;
@@ -303,10 +303,10 @@ pro.pengpenghu = function(user,pais,laiziCount,pai){
 
 
 pro.qingyise = function(user,pai,pais){
-    let type;
-    let temp = false;
-    for(let i = 0; i < pais.length ; i++){
-        for(let j = 0; j < pais[i].length; j++){
+    var type;
+    var temp = false;
+    for(var i = 0; i < pais.length ; i++){
+        for(var j = 0; j < pais[i].length; j++){
             if(pais[i][j] > 0 && !temp){
                 temp = true;
                 type = i ;
@@ -316,14 +316,14 @@ pro.qingyise = function(user,pai,pais){
             }
         }
     }
-    let mahjongs = user.mahjong;
+    var mahjongs = user.mahjong;
     if(pai){
         mahjongs = mahjongs.concat(pai)
     }
 
-    let laiziCount = this.getLaiziCount(mahjongs);
+    var laiziCount = this.getLaiziCount(mahjongs);
 
-    for(let i = 0; i < user.gang.length ; i ++){
+    for(var i = 0; i < user.gang.length ; i ++){
         if(type == 0 && user.gang[i].pai[0] > 10){
             return false;
         }
@@ -342,7 +342,7 @@ pro.qingyise = function(user,pai,pais){
         }
     }
 
-    for(let i = 0; i < user.peng.length ; i ++){
+    for(var i = 0; i < user.peng.length ; i ++){
         if(type == 0 && user.peng[i].pai[0] > 10){
             return false;
         }
@@ -360,7 +360,7 @@ pro.qingyise = function(user,pai,pais){
         }
     }
 
-    for(let i = 0; i < user.chi.length ; i ++){
+    for(var i = 0; i < user.chi.length ; i ++){
         if(type == 0 && user.chi[i].pai[0] > 10){
             return false;
         }
@@ -385,29 +385,29 @@ pro.qingyise = function(user,pai,pais){
 };
 
 pro.fengyise = function(user,pai){
-    let mahjongs = user.mahjong;
+    var mahjongs = user.mahjong;
     if(pai){
         mahjongs = mahjongs.concat(pai);
     }
 
-    for(let i = 0 ; i < mahjongs; i++){
+    for(var i = 0 ; i < mahjongs; i++){
         if(mahjongs[i] < 30 && mahjongs[i] >40){
             return false
         }
     }
-    for(let i = 0; i < user.gang.length ; i ++){
+    for(var i = 0; i < user.gang.length ; i ++){
         if(user.gang[i].pai[0] < 30 && user.gang[i].pai[0]  >40){
             return false
         }
     }
 
-    for(let i = 0; i < user.peng.length ; i ++){
+    for(var i = 0; i < user.peng.length ; i ++){
         if(user.peng[i].pai[0] < 30 && user.peng[i].pai[0]  >40){
             return false
         }
     }
 
-    for(let i = 0; i < user.chi.length ; i ++){
+    for(var i = 0; i < user.chi.length ; i ++){
         if(user.chi[i].pai[0] < 30 && user.chi[i].pai[0]  >40){
             return false
         }
@@ -416,7 +416,7 @@ pro.fengyise = function(user,pai){
 };
 
 pro.quanqiuren = function(user,pai){
-    let allMahjong = user.mahjong;
+    var allMahjong = user.mahjong;
     if(pai){
         allMahjong = mahjong.concat(pai);
     }
@@ -424,12 +424,12 @@ pro.quanqiuren = function(user,pai){
     if(allMahjong.length != 2){
         return false;
     }
-    let laiziCount = this.getLaiziCount(allMahjong);
+    var laiziCount = this.getLaiziCount(allMahjong);
     if(laiziCount == 2){
         return false;
     }
     console.log(allMahjong,'======>>>>>');
-    for(let i = 0 ; i < allMahjong.length ; i ++){
+    for(var i = 0 ; i < allMahjong.length ; i ++){
         if(allMahjong[i] > 40){
             return false;
         }
@@ -453,9 +453,9 @@ pro.quanqiuren = function(user,pai){
  * @returns {boolean}
  */
 pro.checkWaiGang = function(user,pai){
-    let arr = user.mahjong;
-    let count = 0;
-    for(let i = 0 ; i < arr.length ; i++){
+    var arr = user.mahjong;
+    var count = 0;
+    for(var i = 0 ; i < arr.length ; i++){
         if(arr[i] == pai && pai != 99){
             count += 1;
         }
@@ -475,14 +475,14 @@ pro.checkWaiGang = function(user,pai){
  * @returns {boolean}
  */
 pro.checkGang = function(user,pai){
-    let arr = user.mahjong;
-    let allPai = this.transform(arr);
-    let obj = {};
-    let type = 1 ; // 1 内杠 2 外杠
+    var arr = user.mahjong;
+    var allPai = this.transform(arr);
+    var obj = {};
+    var type = 1 ; // 1 内杠 2 外杠
 
     if(pai){
-        let count = 0;
-        for(let i = 0; i < arr.length; i ++){
+        var count = 0;
+        for(var i = 0; i < arr.length; i ++){
             if((pai == arr[i] && pai != 99)){
                 count += 1;
             }
@@ -500,7 +500,7 @@ pro.checkGang = function(user,pai){
             };
         }
 
-        for(let j = 0 ; j < user.peng.length; j++){
+        for(var j = 0 ; j < user.peng.length; j++){
             if(user.peng[j].pai[0] == pai){
                 obj = {
                     type :  2,
@@ -514,9 +514,9 @@ pro.checkGang = function(user,pai){
 
 //检测碰牌
 pro.checkPeng = function(user,pai){
-    let arr = user.mahjong;
-    let count = 0;
-    for(let i = 0 ; i < arr.length ; i++){
+    var arr = user.mahjong;
+    var count = 0;
+    for(var i = 0 ; i < arr.length ; i++){
         if(arr[i] == 99){
             continue
         }
@@ -531,8 +531,8 @@ pro.checkPeng = function(user,pai){
 };
 
 pro.checkChi = function(user,pai){
-    let mahjongs = user.mahjong;
-    let arr = [];
+    var mahjongs = user.mahjong;
+    var arr = [];
     if(mahjongs.indexOf(pai + 1) != -1 &&  mahjongs.indexOf(pai + 2) != -1 &&  pai < 30){
         arr.push(pai);
         arr.push(pai + 1);
@@ -553,47 +553,47 @@ pro.checkChi = function(user,pai){
     return arr;
 }
 
-let clearDouble = function(jiangPos , allPai){
+var clearDouble = function(jiangPos , allPai){
     allPai[jiangPos[0]][jiangPos[1]] -= 2;
     if(allPai[jiangPos[0]][jiangPos[1]] < 0){
         allPai[jiangPos[0]][jiangPos[1]] = 0
     }
 };
 
-let getThreePosArr = function(arr){
-    let thrArr = [];
-    for(let i = 0 ; i < arr.length ; i++){
-        for(let j = 0 ; j < arr[i].length ; j ++ ){
+var getThreePosArr = function(arr){
+    var thrArr = [];
+    for(var i = 0 ; i < arr.length ; i++){
+        for(var j = 0 ; j < arr[i].length ; j ++ ){
             if(arr[i][j] >= 3){
-                let temp = [i, j];
+                var temp = [i, j];
                 thrArr.push(temp);
             }
         }
     }
     return thrArr;
 };
-let getDoublePos = function(arr){
-    let doubArr = [];
-    for(let i = 0 ; i < arr.length ; i++){
-        for(let j = 0 ; j < arr[i].length ; j ++ ){
+var getDoublePos = function(arr){
+    var doubArr = [];
+    for(var i = 0 ; i < arr.length ; i++){
+        for(var j = 0 ; j < arr[i].length ; j ++ ){
             if(arr[i][j] == 2){
-                let temp = [i, j];
+                var temp = [i, j];
                 doubArr.push(temp);
             }
         }
     }
     return doubArr;
 };
-let getDoubleJiangPos = function(arr){
+var getDoubleJiangPos = function(arr){
     console.log(arr)
-    let doubArr = [];
-    for(let i = 0 ; i < arr.length ; i++){
+    var doubArr = [];
+    for(var i = 0 ; i < arr.length ; i++){
         if(i > 2){
             break;
         }
-        for(let j = 0 ; j < arr[i].length ; j ++ ){
+        for(var j = 0 ; j < arr[i].length ; j ++ ){
             if(arr[i][j] >= 2 && ( j == 1 || j == 4 || j == 7)){
-                let temp = [i, j];
+                var temp = [i, j];
                 doubArr.push(temp);
             }
         }
@@ -602,27 +602,30 @@ let getDoubleJiangPos = function(arr){
 };
 
 pro.transform = function(pai){
-    let arr = [
+    var arr = [
         [0,0,0,0,0,0,0,0,0],//万
         [0,0,0,0,0,0,0,0,0],//硕
         [0,0,0,0,0,0,0,0,0],//筒
         [0,0,0,0,0,0,0,0,0] //字
     ];
 
-    for(let i = 0; i < pai.length; i++){
-        if(pai[i] != this.laizi){
-            let type = getType(pai[i]);
-            let num = pai[i] % 10 - 1;
+    for(var i = 0; i < pai.length; i++){
+        if(pai[i] == 41 || pai[i] == 42){
+            continue;
+        }
+        if(pai[i] != this.laizi ){
+            var type = getType(pai[i]);
+            var num = pai[i] % 10 - 1;
             arr[type][num] += 1;
         }
     }
     return arr;
 };
 
-let getDoubleAndLaiziCount = function(allPai){
-    let arr = [];
-    for(let i = 0 ; i < allPai.length;i++){
-        for(let j = 0 ; j < allPai[i].length;j++){
+var getDoubleAndLaiziCount = function(allPai){
+    var arr = [];
+    for(var i = 0 ; i < allPai.length;i++){
+        for(var j = 0 ; j < allPai[i].length;j++){
             if(allPai[i][j] != 0){
                 arr.push([i,j]);
             }
@@ -631,13 +634,13 @@ let getDoubleAndLaiziCount = function(allPai){
     return arr;
 };
 
-let getDoubleJiangAndLaiziCount = function(allPai){
-    let arr = [];
-    for(let i = 0 ; i < allPai.length;i++){
+var getDoubleJiangAndLaiziCount = function(allPai){
+    var arr = [];
+    for(var i = 0 ; i < allPai.length;i++){
         if(i > 2){
             break;
         }
-        for(let j = 0 ; j < allPai[i].length;j++){
+        for(var j = 0 ; j < allPai[i].length;j++){
             if(allPai[i][j] != 0 && (j == 1 || j == 4 || j == 7)){
                 arr.push([i,j]);
             }
@@ -648,7 +651,7 @@ let getDoubleJiangAndLaiziCount = function(allPai){
 
 
 
-let getType = function(num){
+var getType = function(num){
     if(num > 0 && num < 10){
         return 0;
     }
@@ -666,8 +669,8 @@ let getType = function(num){
 };
 
 pro.getLaiziCount = function(mahjongs){
-    let laiziCount = 0;
-    for(let i = 0 ; i < mahjongs.length; i++){
+    var laiziCount = 0;
+    for(var i = 0 ; i < mahjongs.length; i++){
         if(mahjongs[i] == this.laizi){
             laiziCount += 1;
         }
@@ -675,11 +678,11 @@ pro.getLaiziCount = function(mahjongs){
     return laiziCount;
 };
 
-let cloneMahjong = function(allPais){
-    let cloneArr = [];
-    for(let i = 0 ; i < allPais.length ; i++){
-        let arr = [];
-        for(let j = 0; j < allPais[i].length; j++){
+var cloneMahjong = function(allPais){
+    var cloneArr = [];
+    for(var i = 0 ; i < allPais.length ; i++){
+        var arr = [];
+        for(var j = 0; j < allPais[i].length; j++){
             arr.push(allPais[i][j]);
         }
         cloneArr.push(arr);
@@ -688,9 +691,9 @@ let cloneMahjong = function(allPais){
 };
 
 
-let getThreePos = function(arr){
-    let thrArr = [];
-    for(let j = 0 ; j < arr.length ; j ++ ){
+var getThreePos = function(arr){
+    var thrArr = [];
+    for(var j = 0 ; j < arr.length ; j ++ ){
         if(arr[j] >= 3){
             thrArr.push(j);
         }
@@ -698,9 +701,9 @@ let getThreePos = function(arr){
     return thrArr;
 };
 
-let clearThree = function(pais,index){
-    let threeCount = getThreePos(pais);
-    for(let i = 0 ; i < threeCount.length ; i++){
+var clearThree = function(pais,index){
+    var threeCount = getThreePos(pais);
+    for(var i = 0 ; i < threeCount.length ; i++){
         if(!pais[threeCount[i] - 1] || !pais[threeCount[i] + 1]){
             pais[threeCount[i]] -= 3;
             clearThree(pais,index);
@@ -708,20 +711,20 @@ let clearThree = function(pais,index){
         }
     }
 };
-//let clear = function(pais,index){
+//var clear = function(pais,index){
 //    getNeedCount(pais);
 //    return max;
 //};
 
 
 
-let clearStraight = function(pais,arr){
+var clearStraight = function(pais,arr){
     for(var i = 0; i < arr.length; i ++){
         pais[arr[i]] -= 1;
     }
 };
 
-let getAllStraight  = function(pais){
+var getAllStraight  = function(pais){
     var allArr = [];
     //console.log(pais,'====>>>pais');
     for(var i = 0 ; i < pais.length; i ++){
@@ -732,7 +735,7 @@ let getAllStraight  = function(pais){
     return allArr;
 };
 
-let clearAll = function(allPai){
+var clearAll = function(allPai){
     var allNeed = 0;
     for(var i = 0; i < allPai.length;i++){
         max = 4;
@@ -747,7 +750,7 @@ let clearAll = function(allPai){
 };
 
 
-let getNeedCount = function(pais,needCount){
+var getNeedCount = function(pais,needCount){
     needCount = needCount || 0;
     var arr = [];
     var clone ;
@@ -851,7 +854,7 @@ let getNeedCount = function(pais,needCount){
     return needCount;
 };
 
-let getFengNeedCount = function(pais,needCount){
+var getFengNeedCount = function(pais,needCount){
     needCount = needCount || 0;
     var arr = [];
     var clone ;
@@ -876,13 +879,13 @@ let getFengNeedCount = function(pais,needCount){
     return needCount;
 };
 
-let mahjongs = [
+var mahjongs = [
     1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19,21,22,23,24,25,26,27,28,29,99
 ];
 
 pro.canHu = function(user){
     var arr = [];
-    for(let i = 0 ; i < mahjongs.length;i++){
+    for(var i = 0 ; i < mahjongs.length;i++){
         if(this.checkHu(user,mahjongs[i])){
             arr.push(mahjongs[i]);
         }
@@ -894,10 +897,10 @@ pro.canHu = function(user){
 
 
 
-let testmahjongs = [
+var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-let checks = new Check(2);
+var checks = new Check(2);
 
 var getMahjong = function(){
     var arr = [];
@@ -999,9 +1002,9 @@ var test = function(){
         if(!isvail(mahjongs)){
             continue;
         }
-        let member = {
+        var member = {
             mahjong :mahjongs
-        }
+        };
 
         if(i % 1000000 == 0){
             console.error(i);
@@ -1016,22 +1019,22 @@ var test = function(){
 };
 
 var member = {
-    mahjong : [21,23,31,32,32],
+    mahjong : [1,1,7,11,11,11,12,12,13,17,26,34,42],
     chi : [{
         pai : []
     }],
     peng : [{
-        pai : [33,33,33]
+        pai : []
     }],
     gang : [{
         type : 1,
-        pai : [34,34,34,34]
+        pai : []
     }]
 }
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
-////console.log(checks.canHu(member));
-//console.log(checks.checkChi(member,22));
+//console.log(checks.canHu(member));
+console.log(checks.checkPeng(member,12));
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))

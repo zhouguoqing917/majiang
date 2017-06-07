@@ -176,7 +176,6 @@ roomPro.entryRoom = async function(roomNo,session){
     }else{
         route = 'onUserLine';
         user = this.getUserByUid(uid);
-        user.status = 1;
         user.sid = session.get('sid');
     }
     this.roomChannel.addUserToChannel(user);
@@ -795,6 +794,11 @@ roomPro.cannelAction = function(uid){
             this.clearOptions();
             return this.handlerGang(key,mahjong);
         }
+
+        if(maxOption == 8){
+            this.clearOptions();
+            return this.handlerHu(key);
+        }
     }
 
     let isAllHandler = true;
@@ -871,6 +875,7 @@ roomPro.handlerGang = function(uid,pai){
 
     //推送杠广播
     this.roomChannel.sendMsgToRoom('onGang',{code : 200 ,data : { gangUid : uid , beGangUid : beUid,mahjong : mahjong,type : gangObj.type}});
+
     this.gameRecord.addRecord(this.round,5,user,mahjong);
     if(this.userHu){
         this.previousOut = {};
@@ -950,6 +955,27 @@ roomPro.clearOptions = function(){
     }
 }
 
+//获取我庄之间的 顺时钟玩家
+roomPro.getMeBetweenBankerUsers = function(uid,beUid){
+    let usersArr = [];
+    let temp = false;
+    for(let i = this.users.length - 1; i >= 0; i--){
+        let user = this.users[i];
+        if(uid == user.id){
+            temp = true;
+            continue;
+        }
+
+        if(temp){
+            if(beUid == user.uid){
+                break;
+            }
+            usersArr.push(user);
+        }
+    }
+}
+
+
 /**
  * 胡牌
  * @param uid
@@ -958,6 +984,7 @@ roomPro.handlerHu = async function(uid,isFlow){
     if(this.userPeng){
         throw '碰了之后不能胡';
     }
+
 
 
     //判断上一次出牌的玩家是不是自己
@@ -991,127 +1018,67 @@ roomPro.handlerHu = async function(uid,isFlow){
             for(let i = 0 ; i < user.gang.length; i ++){
                 if(user.gang[i].pai[0] == pai && user.gang[i].type == 2){
                     preIsGang = true;
-                    //移除杠
                     user.gang.splice(i,1);
                 }
             }
-            isZimo = false;
-            otherIsHu = true;
+            if(preIsGang){
+                isZimo = 2;
+            }else{
+                isZimo = 3;
+            }
             pai = this.previousOut[preUid]
         }else{
             console.error('=========>>>>>>',user);
             throw '非法胡牌操作'
         }
 
-
-        let haveUserHu = false;
-        for(let x = 0 ; x < this.users.length; x++){
-            let user = this.users[x];
-            let uid = user.uid;
-            let isHu = this.check.checkHu(user);
-            if(otherIsHu){
-                isHu = this.check.checkHu(user,pai);
-            }
-            if(isHu){
-                if(isZimo && this.currPlayUid == uid ){
-                    haveUserHu = true;
-                    huUidArr.push(uid);
-                    //其他玩家减分
-                    for(let i = 0 ; i < this.users.length; i++){
-                        if(this.users[i].uid != uid){
-                            this.users[i].score -= count;
-                        }else if(this.users[i].uid == uid){
-                            this.users[i].score += count * 3;
-                        }
-                    }
-                }else if(otherIsHu){
-                    haveUserHu = true;
-                    huUidArr.push(uid);
-                    user.mahjong.push(pai);
-                    //抢杠
-                    this.users[x].score += count * 3;
-                    this.getUserByUid(preUid).score -= count* 3;
+        //判断我和打出之间的玩家  也有可以胡的 则等待
+        if(isZimo != 1){
+            let users = this.getMeBetweenBankerUsers(uid,preUid);
+            for(let i = 0 ; i < users.length ; i ++){
+                if(this.check.checkHu(user,pai)){
+                    return;
                 }
             }
         }
 
-        if(!haveUserHu){
-            let userStr = '';
-            for(let i = 0 ; i < this.users.length; i ++){
-                let user = this.users[i];
-                userStr += JSON.stringify(this.getRoomUserInfo(user.uid));
-            }
-            mailModel.sendMail('======>>>userStr : ' + userStr + '======>>room' + JSON.stringify(this.getRoomMessage())+'=======>>otherIsHu:'+otherIsHu+'======>>isZimo'+isZimo);
+        //验证胡牌
+        let isHu = false;
+        if(isZimo == 1){
+            isHu = this.check.checkHu(user);
+        }else{
+            isHu = this.check.checkHu(user,pai);
+        }
+
+        if(!isHu){
             throw '没有可以胡的玩家';
         }
     }
 
-    //计算杠
-    for(let i = 0 ; i < this.users.length; i++){
-        let gang = this.users[i].gang;
-        for(let key = 0 ; key < gang.length; key ++){
-            let multiple = 1;
-            if(gang[key].type == 1 ){
-                multiple = 2;
-            }
-            if(gang[key].uid != this.users[i].uid){
-                let user = this.getUserByUid(gang[key].uid);
-                user.score -= 3 * multiple;
-                this.users[i].score += 3 * multiple;
-            }else{
-                //其余每个人扣一分
-                for(let j = 0; j < this.users.length; j++){
-                    if(this.users[j].uid != this.users[i].uid){
-                        this.users[j].score -= 1 * multiple;
-                    }else{
-                        this.users[j].score += 3 * multiple;
-                    }
-                }
-            }
-        }
-    }
-
-
-    for(let i = 0 ; i < this.users.length;i++){
-        this.result[this.users[i].uid]['score'] = this.users[i].score - this.result[this.users[i].uid]['score'] ;
-        if(huUidArr.indexOf(this.users[i].uid) != -1){
-            this.result[this.users[i].uid]['hu'] = pai;
-        }
-    }
-
     //一盘结束
-    if(this.round == 1 && this.status != 3){
-        //更新数据库 此房间已经不能退卡
-        this.status = 3;
-        await roomModel.update({_id : this.roomId},{status : 3})
-    }
+    //if(this.round == 1 && this.status != 3){
+    //    //更新数据库 此房间已经不能退卡
+    //    this.status = 3;
+    //    await roomModel.update({_id : this.roomId},{status : 3})
+    //}
+
+    //判断是否海底捞
+    //判断胡牌类型
+    //算分
+
+
+
 
     let leaveOver = this.mahjong.mahjong;
     if(this.round <= this.roundCount ){
-        if(!isFlow){
-            this.banker = uid;
-        }else{
-            this.banker = this.currPlayUid;
-        }
+        this.banker = uid;
         this.roundInit();
 
-        //如果有一个人以上胡
-        let count = 0;
-        if(!isZimo){
-            for(var key in this.result){
-                if(this.result[key].hu){
-                    count += 1;
-                }
-            }
-        }
-
-        if(count >= 2){
-            this.banker = preUid;
-        }
         let bankerUser = this.getUserByUid(this.banker);
         bankerUser.isBanker = 1;
         //整理总结果
         this.allResult = this.allResult || {};
+
         for(let key in this.result){
             this.allResult[key] = this.allResult[key] || {};
             this.allResult[key].huCount = this.allResult[key].huCount || 0;

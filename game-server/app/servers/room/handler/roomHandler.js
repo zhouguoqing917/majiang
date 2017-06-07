@@ -84,20 +84,6 @@ handler.leaveRoom = async function(msg, session, next){
     }
 };
 
-//打骰子
-handler.rockDice = function(msg, session, next){
-    let roomNo = msg.roomNo;
-    if (!roomNo) {
-        return next(null, {code: 500, msg: '参数错误!'});
-    }
-    let room = roomManager.getRoomByRoomNo(roomNo);
-    if(!room){
-        return next(null, {code: 500, msg: '房间不存在!'});
-    }
-    let data = room.mahjong.diceRoller();
-    room.dice = data;
-    next(null, {code: 200, msg: '打骰子',data : data});
-};
 
 //出牌
 handler.playMahjong = async function(msg, session, next){
