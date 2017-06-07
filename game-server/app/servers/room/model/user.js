@@ -26,6 +26,11 @@ let User = function(session,roomCard){
     this.roomCard = roomCard;
     this.options = 0;
     this.readyChi = [];
+    this.unHu = [];
+    this.funNum = 0;
+    this.gangHongzhong = 0;
+    this.gangFacai = 0;
+    this.gangLaizi = 0;
 };
 
 pro = User.prototype;
@@ -124,5 +129,25 @@ pro.clearOutMahjongByNum = function(pai){
             break;
         }
     }
-}
+};
+
+pro.getFanNum  = function(){
+    this.funNum = 1;
+    //开口
+    let isKaikou = false;
+    if(this.chi.length){
+        isKaikou = true;
+    }
+
+    if(this.peng.length){
+        isKaikou = true;
+    }
+    let count = 0;
+    for(let i = 0; i < this.gang.length; i++){
+        if(this.gang[i].type != 1){
+            count += 1;
+        }
+    }
+
+};
 module.exports = User;
