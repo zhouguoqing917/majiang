@@ -1,1 +1,8 @@
-{"code":200,"msg":"登录成功","data":{"_id":"59241ddfeccf6136bfb18890","openid":"11111111","token":"11111111","headimgurl":"http://wx.qlogo.cn/mmopen/xgghTUGdCxUJiaJIKVYf5BRCl5qkrvFSZkicVZmAOYPEGfqiblKAtsS9JhOUTJibVKlXr9Uy0EGQVlzmFa5QUkTAQXhTVic6oxrMq/0","nickname":"11111111","id":100001,"roomCard":1000,"ipaddress":"118.250.112.189","currRoomNo":null,"sex":1},"ts":1495540719021}
+
+for(let i = 0 ; i < 10000;i++){
+    var random = parseInt(Math.random() * 10000)
+    if(random <1){
+        console.log(random);
+    }
+}
+

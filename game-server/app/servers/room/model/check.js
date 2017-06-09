@@ -11,7 +11,7 @@ var pro = Check.prototype ;
 /**
  * 检测胡牌
  * @param user
- * @returns Array 1,屁胡 2,碰碰胡 ,3全球人, 4 , 将将胡 ,5, 清一色 , 6 风一色
+ * @returns Array 1,屁胡 2,碰碰胡 ,3全球人, 4 , 将将胡 ,5, 清一色 , 6 风一色 ,7 海底捞 ,8 ,杠上花
  */
 pro.checkHu = function(user,pai){
     //是否开口
@@ -34,7 +34,6 @@ pro.checkHu = function(user,pai){
     mahjongs = [].concat(mahjongs);
 
     var laziCount = this.getLaiziCount(mahjongs);
-    console.log(laziCount,'====>>laziCount')
     var huType = [];
     if(isHu){
         //判断大胡
@@ -122,7 +121,6 @@ pro.checkHasJiang = function(user,pai){
             var temp = cloneMahjong(allPai);
             clearDouble(doubleCount[i],temp);
             var needLaiziCount = clearAll(temp);
-            console.log(needLaiziCount,laiziCount,'====>>>??');
             if(needLaiziCount == laiziCount || (needLaiziCount == 0 && laiziCount == 3)){
                 result = true;
                 break;
@@ -377,7 +375,6 @@ pro.qingyise = function(user,pai,pais){
             type = getType(user.chi[i].pai[0]);
         }
     }
-    console.log(type,'=====>>>>');
     if(type < 3){
         return 5
     }
@@ -900,7 +897,7 @@ pro.canHu = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check(2);
+var checks = new Check(0);
 
 var getMahjong = function(){
     var arr = [];
@@ -1019,7 +1016,7 @@ var test = function(){
 };
 
 var member = {
-    mahjong : [1,1,7,11,11,11,12,12,13,17,26,34,42],
+    mahjong : [1,2,3,2],
     chi : [{
         pai : []
     }],
@@ -1034,7 +1031,7 @@ var member = {
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 //console.log(checks.canHu(member));
-console.log(checks.checkPeng(member,12));
+console.log(checks.checkHu(member,2));
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))

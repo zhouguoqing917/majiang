@@ -1322,3 +1322,4 @@
 [2017-06-07 10:19:16.432] [INFO] pomelo - [32m[/Users/li/Documents/work/BumperHu/game-server/node_modules/pomelo/lib/application.js] [39m"connector-server-3" enter after start...
 [2017-06-07 10:19:16.437] [INFO] pomelo - [32m[/Users/li/Documents/work/BumperHu/game-server/node_modules/pomelo/lib/application.js] [39m"connector-server-3" finish start
 [2017-06-07 10:19:16.438] [INFO] pomelo - [32m[/Users/li/Documents/work/BumperHu/game-server/node_modules/pomelo/lib/application.js] [39m"connector-server-3" startup in 859 ms
+[2017-06-08 17:42:42.085] [INFO] pomelo - [32m[/Users/li/Documents/work/BumperHu/game-server/node_modules/pomelo/lib/application.js] [39mapplication inited: "connector-server-3"

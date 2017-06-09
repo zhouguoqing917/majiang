@@ -27,10 +27,9 @@ let User = function(session,roomCard){
     this.options = 0;
     this.readyChi = [];
     this.unHu = [];
-    this.funNum = 0;
-    this.gangHongzhong = 0;
-    this.gangFacai = 0;
-    this.gangLaizi = 0;
+    this.funNum = 1;
+    this.resultRecord = [];//{type : 1} , 1 开口 2,发财杠 3,红中杠 4 癞子杠 5 暗杠 6 明杠 7 放冲 8 自摸 9,庄家
+    //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞
 };
 
 pro = User.prototype;
@@ -80,7 +79,8 @@ pro.addGangToUser = function(pai,uid,type){
     this.gang.push({
         type : type,// 1 内杠 2 碰了之后杠 3,外杠
         uid : uid,
-        pai : [pai,pai,pai,pai]
+        pai : [pai,pai,pai,pai],
+        ts : Date.now()
     });
     console.log('=======>>>',this.gang);
 };
@@ -96,7 +96,8 @@ pro.addPengToUser = function(pai,uid){
     }
     this.peng.push({
         uid : uid,
-        pai : [pai,pai,pai]
+        pai : [pai,pai,pai],
+        ts : Date.now()
     });
     return [pai,pai,pai];
 };
@@ -117,7 +118,8 @@ pro.addChiToUser = function(uid,pais,pai){
     pais.splice(1,0,pai);
     this.chi.push({
         uid : uid,
-        pai : pais
+        pai : pais,
+        ts : Date.now()
     });
     return pais;
 };
@@ -132,60 +134,46 @@ pro.clearOutMahjongByNum = function(pai){
 };
 
 pro.getFanNum  = function(){
-    this.funNum = 1;
-    //开口
-    let isKaikou = false;
-    if(this.chi.length){
-        isKaikou = true;
-    }
-
-    if(this.peng.length){
-        isKaikou = true;
-    }
-    let anGang = 0;
-    let mingGang = 0;
-    for(let i = 0; i < this.gang.length; i++){
-        if(this.gang[i].type != 1){
-            anGang += 1;
-            isKaikou = true;
-        }
-        if(this.gang[i].type == 1){
-            mingGang += 1;
-        }
-    }
-    let isBanker = this.isBanker;
-    if(isKaikou){
-        this.funNum = this.funNum * 2;
-    }
-    if(anGang){
-        this.funNum = this.funNum * anGang * 4;
-    }
-    if(mingGang){
-        this.funNum = this.funNum * mingGang * 2;
-    }
-
-    if(this.gangHongzhong){
-        this.funNum = this.funNum * this.gangHongzhong * 2;
-    }
-
-    if(this.gangFacai){
-        this.funNum = this.funNum * this.gangFacai * 2;
-    }
-
-    if(this.gangLaizi){
-        this.funNum = this.funNum * this.gangLaizi * 4;
-    }
 };
 
-pro.addLaiziGang = function(laizi,pai){
-    if(laizi == pai){
-        this.gangLaizi += 1;
+
+pro.addResultRecord = function(type){
+    let obj = {
+        type : type
+    };
+
+    if(type == 1 || type == 6 ){
+        let has = false;
+        for(let i = 0 ; i < this.addResultRecord.length; i++){
+            if(this.addResultRecord['type'] == 1){
+                has = true;
+                break;
+            }
+        }
+        if(!has){
+            this.addResultRecord.push(obj);
+        }
     }
-    if(41 == pai){
-        this.gangFacai += 1;
+    this.addResultRecord.push(obj);
+};
+
+pro.getFanNum = function(){
+    //1 开口 2,发财杠 3,红中杠 4 癞子杠 5 暗杠 6 明杠 7 放冲 8 自摸 9,庄家
+    //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞
+    this.funNum = 1;
+    for(let i = 0 ;i < this.addResultRecord.length; i++){
+        let type = this.addResultRecord[i].type;
+        if(type == 1 || type == 2 || type == 3 || type == 6 || type == 7 || type == 8 || type == 9 || type == 10){
+            this.funNum = this.funNum * 2;
+        }
+        if(type == 5 || type == 4){
+            this.funNum = this.funNum * 4;
+        }
+
+        if(type == 11 || type == 12 || type == 13 || type == 14 || type == 15 || type == 16 || type == 17 || type == 18){
+            this.funNum = this.funNum * 20;
+        }
     }
-    if(42 == pai){
-        this.gangHongzhong += 1;
-    }
-}
+    return this.funNum;
+};
 module.exports = User;
