@@ -1210,13 +1210,75 @@ roomPro.handlerHu = async function(uid,isFlow){
                 }
             }
         }
-        //todo 计算包牌
-        if(isZimo == 3){ //计算包牌情况
-            for(let i = 0 ; i < user.resultRecord.length; i ++){
+        // 计算包牌
+        let isBaoPai = false;
+        if(isZimo == 3 ){ //计算包牌情况
+            if(isHu && isHu.length == 1 && isHu[0] == 3 && !this.check.canHu(preUser).length){
+                //包牌
+                isBaoPai = true;
+            }else if(isHu.indexOf(4) != -1 && isHu.indexOf(5) != -1){ //大胡 第三铺 玩家 包牌
+                //第三铺
+                let arr = [];
+                arr = arr.concat(user.chi);
+                arr = arr.concat(user.peng);
+                arr = arr.concat(user.gang);
+                if(arr.length >= 3){
+                    //排序
+                    for(let i = 0; i < arr.length;i++){
+                        let temp;
+                        for(let j = 0; j < arr.length; j ++){
+                            if(arr[i].ts > arr[j].ts){
+                                temp = arr[i].ts;
+                                arr[i] = arr[j];
+                                arr[j] = temp;
+                            }
+                        }
+                    }
+                    if(arr[2] != uid){
+                        let uid = arr[2].uid;
+                        isBaoPai = true;
+                        preUser = this.getUserByUid(uid);
+                    }
+                }
 
             }
         }
+        if(isZimo == 2 || isBaoPai){ //包牌
+            for(let i = 0; i < this.users.length; i ++) {
+                let user = this.users[i];
+                if(user.uid != uid && preUser.uid != user.uid){
+                    preUser.funNum += user.funNum ;
+                    user.funNum = 0;
+                }
+            }
+        }
+
+        //计算分数
+        for(let i = 0; i < this.users.length; i ++) {
+            let otherUser = this.users[i];
+            if(otherUser.uid != uid){
+                otherUser.score -= otherUser.funNum;
+                user.score += otherUser.funNum;
+            }
+        }
+        this.allResult[user.uid] = this.allResult[user.uid] || {};
+        this.allResult[user.uid].win =this.allResult[user.uid].win || 0;
+        this.allResult[user.uid].win += 1;
+        //一局结果
+        for(let i = 0; i < this.users.length; i ++){
+            let user = this.users[i];
+            this.result[user.uid] = {};
+            this.result[user.uid].nickname = user.nickname;
+            this.result[user.uid].score = user.score;
+            this.result[user.uid].funRecord = user.resultRecord;
+            this.result[user.uid].funNum = user.funNum;
+            this.result[user.uid].winUserFunNum = winUserFun;
+            this.result[user.uid].id  = user.id;
+            this.result[user.uid].headimgurl  = user.headimgurl;
+        }
+
     }
+
 
     //一盘结束
     //if(this.round == 1 && this.status != 3){
@@ -1231,7 +1293,6 @@ roomPro.handlerHu = async function(uid,isFlow){
 
         let bankerUser = this.getUserByUid(this.banker);
         bankerUser.isBanker = 1;
-        //todo 总结果
 
         this.allResult.ownerUid = this.ownerUid;
         this.allResult.roomNo = this.roomNo;
