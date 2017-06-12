@@ -320,7 +320,7 @@ roomPro.getRoomMessage = function(uid,isAll){
         maxHuCount : this.maxHuCount,
         laizi : this.laizi,
         laizipi : this.laizipi,
-        ownerUid : this.ownerUid
+        ownerUid : this.ownerUid,
     };
     return obj;
 };
@@ -366,7 +366,10 @@ roomPro.getRoomUserInfo = function(uid,isAll){
             playOutMahjong : user.playOutMahjong,
             id : user.id,
             latitude : user.latitude,
-            longitude : user.longitude
+            longitude : user.longitude,
+            unHu : user.unHu,
+            funNum : user.funNum,
+            funRecord : user.resultRecord
         };
 
         if(this.users[i].uid == uid || isAll){
@@ -763,9 +766,9 @@ roomPro.cannelAction = function(uid){
     user.isAction = 0;
     user.options = 0;
     user.readyChi = [];
-
-
-    let lowLevel = userMaxAction / 2;
+    user.readyPeng = null;
+    user.readyGang = null;
+    this.gameRecord.addRecord(this.round,7,user);
 
     let maxOption = 0;
     let maxOptionUid = null;
@@ -822,9 +825,8 @@ roomPro.cannelAction = function(uid){
     if(!isAllHandler){
         return ;
     }
-    user.unHu = [];
-    this.gameRecord.addRecord(this.round,7,user);
     this.isLicensing(uid);
+    return user.unHu;
 };
 
 /**
@@ -958,6 +960,7 @@ roomPro.handlerPeng = function(uid){
     let preUser = this.getUserByUid(previousUid);
     preUser.clearOutMahjongByNum(mahjong);
     this.currPlayUid = uid;
+
     let mahjongs = user.addPengToUser(mahjong,previousUid);
     this.gameRecord.addRecord(this.round,4,user,mahjong);
     user.addResultRecord(1);
@@ -1262,14 +1265,15 @@ roomPro.handlerHu = async function(uid,isFlow){
             }
         }
         this.allResult[user.uid] = this.allResult[user.uid] || {};
-        this.allResult[user.uid].win =this.allResult[user.uid].win || 0;
+        this.allResult[user.uid].win = this.allResult[user.uid].win || 0;
         this.allResult[user.uid].win += 1;
+        this.allResult[user.uid].score = user.score ;
         //一局结果
         for(let i = 0; i < this.users.length; i ++){
             let user = this.users[i];
             this.result[user.uid] = {};
             this.result[user.uid].nickname = user.nickname;
-            this.result[user.uid].score = user.score;
+            this.result[user.uid].score = user.score - this.result[user.uid].score;
             this.result[user.uid].funRecord = user.resultRecord;
             this.result[user.uid].funNum = user.funNum;
             this.result[user.uid].winUserFunNum = winUserFun;
@@ -1307,7 +1311,7 @@ roomPro.handlerHu = async function(uid,isFlow){
         roomManager.destroyRoom(this.roomNo);
         await roomModel.update({_id : this.roomId},{status : 4});
     }
-    this.roomChannel.sendMsgToRoom('onRoundOver',{code : 200 , data : {allResult : this.allResult,result : this.result , banker : preBanker, leaveOver : leaveOver ,birds : bridMahjongs}});
+    this.roomChannel.sendMsgToRoom('onRoundOver',{code : 200 , data : {allResult : this.allResult,result : this.result , banker : preBanker,isFlow : isFlow || false}});
 };
 
 

@@ -148,8 +148,8 @@ handler.cannelAction = function(msg, session, next){
         return next(null, {code: 400, msg: '不在此房间!'});
     }
     try {
-        room.cannelAction(uid);
-        next(null, {code: 200, msg: '取消操作'});
+        let reuslt = room.cannelAction(uid);
+        next(null, {code: 200, msg: '取消操作',unhu : reuslt});
     } catch (ex) {
         next(null, {code: 500, msg: ex});
     }

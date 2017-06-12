@@ -20,6 +20,10 @@ pro.checkHu = function(user,pai){
         return false;
     }
 
+    if(user.unHu.indexOf(pai) != -1){
+        return false;
+    }
+
     var mahjongs = user.mahjong;
     if(pai){
         mahjongs = mahjongs.concat([pai]);
