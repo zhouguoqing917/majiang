@@ -20,16 +20,10 @@ const schema=new mongoose.Schema({
     gameRecordId : {
         type : String
     },
-    is7dui : {
-        type : Boolean
+    huCount : {
+        type : Number
     },
-    isPeng : {
-        type : Boolean
-    },
-    onlyOneBird : {
-        type : Boolean
-    },
-    birdNum : {
+    maxHuCount : {
         type : Number
     },
     roundCount : {
