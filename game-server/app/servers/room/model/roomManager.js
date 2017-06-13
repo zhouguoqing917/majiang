@@ -250,6 +250,7 @@ RoomManager.prototype.getGameResultList = async function(uid){
     console.error(obj,'=====>>>>',results);
     let arr = [];
     for(let i = 0; i < results.length;i ++){
+        results[i].result._id = results[i]._id;
         arr.push(results[i].result);
     }
     console.error(obj,'=====>>>>',results,arr);
