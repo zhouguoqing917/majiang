@@ -1,33 +1,50 @@
 /**
  * Created by Mrli on 17/4/18.
  */
-var Record = function(roomNo){
+var Record = function(room){
     this.startTime = Date.now();
-    this.roomNo = roomNo;
+    this.roomNo = room.roomNo;
+    this.is7dui = room.is7dui;
+    this.isPeng = room.isPeng;
+    this.onlyOneBird = room.onlyOneBird;
+    this.birdNum = room.birdNum;
+    this.scores = [];
+    this.records = {};
+    this.roundCount = room.roundCount;
 };
 
 /**
  * add record
- * @type 操作类型 1 , 发牌 2,出牌 3,抓牌 4,碰 5 杠 6 胡 7 过
+ * @type 操作类型 1 , 发牌 2,出牌 3,抓牌 4,碰 5 杠 6 胡 7 过 8刘局
  */
-
-Record.prototype.addRecord = function(round,type,user,mahjong){
-    this[round] = this[round] || {
-
+Record.prototype.addRecord = function(round,type,user,mahjong,dice){
+    this.records[round] = this.records[round] || {
             actions : []
-        }
-    var obj = {
+        };
+    let obj = {
         type : type,
         timestamp : Date.now(),
         mahjongs : user.mahjong.concat([]),
         peng : user.peng.concat([]),
         gang : user.gang.concat([]),
-        chi : user.chi.concat([]),
         uid : user.uid
     };
+    if(dice){
+        this.records[round].dice = dice;
+        this.records[round].users = this.records[round].users || [];
+        let obj = {
+            nickname : user.nickname,
+            headimgurl : user.headimgurl,
+            uid : user.uid
+        };
+        this.records[round].users.push(obj);
+    }
 
     if(type == 1){ // 一局初始化
         obj.des = '发牌';
+        if(obj.mahjongs.length == 14){
+            this.records[round].banker =  user.uid;
+        }
     }
 
     if(type == 2){
@@ -59,12 +76,15 @@ Record.prototype.addRecord = function(round,type,user,mahjong){
         obj.mahjong = mahjong;
         obj.des = '过';
     }
-
     if(type == 8){
-        obj.mahjong = mahjong;
-        obj.des = '吃';
+        obj.des = '流局';
     }
-    this[round].actions.push(obj);
+    this.records[round].actions.push(obj);
+};
+
+Record.prototype.addScore = function(result){
+    result.createTime = Date.now();
+    this.scores.push(result);
 };
 
 module.exports = Record;

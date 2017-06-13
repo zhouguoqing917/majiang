@@ -2,11 +2,15 @@
  * Created by Mrli on 17/3/7.
  */
 
-//todo 加入定时器 清理过期房间
 const roomModel = require('mongoose').models['Room'];
 const gameUserModel = require('mongoose').models['GameUser'];
 const roomCardRecordModel = require('mongoose').models['RoomCardRecord'];
 const gameResult = require('mongoose').models['GameResult'];
+const gameRecord = require('mongoose').models['GameRecord'];
+const recordModel = require('mongoose').models['Record'];
+const shareRecordModel = require('mongoose').models['ShareRecord'];
+const serverId = 'room-server-10';
+const uuid = require('../../../util/uuid.js');
 
 let mailModel = require('../../../util/mail.js');
 let RoomManager = function(){
@@ -64,6 +68,7 @@ RoomManager.prototype.getRoomsForDatabase = async function(uid){
     let now = Date.now();
     let date = new Date(now - 10 * 60 * 1000);
     let rooms = await roomModel.find({createUserId : uid ,status : { $lte : 3}/* , $or : [{createTime : {$gte : date}} , {status : { $gt : 1}}]*/ }) || [];
+    let myRoom = [];
     for(let i = 0; i < rooms.length;i++){
         let result = await new Promise(function (resolve, reject) {
             global.app.rpc.room.room.getRoomUserCount(rooms[i].roomNo,rooms[i].roomNo,function(err, data){
@@ -78,23 +83,39 @@ RoomManager.prototype.getRoomsForDatabase = async function(uid){
         if(Date.now() - rooms[i].createTime >= 40 * 60 * 1000){
             await roomModel.update({_id : rooms[i]._id},{status : 5});
             if(rooms[i].status < 3){
-                await this.returnRoomCard(rooms[i].createUserId , rooms[i]._id);
+                let roundCount = rooms[i].data.configure.roundCount ;
+                let cardNum = roundCount == 8 ? 1 : 2;
+                await this.returnRoomCard(rooms[i].createUserId , rooms[i]._id,cardNum);
             }
             continue;
         }
+        if(result == 0 && rooms[i].status > 1){
+            if(rooms[i].status < 3){
+                let roundCount = rooms[i].data.configure.roundCount ;
+                let cardNum = roundCount == 8 ? 1 : 2;
+                await this.returnRoomCard(rooms[i].createUserId , rooms[i]._id,cardNum);
+            }else{
+                await roomModel.update({_id : rooms[i]._id},{status : 5});
+            }
+            continue;
+        }
+
         let temp = rooms[i].createTime.getTime() + 10 * 60 * 1000 ;
         rooms[i].userCount = result || 0;
         rooms[i].timeRemaining = (rooms[i].createTime.getTime() + 10 * 60 * 1000 ) - Date.now();
+        if(rooms[i].timeRemaining > 0){
+            myRoom.push(rooms[i]);
+        }
     }
-    return rooms;
+    return myRoom;
 };
 
 /**
  * 30秒 清楚过期房间
  */
 RoomManager.prototype.clearRoom = function(){
-    const outTime = 60 * 60 * 1000;
-    const outTime2 = 60 * 60 * 1000;
+    const outTime = 10 * 60 * 1000;
+    const outTime2 = 120 * 60 * 1000;
     let self = this;
     setInterval(async function(){
         try {
@@ -121,8 +142,10 @@ RoomManager.prototype.clearRoom = function(){
                         }
                     }
 
+
                     if(room.status < 3){
-                        await self.returnRoomCard(ownerId,room.roomId);
+                        let cardNum = room.roundCount == 8 ? 1 : 2;
+                        await self.returnRoomCard(ownerId,room.roomId,cardNum);
                     }
 
                     console.log('============>>>>222clear Room : ' +  room.roomNo  + ' 时间 : ' + now + " 创建时间 :" + room.createTime + ' 房间状态 : ' + room.status);
@@ -166,32 +189,20 @@ RoomManager.prototype.clearRoom = function(){
     },40000)
 };
 
-RoomManager.prototype.returnRoomCard = async function(uid,roomId){
-    let user = await gameUserModel.findOne({_id : uid});
-    let roomCardRecord = await roomCardRecordModel.findOne({roomId : roomId});
-    if(!roomCardRecord){
-        return;
-    }
-    let curNumber = roomCardRecord.curNumber;
-    let preRoomCard = user.roomCard;
-    if(curNumber < 0){
-        curNumber = Math.abs(curNumber);
-        user.roomCard += curNumber;
-        //给用户加卡
-        await gameUserModel.update({_id : uid } ,{roomCard : user.roomCard });
-        //修改房间状态
-        await roomModel.update({_id :roomId},{status : 5});
-        //写入房卡消耗记录
 
-        await roomCardRecordModel.create({
-            aboutUserId: user._id,
-            modifyType: 'system',
-            preNumber: preRoomCard,
-            curNumber: curNumber,
-            afterNumber: user.roomCard,
-            description: `房间超时`,
-            userCount : 0
-        });
+RoomManager.prototype.returnRoomCard = async function(uid,roomId,cardNum){
+    try{
+        let result = await new Promise(function (resolve, reject) {
+            global.app.rpc.room.room.backRoomCard(serverId,uid,roomId,cardNum,function(err,info){
+                if(!err ){
+                    resolve(info);
+                }else if(err){
+                    reject(new Error(err));
+                }
+            });
+        })
+    }catch(e){
+        console.error('退回房卡失败',e.stack,e);
     }
 };
 
@@ -235,8 +246,48 @@ RoomManager.prototype.getGameResultList = async function(uid){
     let key = 'result.' + uid;
     let obj = {};
     obj[key] = {$ne:null};
-    let results = await gameResult.find(obj ,{result : 1}).sort({'result.createTime' : -1}).limit(10);
+    let results = await gameResult.find(obj).sort({'result.createTime' : -1}).limit(10) || [];
+    let arr = [];
+    for(let i = 0; i < results.length;i ++){
+        arr.push(results[i].result);
+    }
+    return arr;
+};
+
+RoomManager.prototype.getGameRecordList = async function(resultId){
+    let results = await gameRecord.find({gameResultId : resultId} ,{scores : 1});
     return results;
+};
+
+RoomManager.prototype.getGameRecord = async function(recordId,round){
+    let now = Date.now();
+    let result = await recordModel.findOne({ gameRecordId :recordId,round : round});
+    return result;
+};
+
+RoomManager.prototype.getRecordCode = async function(uid,recordId,round,max){
+    max = max || 0;
+    let code = uuid.generate(6, 10);
+    let reuslt = await shareRecordModel.findOne({code : code});
+    if(max > 10){
+        return null;
+    }
+    if(reuslt){
+        max += 1;
+        this.getRecordCode(uid,recordId,round,max);
+    }
+    let result = await recordModel.findOne({ gameRecordId :recordId,round : round});
+    result = Object.assign({},result);
+    result = result._doc;
+    delete result._id;
+    result.code = code;
+    result.shareUid = uid;
+    await shareRecordModel.create(result);
+    return code;
+};
+RoomManager.prototype.getGameRecordByCode = async function(code){
+    let result = await shareRecordModel.findOne({ code :code});
+    return result;
 };
 
 module.exports = new RoomManager();

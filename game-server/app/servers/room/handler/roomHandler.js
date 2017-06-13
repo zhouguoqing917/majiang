@@ -408,3 +408,53 @@ handler.getGameResultList = async function(msg, session, next){
         next(null, {code: 500, msg: '查询失败'});
     }
 };
+
+handler.getGameRecordList = async function(msg, session, next){
+    try {
+        let resultId = msg.resultId;
+        let results = await roomManager.getGameRecordList(resultId);
+        next(null, {code: 200, data : {result : results}});
+    }catch(ex){
+        next(null, {code: 500, msg: '查询失败'});
+    }
+};
+
+handler.getGameRecord = async function(msg, session, next){
+    try {
+        let recordId = msg.recordId;
+        let round = msg.round;
+        let results = await roomManager.getGameRecord(recordId,round);
+        results.round = round;
+        next(null, {code: 200, data : {result : results}});
+    }catch(ex){
+        next(null, {code: 500, msg: '查询失败'});
+    }
+};
+
+handler.getRecordCode = async function(msg, session, next){
+    try {
+        let recordId = msg.recordId;
+        let round = msg.round;
+        let uid = session.uid;
+        let code = await roomManager.getRecordCode(uid,recordId,round,recordId);
+        if(code){
+            next(null, {code: 200, msg: '获取回放码成功' , data : {code : code}});
+        }else{
+            next(null, {code: 500, msg: '获取回放码失败'});
+        }
+    }catch(ex){
+        console.log(ex,'=======>>>>>')
+        next(null, {code: 500, msg: '获取回放码失败'});
+    }
+
+};
+
+handler.getGameRecordByCode = async function(msg, session, next){
+    let code = msg.code ;
+
+    if(!code){
+        return next(null, {code: 500, msg: '参数错误!'});
+    }
+    let result = await roomManager.getGameRecordByCode(code);
+    next(null, {code: 200, data : {result : result}});
+};

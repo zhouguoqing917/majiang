@@ -5,5 +5,8 @@ module.exports={
         require('./room').load();
         require('./roomcardrecord').load();
         require('./gameResult').load();
+        require('./gameRecord').load();
+        require('./record').load();
+        require('./shareRecord').load();
     }
 }

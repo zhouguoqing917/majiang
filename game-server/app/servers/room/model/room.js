@@ -6,6 +6,10 @@ const gameUserModel = require('mongoose').models['GameUser'];
 const roomModel = require('mongoose').models['Room'];
 const roomCardRecordModel = require('mongoose').models['RoomCardRecord'];
 const gameResult = require('mongoose').models['GameResult'];
+const gameRecordModel = require('mongoose').models['GameRecord'];
+const recordModel = require('mongoose').models['Record'];
+
+
 const RoomChannel = require('./roomChannel.js');
 const roomManager = require('./roomManager.js');
 const uuid = require('../../../util/uuid.js');
@@ -13,6 +17,7 @@ const User = require('./user.js');
 const Mahjong = require('./mahjong.js');
 let mailModel = require('../../../util/mail.js');
 let GameRecord = require('./gameRecord.js');
+
 
 //todo 癞子打出去 红中 发财 算是杠
 
@@ -1304,6 +1309,9 @@ roomPro.handlerHu = async function(uid,isFlow){
         this.allResult.endTime = Date.now();
         this.allResult.round = this.round ;
         this.allResult.createTime = this.createTime ;
+        this.allResult.huCount = this.huCount;
+        this.allResult.maxHuCount = this.maxHuCount;
+
     }
     this.gameRecord.addRecord(this.round,6,user,pai);
     if(this.round >= this.roundCount){
@@ -1316,13 +1324,60 @@ roomPro.handlerHu = async function(uid,isFlow){
 
 
 roomPro.addGameResult = async function(){
-    if(!this.allResult || !Object.keys(this.allResult).length){
-        return;
+    if(this.status <= 1){
+        return ;
     }
-    let data = await gameResult.create({
-        result  : this.allResult,
-        record : {}
-    });
+    try{
+        if(!this.allResult || !Object.keys(this.allResult).length){
+            this.allResult = {};
+            this.allResult.ownerUid = this.ownerUid;
+            this.allResult.roomNo = this.roomNo;
+            this.allResult.roundCount = this.roundCount;
+            this.allResult.endTime = Date.now();
+            this.allResult.round = this.round ;
+            this.allResult.createTime = this.createTime ;
+            this.allResult.huCount = this.huCount;
+            this.allResult.maxHuCount = this.maxHuCount;
+            for(let i = 0; i < this.users.length ; i++){
+                this.allResult[this.users[i].uid] = this.allResult[this.users[i].uid] || {};
+                this.allResult[this.users[i].uid].score = 0;
+                this.allResult[this.users[i].uid].nickname = this.users[i].nickname;
+                this.allResult[this.users[i].uid].bridCount = 0;
+                this.allResult[this.users[i].uid].pengCount = 0;
+                this.allResult[this.users[i].uid].mingGangCount = 0;
+                this.allResult[this.users[i].uid].anGangCount = 0;
+
+                this.result[this.users[i].uid] = this.result[this.users[i].uid] || {};
+                this.result[this.users[i].uid].score = 0;
+                this.result[this.users[i].uid].nickname = this.users[i].nickname;
+                this.result[this.users[i].uid].headimgurl = this.users[i].headimgurl;
+                this.result.createTime = Date.now();
+            }
+            this.gameRecord.addScore(this.result);
+            console.log(this.result,'=======>>>this.result');
+        }
+        let data = await gameResult.create({
+            result  : this.allResult
+        });
+
+        this.gameRecord.gameResultId = data._id;
+        let records = [].concat(this.gameRecord.records);
+        records = records[0];
+        delete this.gameRecord.records;
+        let recordInfo = await gameRecordModel.create(this.gameRecord);
+
+        for(let key in records){
+            let obj = records[key];
+            obj.roomNo =  this.gameRecord.roomNo;
+            obj.round = parseInt(key);
+            obj.roundCount = this.gameRecord.roundCount;
+            obj.createTime = Date.now();
+            obj.gameRecordId = recordInfo._id;
+            await recordModel.create(obj);
+        }
+    }catch(e){
+        console.error(e.stack);
+    }
 };
 
 roomPro.isInBird = function(arr){
