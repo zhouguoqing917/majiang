@@ -246,11 +246,13 @@ RoomManager.prototype.getGameResultList = async function(uid){
     let key = 'result.' + uid;
     let obj = {};
     obj[key] = {$ne:null};
-    let results = await gameResult.find(obj).sort({'result.createTime' : -1}).limit(10) || [];
+    let results = await gameResult.find(obj).sort({'result.createTime' : -1}).limit(10);
+    console.error(obj,'=====>>>>',results);
     let arr = [];
     for(let i = 0; i < results.length;i ++){
         arr.push(results[i].result);
     }
+    console.error(obj,'=====>>>>',results,arr);
     return arr;
 };
 
