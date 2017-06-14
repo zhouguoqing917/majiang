@@ -1415,6 +1415,7 @@ roomPro.userReady = function(uid){
         this.check = new Check(this.laizi);
         this.licensing();
         this.confirmLaizi();
+        this.status = 2;
         let self = this;
         for(let i = 0 ; i < this.users.length; i ++){
             let fun = function(user){
