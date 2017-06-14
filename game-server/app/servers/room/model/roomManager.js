@@ -143,10 +143,10 @@ RoomManager.prototype.clearRoom = function(){
                     }
 
 
-                    if(room.status < 3){
-                        let cardNum = room.roundCount == 8 ? 1 : 2;
-                        await self.returnRoomCard(ownerId,room.roomId,cardNum);
-                    }
+                    //if(room.status < 3){
+                    //    let cardNum = room.roundCount == 8 ? 1 : 2;
+                    //    await self.returnRoomCard(ownerId,room.roomId,cardNum);
+                    //}
 
                     console.log('============>>>>222clear Room : ' +  room.roomNo  + ' 时间 : ' + now + " 创建时间 :" + room.createTime + ' 房间状态 : ' + room.status);
                     let bss = global.app.get('backendSessionService');
