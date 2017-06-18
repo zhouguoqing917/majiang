@@ -1601,11 +1601,12 @@ roomPro.forceDissolveRoom = async function(){
     this.roomChannel.sendMsgToRoom('onRoomDissolve',{code : 200,allResult : this.allResult});
     await this.addGameResult();
     roomManager.destroyRoom(this.roomNo);
-    if(this.status < 3){ // 返回房卡
-        roomManager.returnRoomCard(this.ownerUid,this.roomId);
-    }else{
-        await roomModel.update({_id : this.roomId},{status : 5});
-    }
+    await roomModel.update({_id : this.roomId},{status : 5});
+    //if(this.status < 3){ // 返回房卡
+    //    roomManager.returnRoomCard(this.ownerUid,this.roomId);
+    //}else{
+    //    await roomModel.update({_id : this.roomId},{status : 5});
+    //}
 };
 
 /**
