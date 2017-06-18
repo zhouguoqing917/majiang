@@ -109,10 +109,12 @@ pro.addChiToUser = function(uid,pais,pai){
     for(let i = this.mahjong.length - 1; i >= 0 ; i--){
         if(this.mahjong[i] == pais[0] && !temp1){
             this.mahjong.splice(i,1);
+            temp1 = true;
         }
 
         if(this.mahjong[i] == pais[1] && !temp2){
             this.mahjong.splice(i,1);
+            temp2 = true;
         }
     }
     pais.splice(1,0,pai);
