@@ -752,11 +752,11 @@ roomPro.cannelAction = function(uid){
         throw '此用户不在此房间';
     }
     if(!this.previousOut || !Object.keys(this.previousOut).length){
-        return;
+        throw '上次玩家出牌为空';
     }
 
     if(user.mahjong.length % 3 == 2 || !user.isAction){
-        return;
+        throw '玩家牌数不对 或者不能操作';
     }
 
     let key = Object.keys(this.previousOut)[0];
@@ -1623,7 +1623,7 @@ roomPro.handlerChi = function(uid,mahjongs){
 
     let obj = this.previousOut;
     if(!obj){
-        return '不能吃';
+        throw '不能吃';
     }
     let keys = Object.keys(obj);
     let previousUid = keys[0];
