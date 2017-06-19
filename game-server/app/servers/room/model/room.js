@@ -849,6 +849,11 @@ roomPro.cannelAction = function(uid){
     if(!isAllHandler){
         return ;
     }
+
+    if(userMaxAction == 8 && this.currPlayUid == uid){
+        return user.unHu;
+    }
+
     this.isLicensing(uid,mahjong,true);
     return user.unHu;
 };
