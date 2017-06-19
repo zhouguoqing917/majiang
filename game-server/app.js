@@ -68,7 +68,7 @@ app.configure('production|development|stage', 'connector', function(){
     });
 });
 
-app.configure('production|development|stage', 'square|room', function(){
+app.configure('production|development|stage', 'room', function(){
     app.filter(pomelo.filters.serial());
     app.before(loginFilter);
 });
