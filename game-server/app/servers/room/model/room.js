@@ -628,34 +628,49 @@ roomPro.playMahjong = async function(uid,pai){
     }
 };
 
-roomPro.isLicensing = function(uid,pai){
+roomPro.isLicensing = function(uid,pai,isCannel){
     let isCanLicensing = true;
     //判断出的这张牌 其它玩家是否 吃 碰 杠 胡
     let nextUser = this.getNextUserByUid(uid);
-    for(let i = 0 ; i < this.users.length; i++){
-        let user = this.users[i];
-        if(uid == user.uid){
-            continue;
-        }
+    //如果是取消操作 只需要判断 其它用户的isAction 是否大于0
+    if(isCannel){
+        for(let i = 0 ; i < this.users.length; i++){
+            let user = this.users[i];
+            if(uid == user.uid){
+                continue;
+            }
 
-        if(this.check.checkHu(user,pai) ){
-            isCanLicensing = false;
-            user.isAction = user.isAction || 8;
+            if(!!user.isAction){
+                isCanLicensing = false;
+                break;
+            }
         }
+    }else{
+        for(let i = 0 ; i < this.users.length; i++){
+            let user = this.users[i];
+            if(uid == user.uid){
+                continue;
+            }
 
-        if(this.check.checkWaiGang(user,pai)){
-            user.isAction = user.isAction || 4;
-            isCanLicensing = false;
-        }
+            if(this.check.checkHu(user,pai) && pai){
+                isCanLicensing = false;
+                user.isAction = user.isAction || 8;
+            }
 
-        if(this.check.checkPeng(user,pai)){
-            isCanLicensing = false;
-            user.isAction = user.isAction || 2;
-        }
+            if(this.check.checkWaiGang(user,pai) ){
+                user.isAction = user.isAction || 4;
+                isCanLicensing = false;
+            }
 
-        if( nextUser.uid == this.users[i].uid && this.check.checkChi(user,pai).length  > 0 ){
-            isCanLicensing = false;
-            user.isAction = user.isAction || 1;
+            if(this.check.checkPeng(user,pai)){
+                isCanLicensing = false;
+                user.isAction = user.isAction || 2;
+            }
+
+            if( nextUser.uid == this.users[i].uid && this.check.checkChi(user,pai).length  > 0 ){
+                isCanLicensing = false;
+                user.isAction = user.isAction || 1;
+            }
         }
     }
 
@@ -673,6 +688,10 @@ roomPro.isLicensing = function(uid,pai){
 
     //是否可以发牌给下一个玩家
     if(isCanLicensing && !this.isRoundOver()){
+        let outUid = Object.keys(this.previousOut)[0];
+        let user = this.getUserByUid(outUid);
+        let nextUser = this.getNextUserByUid(outUid);
+
         this.currPlayUid = nextUser.uid;
         let uArr = this.getExceptUids(nextUser.uid);
         let mahjong ;
@@ -830,7 +849,7 @@ roomPro.cannelAction = function(uid){
     if(!isAllHandler){
         return ;
     }
-    this.isLicensing(uid);
+    this.isLicensing(uid,mahjong,true);
     return user.unHu;
 };
 
