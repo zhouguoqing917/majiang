@@ -374,7 +374,8 @@ roomPro.getRoomUserInfo = function(uid,isAll){
             longitude : user.longitude,
             unHu : user.unHu,
             funNum : user.funNum,
-            funRecord : user.resultRecord
+            funRecord : user.resultRecord,
+            roomCard : user.roomCard
         };
 
         if(this.users[i].uid == uid || isAll){
