@@ -576,14 +576,14 @@ roomPro.playMahjong = async function(uid,pai){
     }
 
     if(user.mahjong.length % 3 != 2){
-        throw '不是可以出牌的玩家';
+        throw '不是可以出牌的玩家22';
     }
 
 
     user.playAMahjong(pai);
     user.playOutMahjong.push(pai);
     this.previousOut = {};
-
+    this.currUserInaugurated = null;
     //记录上一次谁出了什么牌
     this.previousOut[uid] = pai;
 
@@ -996,6 +996,7 @@ roomPro.handlerPeng = function(uid){
 
     let mahjongs = user.addPengToUser(mahjong,previousUid);
     this.gameRecord.addRecord(this.round,4,user,mahjong);
+    this.previousOut = null;
     user.addResultRecord(1);
     //pengUid 碰牌玩家  bePengUid被碰牌玩家
     this.roomChannel.sendMsgToRoom('onPeng',{code : 200 ,data : {pengUid : uid , bePengUid : previousUid,mahjongs : mahjongs}})
