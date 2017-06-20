@@ -652,8 +652,8 @@ roomPro.isLicensing = function(uid,pai,isCannel){
             if(uid == user.uid){
                 continue;
             }
-
-            if(this.check.checkHu(user,pai) && pai){
+            let isHu = this.check.checkHu(user,pai);
+            if(isHu && isHu.length && pai){
                 console.error(user,pai,'======>>>>huUser');
                 isCanLicensing = false;
                 user.isAction = user.isAction || 8;
@@ -907,7 +907,8 @@ roomPro.handlerGang = function(uid,pai){
     if(gangObj.type == 2){
         for(let i = 0 ; i < this.users.length; i++){
             let user = this.users[i];
-            if(uid != user.uid && this.check.checkHu(user,mahjong)){
+            let isHu = this.check.checkHu(user,mahjong)
+            if(uid != user.uid && isHu && isHu.length ){
                 this.userHu = {};
                 this.userHu[user.uid] = mahjong;
                 break;
@@ -1081,7 +1082,8 @@ roomPro.handlerHu = async function(uid,isFlow){
         if(isZimo != 1 && isZimo != 4){
             let users = this.getMeBetweenBankerUsers(uid,preUid);
             for(let i = 0 ; i < users.length ; i ++){
-                if(this.check.checkHu(user,pai)){
+                let isHu = this.check.checkHu(user,pai);
+                if(isHu && isHu.length){
                     return;
                 }
             }
@@ -1095,7 +1097,7 @@ roomPro.handlerHu = async function(uid,isFlow){
             isHu = this.check.checkHu(user,pai);
         }
 
-        if(!isHu){
+        if(!isHu && isHu.length){
             throw '没有可以胡的玩家';
         }
 
@@ -1128,7 +1130,7 @@ roomPro.handlerHu = async function(uid,isFlow){
         }else{
             yinghu = check.checkHu(user,pai)
         }
-        if(yinghu){
+        if(yinghu && yinghu.length){
             user.addResultRecord(10);
         }
         let preUser = this.getUserByUid(preUid);
