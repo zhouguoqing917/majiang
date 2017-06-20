@@ -324,65 +324,26 @@ pro.qingyise = function(user,pai,pais){
     }
 
     var laiziCount = this.getLaiziCount(mahjongs);
-
+    console.log(type,'======>>>>>>type');
     for(var i = 0; i < user.gang.length ; i ++){
-        if(type == 0 && user.gang[i].pai[0] > 10){
-            return false;
-        }
-        if(type == 1 && user.gang[i].pai[0] < 10 && user.gang[i].pai[0] > 20){
-            return false;
-        }
-        if(type == 2 && user.gang[i].pai[0] < 20 && user.gang[i].pai[0] > 30){
-            return false;
-        }
-        if(type == 3 && user.gang[i].pai[0] < 30 ){
-            return false;
-        }
 
-        if(!type){
-            type = getType(user.gang[i].pai[0]);
+        if(type != getType(user.gang[i].pai[0])){
+            return false;
         }
     }
 
     for(var i = 0; i < user.peng.length ; i ++){
-        if(type == 0 && user.peng[i].pai[0] > 10){
+        if(type != getType(user.peng[i].pai[0])){
             return false;
-        }
-        if(type == 1 && user.peng[i].pai[0] < 10 && user.peng[i].pai[0] > 20){
-            return false;
-        }
-        if(type == 2 && user.peng[i].pai[0] < 20 && user.peng[i].pai[0] > 30){
-            return false;
-        }
-        if(type == 3 && user.peng[i].pai[0] < 30 ){
-            return false;
-        }
-        if(!type){
-            type = getType(user.peng[i].pai[0]);
         }
     }
 
     for(var i = 0; i < user.chi.length ; i ++){
-        if(type == 0 && user.chi[i].pai[0] > 10){
+        if(type != getType(user.chi[i].pai[0])){
             return false;
-        }
-        if(type == 1 && user.chi[i].pai[0] < 10 && user.chi[i].pai[0] > 20){
-            return false;
-        }
-        if(type == 2 && user.chi[i].pai[0] < 20 && user.chi[i].pai[0] > 30){
-            return false;
-        }
-        if(type == 3 && user.chi[i].pai[0] < 30 ){
-            return false;
-        }
-        if(!type){
-            type = getType(user.chi[i].pai[0]);
         }
     }
-    if(type < 3){
-        return 5
-    }
-    return false;
+    return 5;
 };
 
 pro.fengyise = function(user,pai){
@@ -908,7 +869,7 @@ pro.canHu = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check(24);
+var checks = new Check(9);
 
 var getMahjong = function(){
     var arr = [];
@@ -1027,18 +988,16 @@ var test = function(){
 };
 
 var member = {
-    mahjong: [ 15, 22, 21, 15, 16, 21, 16, 3, 1, 3 ],
-    peng:
-        [ { uid: '59241df8eccf6136bfb18891',
-            pai: [Object],
-            ts: 1497926213697 } ],
-    gang: [],
-    chi: []
+    mahjong: [9,26,27,25],
+    "peng":[{"uid":"59241df8eccf6136bfb18891",
+    "pai":[32,32,32],"ts":1497927077006}],
+    "gang":[],
+    "chi":[{"uid":"59241e49eccf6136bfb18893","pai":[11,12,13]}]
 }
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 var start = Date.now();
 //console.log(checks.canHu(member));
-console.log(checks.checkHu(member,33));
+console.log(checks.checkHu(member,28));
 console.log(Date.now() - start);
 //clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 //console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))
