@@ -1027,16 +1027,22 @@ var test = function(){
 };
 
 var member = {
-    mahjong : [19,34,5,11,12,33,22,32,18,23],
-    "peng":[],
-    "gang":[],
-    "chi":[{"uid":"59241e30eccf6136bfb18892","pai":[27,29,28],"ts":1497923410324}],
+    mahjong: [ 8, 29, 16, 7, 28, 27, 6 ],
+    peng:
+        [ { uid: '59241e30eccf6136bfb18892',
+            pai: [Object],
+            ts: 1497924624488 } ],
+    gang: [],
+    chi:
+        [ { uid: '59241e30eccf6136bfb18892',
+            pai: [Object],
+            ts: 1497924678694 } ]
 
 }
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 var start = Date.now();
-console.log(checks.canHu(member));
-console.log(checks.checkHu(member,31));
+//console.log(checks.canHu(member));
+console.log(checks.checkHu(member,32));
 console.log(Date.now() - start);
 //clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 //console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))

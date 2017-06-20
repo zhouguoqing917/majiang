@@ -654,7 +654,7 @@ roomPro.isLicensing = function(uid,pai,isCannel){
             }
 
             if(this.check.checkHu(user,pai) && pai){
-                console.error(user,'======>>>>huUser')
+                console.error(user,pai,'======>>>>huUser');
                 isCanLicensing = false;
                 user.isAction = user.isAction || 8;
             }
