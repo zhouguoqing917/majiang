@@ -19,7 +19,7 @@ pro.checkHu = function(user,pai){
     if(!isKaikou){
         return false;
     }
-
+    user.unHu = user.unHu || [];
     if(user.unHu.indexOf(pai) != -1){
         return false;
     }
@@ -518,7 +518,7 @@ pro.checkPeng = function(user,pai){
     var arr = user.mahjong;
     var count = 0;
     for(var i = 0 ; i < arr.length ; i++){
-        if(arr[i] == 99){
+        if(arr[i] == this.laizi || arr[i] > 40){
             continue
         }
         if(arr[i] == pai){
@@ -534,19 +534,26 @@ pro.checkPeng = function(user,pai){
 pro.checkChi = function(user,pai){
     var mahjongs = user.mahjong;
     var arr = [];
-    if(mahjongs.indexOf(pai + 1) != -1 &&  mahjongs.indexOf(pai + 2) != -1 &&  pai < 30){
+
+
+    if(mahjongs.indexOf(pai + 1) != -1 &&  mahjongs.indexOf(pai + 2) != -1 &&  pai < 30 &&
+        pai + 1 != this.laizi &&  pai + 1 != this.laizi
+    ){
         arr.push(pai);
         arr.push(pai + 1);
         arr.push(pai + 2);
     }
 
-    if(mahjongs.indexOf(pai + 1) != -1 &&  mahjongs.indexOf(pai - 1) != -1 &&  pai < 30){
+    if(mahjongs.indexOf(pai + 1) != -1 &&  mahjongs.indexOf(pai - 1) != -1 &&  pai < 30 &&
+        pai + 1 != this.laizi &&  pai - 1 != this.laizi){
         arr.push(pai - 1);
         arr.push(pai);
         arr.push(pai + 1);
     }
 
-    if(mahjongs.indexOf(pai - 1) != -1 &&  mahjongs.indexOf(pai - 2) != -1 &&  pai < 30){
+    if(mahjongs.indexOf(pai - 1) != -1 &&  mahjongs.indexOf(pai - 2) != -1 &&  pai < 30 &&
+        pai - 1 != this.laizi &&  pai - 2 != this.laizi
+    ){
         arr.push(pai - 1);
         arr.push(pai - 2);
         arr.push(pai);
@@ -901,7 +908,7 @@ pro.canHu = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check(0);
+var checks = new Check(28);
 
 var getMahjong = function(){
     var arr = [];
@@ -1020,25 +1027,19 @@ var test = function(){
 };
 
 var member = {
-    mahjong : [1,2,3,2],
-    chi : [{
-        pai : []
-    }],
-    peng : [{
-        pai : []
-    }],
-    gang : [{
-        type : 1,
-        pai : []
-    }]
+    mahjong : [19,34,5,11,12,33,22,32,18,23],
+    "peng":[],
+    "gang":[],
+    "chi":[{"uid":"59241e30eccf6136bfb18892","pai":[27,29,28],"ts":1497923410324}],
+
 }
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
-//var start = Date.now();
-//console.log(checks.canHu(member));
-//console.log(checks.checkHu(member,2));
-//console.log(Date.now() - start);
-////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
-////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))
-//console.log(max);
+var start = Date.now();
+console.log(checks.canHu(member));
+console.log(checks.checkHu(member,31));
+console.log(Date.now() - start);
+//clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
+//console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))
+console.log(max);
 //test();
 

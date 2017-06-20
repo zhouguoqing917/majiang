@@ -654,10 +654,11 @@ roomPro.isLicensing = function(uid,pai,isCannel){
             }
 
             if(this.check.checkHu(user,pai) && pai){
+                console.error(user,'======>>>>huUser')
                 isCanLicensing = false;
                 user.isAction = user.isAction || 8;
             }
-            console.error(user.isAction ,'======>>>>>>>isAction1');
+            console.error(user.isAction , '======>>>>>>>isAction1');
             if(this.check.checkWaiGang(user,pai) ){
                 user.isAction = user.isAction || 4;
                 isCanLicensing = false;
