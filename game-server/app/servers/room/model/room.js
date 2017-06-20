@@ -657,21 +657,22 @@ roomPro.isLicensing = function(uid,pai,isCannel){
                 isCanLicensing = false;
                 user.isAction = user.isAction || 8;
             }
-
+            console.error(user.isAction ,'======>>>>>>>isAction1');
             if(this.check.checkWaiGang(user,pai) ){
                 user.isAction = user.isAction || 4;
                 isCanLicensing = false;
             }
-
+            console.error(user.isAction ,'======>>>>>>>isAction2');
             if(this.check.checkPeng(user,pai)){
                 isCanLicensing = false;
                 user.isAction = user.isAction || 2;
             }
-
+            console.error(user.isAction ,'======>>>>>>>isAction3');
             if( nextUser.uid == this.users[i].uid && this.check.checkChi(user,pai).length  > 0 ){
                 isCanLicensing = false;
                 user.isAction = user.isAction || 1;
             }
+            console.error(user.isAction ,'======>>>>>>>isAction4');
         }
     }
 
