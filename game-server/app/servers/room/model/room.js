@@ -629,6 +629,7 @@ roomPro.playMahjong = async function(uid,pai){
         this.gameRecord.addRecord(this.round,3,user,mahjong);
     }else{
         //广播
+        this.currPlayUid = null;
         this.roomChannel.sendMsgToRoom('onPlayMahjong' , {code : 200, data : {uid : uid, mahjong : pai}});
         user.isAction = 0 ;
         this.gameRecord.addRecord(this.round,2,user,pai);
