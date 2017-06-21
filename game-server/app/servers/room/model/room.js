@@ -820,9 +820,9 @@ roomPro.cannelAction = function(uid){
     console.error(maxOption,maxIsAction,'========>>>>>>>11111');
     if(maxOption > maxIsAction){
         if(maxOption == 1){
-            let handlerUser = this.getUserByUid(key);
+            let handlerUser = this.getUserByUid(maxOptionUid);
             let chiArr = handlerUser.readyChi;
-            console.log(chiArr,'======>>>chiArr');
+            console.error(chiArr,'======>>>chiArr');
             //this.clearOptions();
             return this.handlerChi(maxOptionUid,chiArr);
         }
