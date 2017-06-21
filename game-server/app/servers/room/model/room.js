@@ -817,28 +817,28 @@ roomPro.cannelAction = function(uid){
             maxIsAction = user.isAction;
         }
     }
-
+    console.error(maxOption,maxIsAction,'========>>>>>>>11111');
     if(maxOption > maxIsAction){
         if(maxOption == 1){
             let handlerUser = this.getUserByUid(key);
             let chiArr = handlerUser.readyChi;
             console.log(chiArr,'======>>>chiArr');
-            this.clearOptions();
+            //this.clearOptions();
             return this.handlerChi(key,chiArr);
         }
 
         if(maxOption == 2){
-            this.clearOptions();
+            //this.clearOptions();
             return this.handlerPeng(key);
         }
 
         if(maxOption == 4){
-            this.clearOptions();
+            //this.clearOptions();
             return this.handlerGang(key,mahjong);
         }
 
         if(maxOption == 8){
-            this.clearOptions();
+            //this.clearOptions();
             return this.handlerHu(key);
         }
     }
@@ -869,6 +869,9 @@ roomPro.cannelAction = function(uid){
  */
 roomPro.handlerGang = function(uid,pai){
     let user = this.getUserByUid(uid);
+    if(user.isAction & 4 != 4){
+        throw '不能杠或者已经取消';
+    }
     //判断是否可以杠
     let mahjong ,gangObj;
     let beUid ;
@@ -978,7 +981,7 @@ roomPro.handlerPeng = function(uid){
     let mahjong = obj[previousUid];
     let user = this.getUserByUid(uid);
     let havePeng = this.check.checkPeng(user,mahjong);
-    if(!havePeng && (user.isAction & 2 == 2)){
+    if(!havePeng || (user.isAction & 2 != 2)){
         throw '非法碰牌 uid : ' + uid + ' pai : ' + mahjong;
     }
 
@@ -1656,7 +1659,7 @@ roomPro.handlerChi = function(uid,mahjongs){
     }
 
     let obj = this.previousOut;
-    if(!obj){
+    if(!obj || user.isAction & 1 != 1){
         throw '不能吃';
     }
     let keys = Object.keys(obj);
