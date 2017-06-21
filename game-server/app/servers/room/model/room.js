@@ -901,6 +901,8 @@ roomPro.handlerGang = function(uid,pai){
 
     for(let i = 0 ; i < this.users[i].length; i++){
         if(this.users[i].uid != uid && (this.users[i].isAction & 8) == 8){
+            user.options = 4;
+            user.isAction = 0;
             return;
         }
     }
@@ -988,6 +990,8 @@ roomPro.handlerPeng = function(uid){
     //判断有没有胡的 玩家为操作
     for(let i = 0 ; i < this.users[i].length; i++){
         if(this.users[i].uid != uid && (this.users[i].isAction & 8) == 8){
+            user.options = 2;
+            user.isAction = 0;
             return;
         }
     }
@@ -1688,6 +1692,8 @@ roomPro.handlerChi = function(uid,mahjongs){
     for(let i = 0 ; i < this.users.length; i ++){
         if(this.users[i].uid != uid && (this.users[i].isAction != 0 || this.users[i].options != 0 )){
             user.readyChi = mahjongs;
+            user.options = 1;
+            user.isAction = 0;
             return ;
         }
     }
