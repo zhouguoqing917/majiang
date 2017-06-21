@@ -620,11 +620,17 @@ roomPro.playMahjong = async function(uid,pai){
         this.roomChannel.sendMsgToRoomExceptUid('onMahjong',{code : 200,data : {mahjong : -1, uid : user.uid,isGang : true}},uArr);
         this.currUserInaugurated = mahjong;
         user.addMahjongToUser([mahjong]);
+        let isHu = this.check.checkHu(user);
+        if(isHu && isHu.length){
+            user.isAction = 8;
+        }
+
         this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong, uid : user.uid,isGang : true}},user);
         this.gameRecord.addRecord(this.round,3,user,mahjong);
     }else{
         //广播
         this.roomChannel.sendMsgToRoom('onPlayMahjong' , {code : 200, data : {uid : uid, mahjong : pai}});
+        user.isAction = 0 ;
         this.gameRecord.addRecord(this.round,2,user,pai);
         this.isLicensing(uid,pai);
     }
@@ -718,6 +724,10 @@ roomPro.isLicensing = function(uid,pai,isCannel){
 
         nextUser.unHu = [];
         nextUser.addMahjongToUser([mahjong]);
+        let isHu = this.check.checkHu(nextUser);
+        if(isHu && isHu.length){
+            nextUser.isAction = 8;
+        }
         this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong , uid : nextUser.uid}},nextUser);
         this.gameRecord.addRecord(this.round,3,nextUser,mahjong);
     }
@@ -957,7 +967,10 @@ roomPro.handlerGang = function(uid,pai){
         }else{
             user.addResultRecord(6);
         }
-
+        let isHu = this.check.checkHu(user);
+        if(isHu && isHu.length){
+            user.isAction = 8;
+        }
         this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong, uid : user.uid,isGang : true}},user);
         this.gameRecord.addRecord(this.round,3,user,mahjong);
     }
