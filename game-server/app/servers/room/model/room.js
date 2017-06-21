@@ -824,22 +824,22 @@ roomPro.cannelAction = function(uid){
             let chiArr = handlerUser.readyChi;
             console.log(chiArr,'======>>>chiArr');
             //this.clearOptions();
-            return this.handlerChi(key,chiArr);
+            return this.handlerChi(maxOptionUid,chiArr);
         }
 
         if(maxOption == 2){
             //this.clearOptions();
-            return this.handlerPeng(key);
+            return this.handlerPeng(maxOptionUid);
         }
 
         if(maxOption == 4){
             //this.clearOptions();
-            return this.handlerGang(key,mahjong);
+            return this.handlerGang(maxOptionUid,mahjong);
         }
 
         if(maxOption == 8){
             //this.clearOptions();
-            return this.handlerHu(key);
+            return this.handlerHu(maxOptionUid);
         }
     }
 
