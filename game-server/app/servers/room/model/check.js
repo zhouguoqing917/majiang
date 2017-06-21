@@ -869,7 +869,7 @@ pro.canHu = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check(9);
+var checks = new Check(6);
 
 var getMahjong = function(){
     var arr = [];
@@ -988,16 +988,15 @@ var test = function(){
 };
 
 var member = {
-    mahjong: [9,26,27,25],
-    "peng":[{"uid":"59241df8eccf6136bfb18891",
-    "pai":[32,32,32],"ts":1497927077006}],
-    "gang":[],
-    "chi":[{"uid":"59241e49eccf6136bfb18893","pai":[11,12,13]}]
+    mahjong: [ 15, 8, 7, 41, 35, 28, 29, 17, 4, 13, 6, 35, 3 ],
+    peng: [],
+    gang: [],
+    chi: []
 }
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 var start = Date.now();
 //console.log(checks.canHu(member));
-console.log(checks.checkHu(member,28));
+console.log(checks.checkChi(member,7));
 console.log(Date.now() - start);
 //clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 //console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))

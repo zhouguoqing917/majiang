@@ -325,7 +325,7 @@ roomPro.getRoomMessage = function(uid,isAll){
         maxHuCount : this.maxHuCount,
         laizi : this.laizi,
         laizipi : this.laizipi,
-        ownerUid : this.ownerUid,
+        ownerUid : this.ownerUid
     };
     return obj;
 };
@@ -375,7 +375,8 @@ roomPro.getRoomUserInfo = function(uid,isAll){
             unHu : user.unHu,
             funNum : user.funNum,
             funRecord : user.resultRecord,
-            roomCard : user.roomCard
+            roomCard : user.roomCard,
+            isAction : user.isAction
         };
 
         if(this.users[i].uid == uid || isAll){
@@ -656,22 +657,22 @@ roomPro.isLicensing = function(uid,pai,isCannel){
             console.error(user,pai,'======>>>>huUser');
             if(isHu && isHu.length && pai){
                 isCanLicensing = false;
-                user.isAction = user.isAction || 8;
+                user.isAction = user.isAction | 8;
             }
             console.error(user.isAction , '======>>>>>>>isAction1');
             if(this.check.checkWaiGang(user,pai) ){
-                user.isAction = user.isAction || 4;
+                user.isAction = user.isAction | 4;
                 isCanLicensing = false;
             }
             console.error(user.isAction ,'======>>>>>>>isAction2');
             if(this.check.checkPeng(user,pai)){
                 isCanLicensing = false;
-                user.isAction = user.isAction || 2;
+                user.isAction = user.isAction | 2;
             }
             console.error(user.isAction ,'======>>>>>>>isAction3');
             if( nextUser.uid == this.users[i].uid && this.check.checkChi(user,pai).length  > 0 ){
                 isCanLicensing = false;
-                user.isAction = user.isAction || 1;
+                user.isAction = user.isAction | 1;
             }
             console.error(user.isAction ,'======>>>>>>>isAction4');
         }
@@ -977,7 +978,7 @@ roomPro.handlerPeng = function(uid){
     let mahjong = obj[previousUid];
     let user = this.getUserByUid(uid);
     let havePeng = this.check.checkPeng(user,mahjong);
-    if(!havePeng){
+    if(!havePeng && (user.isAction & 2 == 2)){
         throw '非法碰牌 uid : ' + uid + ' pai : ' + mahjong;
     }
 
@@ -1044,7 +1045,9 @@ roomPro.handlerHu = async function(uid,isFlow){
     let user = this.getUserByUid(uid);
     let pai , preUid, isZimo = 1 ;//1为 自摸  2, 抢杠 3,别人放炮 ,4 自己杠到的
     let preBanker = this.banker;
-
+    if(user.isAction & 8 != 8){
+        throw '不能胡或者已经取消胡';
+    }
     //如果可以胡牌 判断是自摸还是抢杠
     if(!isFlow){
         if(this.currPlayUid == uid ){ //自摸
