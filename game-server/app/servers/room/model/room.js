@@ -1720,7 +1720,7 @@ roomPro.handlerChi = function(uid,mahjongs){
     mahjongs = user.addChiToUser(previousUid,mahjongs,mahjong);
     this.gameRecord.addRecord(this.round,8,user,mahjong);
     //pengUid 碰牌玩家  bePengUid被碰牌玩家
-    this.roomChannel.sendMsgToRoom('onChi',{code : 200 ,data : {chiUid : uid , beChiUid : previousUid,mahjong : mahjongs.join(",")}})
+    this.roomChannel.sendMsgToRoom('onChi',{code : 200 ,data : {chiUid : uid , beChiUid : previousUid,mahjong : mahjongs}})
 };
 
 module.exports = Room;
