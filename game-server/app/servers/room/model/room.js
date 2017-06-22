@@ -1034,10 +1034,10 @@ roomPro.clearOptions = function(){
 
 // 顺时钟玩家
 roomPro.getMeBetweenBankerUsers = function(beUid,uid,usersArr){
-    let usersArr = usersArr || [];
+    usersArr = usersArr || [];
     let temp = false;
     let myIndex ;
-    let nextUser = this.getNextUserByUid(uid)
+    let nextUser = this.getNextUserByUid(uid);
     if(nextUser.uid == beUid){
         return usersArr;
     }

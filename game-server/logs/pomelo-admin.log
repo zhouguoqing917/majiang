@@ -168,3 +168,13 @@
 [2017-06-21 13:47:02.414] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "room", "127.0.0.1", 8109
 [2017-06-21 13:47:03.210] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8109
 [2017-06-21 13:47:05.129] [DEBUG] pomelo-admin - [36m[MasterSocket] [39mdisconnect gate-server-1 gate {"main":"/Users/li/Documents/work/BumperHu/game-server/app.js","env":"development","id":"gate-server-1","host":"127.0.0.1","clientPort":5100,"frontend":"true","serverType":"gate","pid":1224}
+[2017-06-22 10:13:38.231] [INFO] pomelo-admin - [32m[MqttServer] [39m[MqttServer] listen on 8109
+[2017-06-22 10:13:38.389] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "master", "127.0.0.1", 8109
+[2017-06-22 10:14:29.889] [INFO] pomelo-admin - [32m[MqttServer] [39m[MqttServer] listen on 8109
+[2017-06-22 10:14:30.242] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "master", "127.0.0.1", 8109
+[2017-06-22 10:14:34.705] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "room", "127.0.0.1", 8109
+[2017-06-22 10:14:34.755] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "room", "127.0.0.1", 8109
+[2017-06-22 10:14:34.708] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "gate", "127.0.0.1", 8109
+[2017-06-22 10:14:34.919] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8109
+[2017-06-22 10:14:34.905] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8109
+[2017-06-22 10:14:35.309] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8109
