@@ -489,7 +489,7 @@ roomPro.confirmLaizi = function(){
     let tempArr = [];
     for(let i = 0; i < users.length; i++){
         if(users[i].uid != banker){
-            tempArr.push(users[i])
+            tempArr.push(users[i])``
         }
     }
     let random = parseInt(Math.random() * tempArr.length);
@@ -1038,11 +1038,11 @@ roomPro.getMeBetweenBankerUsers = function(beUid,uid,usersArr){
     let temp = false;
     let myIndex ;
     let nextUser = this.getNextUserByUid(uid);
-    usersArr.push(nextUser);
     console.error(nextUser,beUid,'======>>>beUid');
     if(nextUser.uid == beUid){
         return usersArr;
     }
+    usersArr.push(nextUser);
     return this.getMeBetweenBankerUsers(beUid,uid,usersArr);
 }
 
