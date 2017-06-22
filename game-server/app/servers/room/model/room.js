@@ -1461,7 +1461,9 @@ roomPro.userReady = function(uid){
         this.banker = this.whoIsBanker();
         this.changeUserStatus(2);
         this.deductRoomCard();//扣除房卡
+        console.error('laizi======>>',this.laizi);
         this.check = new Check(this.laizi);
+        console.error('laizi======>>',this.check.laizi);
         this.licensing();
         this.confirmLaizi();
         this.status = 2;
