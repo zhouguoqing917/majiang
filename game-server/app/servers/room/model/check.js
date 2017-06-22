@@ -869,7 +869,7 @@ pro.canHu = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check(5);
+//var checks = new Check(5);
 
 var getMahjong = function(){
     var arr = [];
