@@ -1461,11 +1461,11 @@ roomPro.userReady = function(uid){
         this.banker = this.whoIsBanker();
         this.changeUserStatus(2);
         this.deductRoomCard();//扣除房卡
+        this.confirmLaizi();
         console.error('laizi======>>',this.laizi);
         this.check = new Check(this.laizi);
         console.error('laizi======>>',this.check.laizi);
         this.licensing();
-        this.confirmLaizi();
         this.status = 2;
         let self = this;
         for(let i = 0 ; i < this.users.length; i ++){
