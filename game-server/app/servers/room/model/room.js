@@ -1041,7 +1041,7 @@ roomPro.getMeBetweenBankerUsers = function(beUid,uid,usersArr){
     if(nextUser.uid == beUid){
         return usersArr;
     }
-    return getMeBetweenBankerUsers(beUid,uid,usersArr);
+    return this.getMeBetweenBankerUsers(beUid,uid,usersArr);
 }
 
 
