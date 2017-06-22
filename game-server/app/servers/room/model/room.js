@@ -681,7 +681,7 @@ roomPro.isLicensing = function(uid,pai,isCannel){
                 isCanLicensing = false;
                 user.isAction = user.isAction | 1;
             }
-            console.error(user.isAction ,'======>>>>>>>isAction4');
+            console.error(user.isAction ,'======>>>>>>>isAction4',this.check.laizi);
         }
     }
 
