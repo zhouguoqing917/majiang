@@ -1038,6 +1038,8 @@ roomPro.getMeBetweenBankerUsers = function(beUid,uid,usersArr){
     let temp = false;
     let myIndex ;
     let nextUser = this.getNextUserByUid(uid);
+    usersArr.push(nextUser);
+    console.error(nextUser,beUid,'======>>>beUid');
     if(nextUser.uid == beUid){
         return usersArr;
     }
@@ -1089,13 +1091,14 @@ roomPro.handlerHu = async function(uid,isFlow){
             }else{
                 isZimo = 3;
             }
-            pai = this.previousOut[preUid]
+
         }else{
             console.error('=========>>>>>>',user);
             throw '非法胡牌操作'
         }
 
         //判断我和打出之间的玩家  也有可以胡的 则等待
+        console.error('=====>>>preUid',preUid);
         if(isZimo != 1 && isZimo != 4){
             let users = this.getMeBetweenBankerUsers(preUid,uid);
             for(let i = 0 ; i < users.length ; i ++){
@@ -1117,7 +1120,7 @@ roomPro.handlerHu = async function(uid,isFlow){
         if(!isHu && isHu.length){
             throw '没有可以胡的玩家';
         }
-
+        console.log(isHu,'========>>>>isHu');
         //判断是否海底捞 7
         if((isZimo == 1 || isZimo == 4) && this.mahjong.mahjong.length < 14){
             if(isHu.length == 1 && isHu[0] == 1){
