@@ -1032,24 +1032,16 @@ roomPro.clearOptions = function(){
     }
 }
 
-//获取我庄之间的 顺时钟玩家
-roomPro.getMeBetweenBankerUsers = function(uid,beUid){
-    let usersArr = [];
+// 顺时钟玩家
+roomPro.getMeBetweenBankerUsers = function(beUid,uid,usersArr){
+    let usersArr = usersArr || [];
     let temp = false;
-    for(let i = this.users.length - 1; i >= 0; i--){
-        let user = this.users[i];
-        if(uid == user.id){
-            temp = true;
-            continue;
-        }
-
-        if(temp){
-            if(beUid == user.uid){
-                break;
-            }
-            usersArr.push(user);
-        }
+    let myIndex ;
+    let nextUser = this.getNextUserByUid(uid)
+    if(nextUser.uid == beUid){
+        return usersArr;
     }
+    return getMeBetweenBankerUsers(beUid,uid,usersArr);
 }
 
 
@@ -1105,7 +1097,7 @@ roomPro.handlerHu = async function(uid,isFlow){
 
         //判断我和打出之间的玩家  也有可以胡的 则等待
         if(isZimo != 1 && isZimo != 4){
-            let users = this.getMeBetweenBankerUsers(uid,preUid);
+            let users = this.getMeBetweenBankerUsers(preUid,uid);
             for(let i = 0 ; i < users.length ; i ++){
                 let isHu = this.check.checkHu(user,pai);
                 if(isHu && isHu.length){
