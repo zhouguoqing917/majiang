@@ -5,7 +5,7 @@ const pomelo = require('pomelo');
 class LoginFilter {
     before(msg, session, next) {
         const sessionService = pomelo.app.get('sessionService');
-        if(!session.uid && msg.__route__!=='connector.loginHandler.checkLogin' && msg.__route__!=='connector.squareHandler.heartbeat'){
+        if(!session.uid && msg.__route__!=='connector.loginHandler.checkLogin'  && msg.__route__!=='gate.gateHandler.queryEntry'){
             next({code : 500,msg : '无法访问'});
             return;
         }
