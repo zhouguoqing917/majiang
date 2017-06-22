@@ -1,6 +1,3 @@
-/**
- * Created by Administrator on 2017/3/7.
- */
 
 let router = {
     room :function(session, msg, app, cb) {

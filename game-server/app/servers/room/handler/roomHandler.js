@@ -393,7 +393,7 @@ handler.sendMessage = async function(msg, session, next){
             return next(null, {code: 400, msg: '不在此房间!'});
         }
         room.sendMessage(uid,message);
-        next(null, {code: 200, msg: '进入房间', data: {}});
+        next(null, {code: 200, msg: '发送成功', data: {}});
     } catch (ex) {
         next(null, {code: 500, msg: ex});
     }

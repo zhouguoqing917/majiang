@@ -1,7 +1,3 @@
-/**
- * 房卡异动记录
- * Created by Administrator on 2017/3/6.
- */
 'use strict';
 
 const mongoose = require('mongoose');

@@ -1,13 +1,6 @@
 /**
  * Created by Mrli on 17/3/24.
  */
-/**
- * Created by Administrator on 2017/3/4.
- */
-/**
- * 生成自增的数字ID
- * Created by Administrator on 2017/3/1.
- */
 'use strict';
 
 const mongoose = require('mongoose');

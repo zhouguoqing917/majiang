@@ -1,6 +1,3 @@
-/**
- * Created by Administrator on 2017/3/8.
- */
 const gameUserModel = require('mongoose').models['GameUser'];
 const roomModel = require('mongoose').models['Room'];
 module.exports = function(app) {
