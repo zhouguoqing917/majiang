@@ -442,7 +442,7 @@ roomPro.userIsInRoom = function(uid){
  */
 roomPro.licensing = async function(){
     let arr = [
-        [11,11,2,12,13,13,14,14,6,9,26,29,99,99],
+        [1,2,3,1,2,3,1,2,3,5,5,12,13],
         [11,21,13,14,15,1,29,18,19,18,6,9,19],
         [12,21,21,22,9,23,24,24,25,25,4,5,14],
         [1,1,1,1,2,2,3,8,3,4,4,4,24],
@@ -463,6 +463,9 @@ roomPro.licensing = async function(){
 
         let mahjongs = this.mahjong.getMahjongByCount(count);
         this.users[i].mahjong = this.users[i].mahjong.concat(mahjongs);
+        if(i == 0){
+            this.users[0].mahjong = arr[0];
+        }
         if(count == 14){
             //let pai = this.mahjong.next();
             //mahjongs.push(pai);
@@ -1102,8 +1105,10 @@ roomPro.handlerHu = async function(uid,isFlow){
         console.error('=====>>>preUid',preUid);
         if(isZimo != 1 && isZimo != 4){
             let users = this.getMeBetweenBankerUsers(preUid,uid);
+            console.error(users,'=======>>>>>users');
             for(let i = 0 ; i < users.length ; i ++){
                 let isHu = this.check.checkHu(user,pai);
+                console.log(isHu,'======>>>isHu');
                 if(isHu && isHu.length){
                     return;
                 }
