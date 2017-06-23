@@ -1352,6 +1352,10 @@ roomPro.handlerHu = async function(uid,isFlow){
             this.result[user.uid].winUserFunNum = winUserFun;
             this.result[user.uid].id  = user.id;
             this.result[user.uid].headimgurl  = user.headimgurl;
+            this.result[user.uid].packBrand = false;
+            if(preUser.uid == user.uid && isBaoPai){
+                this.result[user.uid].packBrand = true;
+            }
         }
 
     }
@@ -1387,7 +1391,7 @@ roomPro.handlerHu = async function(uid,isFlow){
         roomManager.destroyRoom(this.roomNo);
         await roomModel.update({_id : this.roomId},{status : 4});
     }
-    this.roomChannel.sendMsgToRoom('onRoundOver',{code : 200 , data : {allResult : this.allResult,result : this.result , banker : preBanker,isFlow : isFlow || false ,packBrand : isBaoPai}});
+    this.roomChannel.sendMsgToRoom('onRoundOver',{code : 200 , data : {allResult : this.allResult,result : this.result , banker : preBanker,isFlow : isFlow || false }});
 };
 
 
