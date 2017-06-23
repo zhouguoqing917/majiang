@@ -1462,12 +1462,16 @@ roomPro.userReady = function(uid){
         this.banker = this.whoIsBanker();
         //this.deductRoomCard();//扣除房卡
         console.error(this.users.length,'3333');
+        try{
         this.licensing();
         this.confirmLaizi();
         this.status = 2;
         let self = this;
         this.check = new Check(this.laizi);
         this.changeUserStatus(2);
+        }catch(e){
+            console.error(e);
+        }
         console.error(this.users.length,'====');
         for(let i = 0 ; i < this.users.length; i ++){
             let fun = function(user){
