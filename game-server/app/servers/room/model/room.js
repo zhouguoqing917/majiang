@@ -489,7 +489,7 @@ roomPro.confirmLaizi = function(){
     let tempArr = [];
     for(let i = 0; i < users.length; i++){
         if(users[i].uid != banker){
-            tempArr.push(users[i])``
+            tempArr.push(users[i]);
         }
     }
     let random = parseInt(Math.random() * tempArr.length);
@@ -1461,24 +1461,16 @@ roomPro.userReady = function(uid){
         this.dice = this.mahjong.diceRoller();
         this.banker = this.whoIsBanker();
         //this.deductRoomCard();//扣除房卡
-        console.error(this.users.length,'3333');
-        try{
         this.licensing();
         this.confirmLaizi();
         this.status = 2;
         let self = this;
         this.check = new Check(this.laizi);
         this.changeUserStatus(2);
-        }catch(e){
-            console.error(e);
-        }
-        console.error(this.users.length,'====');
         for(let i = 0 ; i < this.users.length; i ++){
             let fun = function(user){
-                console.error('=======>>>>>>???111');
                 self.roomChannel.sendMsgToMem('onGameStart',{code : 200 , data : self.getRoomMessage(user.uid)},user);
             };
-            console.error('=======>>>>>>???',this.users[i]);
             fun(this.users[i]);
         }
     }
