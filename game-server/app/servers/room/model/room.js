@@ -463,15 +463,13 @@ roomPro.licensing = async function(){
 
         let mahjongs = this.mahjong.getMahjongByCount(count);
         this.users[i].mahjong = this.users[i].mahjong.concat(mahjongs);
-        if(i == 0){
-            this.users[0].mahjong = arr[0];
-            let pai = this.mahjong.next();
-            this.users[0].mahjong .push(pai);
-        }
         if(count == 14){
             //let pai = this.mahjong.next();
             //mahjongs.push(pai);
             //this.users[i].mahjong = [4,5,6,14,14,24,99,25,5,5,21,21,22,5]
+            this.users[i].mahjong.mahjong = arr[0];
+            let pai = this.mahjong.next();
+            this.users[i].mahjong.mahjong .push(pai);
             this.currUserInaugurated = mahjongs[this.users[i].mahjong.length - 1];
         }
         try{
