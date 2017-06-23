@@ -1062,6 +1062,7 @@ roomPro.handlerHu = async function(uid,isFlow){
     let user = this.getUserByUid(uid);
     let pai , preUid, isZimo = 1 ;//1为 自摸  2, 抢杠 3,别人放炮 ,4 自己杠到的
     let preBanker = this.banker;
+    let isBaoPai = false;
     if(user.isAction & 8 != 8){
         throw '不能胡或者已经取消胡';
     }
@@ -1279,7 +1280,6 @@ roomPro.handlerHu = async function(uid,isFlow){
             }
         }
         // 计算包牌
-        let isBaoPai = false;
         if(isZimo == 3 ){ //计算包牌情况
             if(isHu && isHu.length == 1 && isHu[0] == 3 && !this.check.canHu(preUser).length){
                 //包牌
@@ -1329,10 +1329,19 @@ roomPro.handlerHu = async function(uid,isFlow){
                 user.score += otherUser.funNum;
             }
         }
-        this.allResult[user.uid] = this.allResult[user.uid] || {};
-        this.allResult[user.uid].win = this.allResult[user.uid].win || 0;
-        this.allResult[user.uid].win += 1;
-        this.allResult[user.uid].score = user.score ;
+
+
+        //总结算
+        for(let i = 0; i < this.users.length; i ++) {
+            let resUser = this.users[i];
+            this.allResult[resUser.uid] = this.allResult[resUser.uid] || {};
+            this.allResult[resUser.uid].win = this.allResult[resUser.uid].win || 0;
+            this.allResult[user.uid].score = user.score ;
+            if(resUser.uid == user.uid){
+                this.allResult[user.uid].win += 1;
+            }
+        }
+
         //一局结果
         for(let i = 0; i < this.users.length; i ++){
             let user = this.users[i];
@@ -1378,7 +1387,7 @@ roomPro.handlerHu = async function(uid,isFlow){
         roomManager.destroyRoom(this.roomNo);
         await roomModel.update({_id : this.roomId},{status : 4});
     }
-    this.roomChannel.sendMsgToRoom('onRoundOver',{code : 200 , data : {allResult : this.allResult,result : this.result , banker : preBanker,isFlow : isFlow || false}});
+    this.roomChannel.sendMsgToRoom('onRoundOver',{code : 200 , data : {allResult : this.allResult,result : this.result , banker : preBanker,isFlow : isFlow || false ,packBrand : isBaoPai}});
 };
 
 
