@@ -927,7 +927,7 @@ roomPro.handlerGang = function(uid,pai){
     if(gangObj.type == 2){
         for(let i = 0 ; i < this.users.length; i++){
             let user = this.users[i];
-            let isHu = this.check.checkHu(user,mahjong)
+            let isHu = this.check.checkHu(user,mahjong);
             if(uid != user.uid && isHu && isHu.length ){
                 this.userHu = {};
                 this.userHu[user.uid] = mahjong;
@@ -948,7 +948,7 @@ roomPro.handlerGang = function(uid,pai){
         this.previousOut[uid] = pai;
         return;
     }else { //给玩家一张牌
-        user.addResultRecord(1);
+        this.gameRecord.addRecord(1);
         if(this.isRoundOver()){
             //todo  房间内信息 初始化 当前玩家坐庄
             // this.roundInit();
@@ -1100,6 +1100,13 @@ roomPro.handlerHu = async function(uid,isFlow){
             throw '非法胡牌操作'
         }
 
+        //初始化 resut
+        for(let i = 0; i < this.users.length; i ++){
+            this.result[this.users[i].uid] = this.result[this.users[i].uid] || {};
+            this.result[this.users[i].uid].score = this.users[i].score;
+        }
+
+
         //判断我和打出之间的玩家  也有可以胡的 则等待
         console.error('=====>>>preUid',preUid);
         if(isZimo != 1 && isZimo != 4){
@@ -1177,7 +1184,7 @@ roomPro.handlerHu = async function(uid,isFlow){
                 break;
             }
         }
-        if(hasZimoFan){
+        if(!hasZimoFan){
             user.addResultRecord(8);
         }
 
@@ -1330,7 +1337,6 @@ roomPro.handlerHu = async function(uid,isFlow){
         //一局结果
         for(let i = 0; i < this.users.length; i ++){
             let user = this.users[i];
-            this.result[user.uid] = {};
             this.result[user.uid].nickname = user.nickname;
             this.result[user.uid].score = user.score - this.result[user.uid].score;
             this.result[user.uid].funRecord = user.resultRecord;
