@@ -470,7 +470,7 @@ roomPro.licensing = async function(){
             this.users[i].mahjong = arr[0];
             let pai = this.mahjong.next();
             this.users[i].mahjong.push(pai);
-            this.currUserInaugurated = mahjongs[this.users[i].mahjong.length - 1];
+            this.currUserInaugurated = this.users[i].mahjong[this.users[i].mahjong.length - 1];
         }
         try{
             this.gameRecord.addRecord(this.round,1,this.users[i]);
