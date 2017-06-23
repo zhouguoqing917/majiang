@@ -1461,11 +1461,11 @@ roomPro.userReady = function(uid){
         this.banker = this.whoIsBanker();
         this.changeUserStatus(2);
         //this.deductRoomCard();//扣除房卡
-        this.confirmLaizi();
-        this.check = new Check(this.laizi);
         this.licensing();
+        this.confirmLaizi();
         this.status = 2;
         let self = this;
+        this.check = new Check(this.laizi);
         for(let i = 0 ; i < this.users.length; i ++){
             let fun = function(user){
                 self.roomChannel.sendMsgToMem('onGameStart',{code : 200 , data : self.getRoomMessage(user.uid)},user);
