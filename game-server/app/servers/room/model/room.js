@@ -1041,7 +1041,6 @@ roomPro.getMeBetweenBankerUsers = function(beUid,uid,usersArr){
     let temp = false;
     let myIndex ;
     let nextUser = this.getNextUserByUid(uid);
-    console.error(nextUser,beUid,'======>>>beUid');
     if(nextUser.uid == beUid){
         return usersArr;
     }
@@ -1107,8 +1106,8 @@ roomPro.handlerHu = async function(uid,isFlow){
             let users = this.getMeBetweenBankerUsers(preUid,uid);
             console.error(users,'=======>>>>>users');
             for(let i = 0 ; i < users.length ; i ++){
-                let isHu = this.check.checkHu(user,pai);
-                console.log(isHu,'======>>>isHu');
+                let isHu = this.check.checkHu(users[i],pai);
+                console.error(isHu,'======>>>isHu');
                 if(isHu && isHu.length){
                     return;
                 }
