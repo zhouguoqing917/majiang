@@ -948,7 +948,6 @@ roomPro.handlerGang = function(uid,pai){
         this.previousOut[uid] = pai;
         return;
     }else { //给玩家一张牌
-        this.gameRecord.addRecord(1);
         if(this.isRoundOver()){
             //todo  房间内信息 初始化 当前玩家坐庄
             // this.roundInit();
