@@ -465,6 +465,8 @@ roomPro.licensing = async function(){
         this.users[i].mahjong = this.users[i].mahjong.concat(mahjongs);
         if(i == 0){
             this.users[0].mahjong = arr[0];
+            let pai = this.mahjong.next();
+            this.users[0].mahjong .push(pai);
         }
         if(count == 14){
             //let pai = this.mahjong.next();
