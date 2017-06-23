@@ -1459,13 +1459,14 @@ roomPro.userReady = function(uid){
         this.round += 1;
         this.dice = this.mahjong.diceRoller();
         this.banker = this.whoIsBanker();
-        this.changeUserStatus(2);
         //this.deductRoomCard();//扣除房卡
         this.licensing();
         this.confirmLaizi();
         this.status = 2;
         let self = this;
         this.check = new Check(this.laizi);
+        this.changeUserStatus(2);
+        console.error(this.users.length,'====');
         for(let i = 0 ; i < this.users.length; i ++){
             let fun = function(user){
                 console.error('=======>>>>>>???111');
