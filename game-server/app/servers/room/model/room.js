@@ -1468,8 +1468,10 @@ roomPro.userReady = function(uid){
         this.check = new Check(this.laizi);
         for(let i = 0 ; i < this.users.length; i ++){
             let fun = function(user){
+                console.error('=======>>>>>>???111');
                 self.roomChannel.sendMsgToMem('onGameStart',{code : 200 , data : self.getRoomMessage(user.uid)},user);
             };
+            console.error('=======>>>>>>???',this.users[i]);
             fun(this.users[i]);
         }
     }
