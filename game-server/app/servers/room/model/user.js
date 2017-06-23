@@ -155,8 +155,10 @@ pro.addResultRecord = function(type){
         if(!has){
             this.resultRecord.push(obj);
         }
+    }else{
+        this.resultRecord.push(obj);
     }
-    this.resultRecord.push(obj);
+
 };
 
 pro.getFanNum = function(){
