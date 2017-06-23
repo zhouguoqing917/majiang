@@ -1453,13 +1453,15 @@ roomPro.userReady = function(uid){
             isAllReady = false;
         }
     }
-
+    console.error(this.users.length,'1111');
     if(isAllReady && this.users.length == 4){
+        console.error(this.users.length,'22222');
         this.result = {};
         this.round += 1;
         this.dice = this.mahjong.diceRoller();
         this.banker = this.whoIsBanker();
         //this.deductRoomCard();//扣除房卡
+        console.error(this.users.length,'3333');
         this.licensing();
         this.confirmLaizi();
         this.status = 2;
