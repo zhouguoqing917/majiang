@@ -1460,6 +1460,7 @@ roomPro.userReady = function(uid){
         this.round += 1;
         this.dice = this.mahjong.diceRoller();
         this.banker = this.whoIsBanker();
+        
         //this.deductRoomCard();//扣除房卡
         this.licensing();
         this.confirmLaizi();
