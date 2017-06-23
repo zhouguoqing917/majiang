@@ -1043,6 +1043,7 @@ roomPro.getMeBetweenBankerUsers = function(beUid,uid,usersArr){
         return usersArr;
     }
     usersArr.push(nextUser);
+    uid = nextUser.uid;
     return this.getMeBetweenBankerUsers(beUid,uid,usersArr);
 }
 
@@ -1460,7 +1461,7 @@ roomPro.userReady = function(uid){
         this.round += 1;
         this.dice = this.mahjong.diceRoller();
         this.banker = this.whoIsBanker();
-        
+
         //this.deductRoomCard();//扣除房卡
         this.licensing();
         this.confirmLaizi();
