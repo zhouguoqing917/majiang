@@ -7,8 +7,8 @@ let cryptUtil = require("./crypt");
 
 const mongoose = require('mongoose');
 
-let wechat_AppID = 'wxf0204bd2fa1abbac';
-let wechat_AppSecret = 'f80e0542b862a67953084e29182eb70e';
+let wechat_AppID = '5948b406';
+let wechat_AppSecret = 'fef532747577afcbabec97e92f9b3468';
 
 router.get('/', function(req, res, next) {
     //var a=JSON.parse(req.body.a);
