@@ -1544,8 +1544,9 @@ roomPro.initiateDissolveRoom = async function(uid){
     if(uid == this.ownerUid){
         isBanker = true;
     }
+
     if(this.status == 1 && !isBanker){
-        return;
+        throw '您不是房主!';
     }
 
     this.dissUid = uid;
