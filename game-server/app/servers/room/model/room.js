@@ -373,7 +373,7 @@ roomPro.getRoomUserInfo = function(uid,isAll){
             latitude : user.latitude,
             longitude : user.longitude,
             unHu : user.unHu,
-            funNum : user.funNum,
+            funNum : user.getFanNum(),
             funRecord : user.resultRecord,
             roomCard : user.roomCard,
             isAction : user.isAction
