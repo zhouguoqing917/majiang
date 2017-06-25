@@ -135,9 +135,6 @@ pro.clearOutMahjongByNum = function(pai){
     }
 };
 
-pro.getFanNum  = function(){
-};
-
 
 pro.addResultRecord = function(type){
     let obj = {

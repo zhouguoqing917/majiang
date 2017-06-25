@@ -1552,20 +1552,30 @@ roomPro.initiateDissolveRoom = async function(uid){
     this.dissUid = uid;
     this.dissCreateTime = Date.now();
 
-    this.agreeDissolve.push(uid);
-    await this.roomChannel.sendMsgToRoom('onDissolveHandler',{
-        code : 200,
-        data : {
-            dissUid : this.dissUid,
-            cannelDissove : this.cannelDissove,
-            agreeDissolve : this.agreeDissolve,
-            dissCreateTime : this.dissCreateTime
-        }
-    });
-    this.handlerDissolveUser.push(uid);
-    this.ressolveTimer = setTimeout(function(){
-        self.dissolveRoom.call(self,true);
-    },outTime);
+    if(isBanker && this.users.length < 4){ //当第一局未结束 直接解散房间
+        this.roomChannel.sendMsgToRoom('onRoomDissolve',{code : 200,allResult : this.allResult});
+        let  cardNum = this.roundCount == 8 ? 1 : 2;
+        await this.addGameResult();
+        await roomModel.update({_id : this.roomId},{status : 5});
+        await roomManager.returnRoomCard(this.ownerUid,this.roomId,cardNum);
+        roomManager.destroyRoom(this.roomNo);
+    }else{
+        //发起解散
+        this.agreeDissolve.push(uid);
+        await this.roomChannel.sendMsgToRoom('onDissolveHandler',{
+            code : 200,
+            data : {
+                dissUid : this.dissUid,
+                cannelDissove : this.cannelDissove,
+                agreeDissolve : this.agreeDissolve,
+                dissCreateTime : this.dissCreateTime
+            }
+        });
+        this.handlerDissolveUser.push(uid);
+        this.ressolveTimer = setTimeout(function(){
+            self.dissolveRoom.call(self,true);
+        },outTime);
+    }
 };
 
 //处理解散房间
