@@ -110,7 +110,7 @@ pro.createGroup = async function(owner,roomNo){
     };
     let result = await request.post(options);
     result = JSON.parse(result);
-    console.log('=====>>>createGroup',result);
+    console.error('=====>>>createGroup',result);
     if(result.ret == 0 && result.gid){
         return result.gid;
     }
