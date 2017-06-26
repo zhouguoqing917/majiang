@@ -15,7 +15,7 @@
   },
   "stage":{
     "gate" : [
-      {"id": "gate-server-1", "host": "47.94.45.41","clientPort": 5100, "frontend": true}
+      {"id": "gate-server-1", "host": "47.94.45.41","clientPort": 5101, "frontend": true}
     ],
     "room":[
       {"id": "room-server-10", "host": "47.94.45.41", "port":9100},
