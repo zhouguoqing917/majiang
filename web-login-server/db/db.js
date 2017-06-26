@@ -2,14 +2,11 @@ var connectionString, db, mongoose, options;
 
 mongoose = require('mongoose');
 
-var host  = "192.168.0.222";
+var host  = "127.0.0.1";
 var port  = "27017";
-var db    = "hongzhong";
-var username='yaoyao';
-var pwd='yaoyao8888';
+let dbname = "hsmajiang";
 
-
-connectionString = `mongodb://${username}:${pwd}@${host}:${port}/${db}`;
+connectionString = `mongodb://${host}:${port}/${dbname}`;
 
 options = {
     db: {
