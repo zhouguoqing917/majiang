@@ -55,6 +55,9 @@ let schema=new mongoose.Schema({
     longitude : {
         type: Number,
         "default": 0
+    },
+    xfToken : {
+        type: String
     }
 });
 schema.index( {id : 1} , { unique : true });

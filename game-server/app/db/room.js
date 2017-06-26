@@ -24,7 +24,7 @@ const schema=new mongoose.Schema({
         type: Number, //剩余时间
         default: 0
     },
-    status:{    //状态  0代表未初始化 2,进行中 3,第一局已经结束 4, 全部结束 , 5,以退卡
+    status:{//状态  0代表未初始化 2,进行中 3,第一局已经结束 4, 全部结束 , 5,以退卡
         type: Number,
         "default": 0
     },
@@ -40,7 +40,6 @@ schema.index( {roomNo : 1} );
 schema.index( {serverId : 1} );
 
 schema.statics={
-
 };
 
 module.exports= {

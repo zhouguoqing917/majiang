@@ -3,6 +3,7 @@ const loginFilter = require('./app/filter/loginFilter');
 const globalFilter = require('./app/filter/globalFilter');
 const router = require('./app/router/router.js');
 const mail = require('./app/util/mail.js');
+const xfyunModel = require('./app/xfyun/xfyunModel.js');
 require('./app/db/mongodb').load();
 
 /**
@@ -31,10 +32,12 @@ app.configure('production|development|stage', function(){
     app.registerAdmin(roomModel,{app : app});
     app.registerAdmin(onLineUser,{app : app});
     app.registerAdmin(broadcast,{app : app});
-
     //全局错误handler
     let globalErrHandler = require('./app/errHandler/globalErrHandler.js');
     app.set('errorHandler',globalErrHandler);
+
+    //注册apptoken
+    xfyunModel.getAppToken();
 });
 app.configure('production|development|stage', 'gate', function(){
     app.set('connectorConfig', {

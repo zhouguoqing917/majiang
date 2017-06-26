@@ -1,5 +1,7 @@
 const gameUserModel = require('mongoose').models['GameUser'];
 const roomModel = require('mongoose').models['Room'];
+const xfyunModel = require('../../../xfyun/xfyunModel.js');
+
 module.exports = function(app) {
     return new Handler(app);
 };
@@ -88,6 +90,16 @@ handler.checkLogin = async function(msg, session, next) {
             });
         }
 
+        if(!gameUser.token){
+            let result = await xfyunModel.userImport(gameUser._id,gameUser.wxuserinfo.nickname,gameUser.wxuserinfo.headimgurl);
+            if(result){
+                //导入用户失败
+                throw '讯科云导入用户失败!'
+            }
+            let xfToken = await xfyunModel.getUserToken(gameUser._id);
+            gameUser.xfToken = xfToken;
+        }
+
         session.set('sid',this.app.curServer.id);
         const {nickname,sex,headimgurl}=gameUser.wxuserinfo;
         session.set('userinfo',{
@@ -125,7 +137,7 @@ handler.checkLogin = async function(msg, session, next) {
                 console.log(`新用户加入，绑定session到服务器${this.app.curServer.id}`);
         });
         session.on('closed', onUserLeave.bind(this, session));
-        gameUserModel.update({_id:gameUser._id},{$set:{ipaddress:gameUser.ipaddress , loginTime : new Date(),loginTimes : loginTimes,latitude : latitude,longitude : longitude}}).exec();
+        gameUserModel.update({_id:gameUser._id},{$set:{ipaddress:gameUser.ipaddress , xfToken : gameUser.xfToken,loginTime : new Date(),loginTimes : loginTimes,latitude : latitude,longitude : longitude}}).exec();
 
         var data = {
             _id : gameUser._id,
@@ -139,6 +151,7 @@ handler.checkLogin = async function(msg, session, next) {
             currRoomNo : gameUser.currRoomNo,
             sex : sex
         };
+
         next(null,{code:200,msg:'登录成功',data: data});
     }else{
         next(null,{code:500,msg:'用户名密码错误'});

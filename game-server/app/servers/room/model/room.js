@@ -17,7 +17,7 @@ const User = require('./user.js');
 const Mahjong = require('./mahjong.js');
 let mailModel = require('../../../util/mail.js');
 let GameRecord = require('./gameRecord.js');
-
+const xfyunModel = require('../../../xfyun/xfyunModel.js');
 
 //todo 癞子打出去 红中 发财 算是杠
 
@@ -90,6 +90,15 @@ roomPro.createRoom = async function (session, roomData) {
         gameuser.roomCard -= useCardNumber;
         await gameUserModel.update({_id : uid}, {$set: gameuser});
     }
+    let roomNo = this.getRoomNo();//roomNo
+
+    //创建讯飞云语音 房间
+    let gid = await xfyunModel.createGroup(this.ownerUid,roomNo);
+    if(!gid){
+        throw '创建语音房间失败';
+    }
+
+    this.gid = gid;
 
     const roomObject = {
         createUserId:'',
@@ -100,7 +109,6 @@ roomPro.createRoom = async function (session, roomData) {
         status:0
     };
 
-    let roomNo = this.getRoomNo();//roomNo
 
     this.roomChannel = new RoomChannel(roomNo);
     this.roomNo = roomNo;
@@ -202,6 +210,7 @@ roomPro.entryRoom = async function(roomNo,session){
     await gameUserModel.update({_id : user.uid}, {currRoomNo : roomNo ,roomId : this.roomId});
     session.set('roomNo',roomNo);
     await session.pushAll();
+    await xfyunModel.joinGroup(this.gid,uid);
     return this.getRoomMessage(uid);
 };
 
@@ -325,7 +334,8 @@ roomPro.getRoomMessage = function(uid,isAll){
         maxHuCount : this.maxHuCount,
         laizi : this.laizi,
         laizipi : this.laizipi,
-        ownerUid : this.ownerUid
+        ownerUid : this.ownerUid,
+        gid : this.gid
     };
     return obj;
 };
@@ -554,6 +564,9 @@ roomPro.leaveRoom = async function(uid,isOffLine){
                 this.sendToRoomOwner();
                 this.roomChannel.sendMsgToRoom('onUserLeave',{code : 200 , uid : uid});
                 await gameUserModel.update({_id : uid}, {currRoomNo : null,roomId : null});
+                if(uid != this.ownerUid){
+                    await xfyunModel.quitGroup(this.gid,uid);
+                }
             }
             //}else{
             //    this.roomChannel.leaveChannel(this.users[i]);
@@ -1462,7 +1475,7 @@ roomPro.isInBird = function(arr){
     return birdArr;
 };
 
-roomPro.userReady = function(uid){
+roomPro.userReady = async function(uid){
     let user = this.getUserByUid(uid);
     if(user.status == 1){
         throw '玩家已经准备!';
@@ -1496,6 +1509,13 @@ roomPro.userReady = function(uid){
                 self.roomChannel.sendMsgToMem('onGameStart',{code : 200 , data : self.getRoomMessage(user.uid)},user);
             };
             fun(this.users[i]);
+        }
+
+        let ownerUid = this.ownerUid;
+        let ownerUser = this.getUserByUid(ownerUid);
+        //如果房主不在房间
+        if(!ownerUser){
+           await xfyunModel.quitGroup(this.gid,ownerUid);
         }
     }
 };

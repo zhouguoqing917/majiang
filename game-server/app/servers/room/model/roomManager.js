@@ -11,6 +11,7 @@ const recordModel = require('mongoose').models['Record'];
 const shareRecordModel = require('mongoose').models['ShareRecord'];
 const serverId = 'room-server-10';
 const uuid = require('../../../util/uuid.js');
+const xfyunModel = require('../../../xfyun/xfyunModel.js');
 
 let mailModel = require('../../../util/mail.js');
 let RoomManager = function(){
@@ -209,6 +210,7 @@ RoomManager.prototype.returnRoomCard = async function(uid,roomId,cardNum){
 RoomManager.prototype.destroyRoom = async function(roomNo){
     let  room = this.getRoomByRoomNo(roomNo);
     if(room){
+        await xfyunModel.removeGroup(room.gid,room.ownerUid);
         for(let i = 0 ; i < room.users.length; i ++){
             let user = room.users[i];
             let bss = global.app.get('backendSessionService');
@@ -288,9 +290,11 @@ RoomManager.prototype.getRecordCode = async function(uid,recordId,round,max){
     await shareRecordModel.create(result);
     return code;
 };
+
 RoomManager.prototype.getGameRecordByCode = async function(code){
     let result = await shareRecordModel.findOne({ code :code});
     return result;
 };
+
 
 module.exports = new RoomManager();
