@@ -90,7 +90,7 @@ handler.checkLogin = async function(msg, session, next) {
             });
         }
 
-        if(!gameUser.token){
+        if(!gameUser.xfToken){
             let result = await xfyunModel.userImport(gameUser._id,gameUser.wxuserinfo.nickname,gameUser.wxuserinfo.headimgurl);
             if(result){
                 //导入用户失败
