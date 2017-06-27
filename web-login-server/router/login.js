@@ -30,7 +30,7 @@ router.get('/login', async function(req, res, next) {
     try{
         let wechat_url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${wechat_AppID}&secret=${wechat_AppSecret}&code=${req.query.code}&grant_type=authorization_code`;
         let data=await http.getLocal(wechat_url);
-        console.log(`收到信息${data}`);
+        console.log(`收到信息${data}`,wechat_url,'======>>wechat_url');
         let wxlogin=JSON.parse(data);
         if(wxlogin.errcode){
             throw new Error(wxlogin.errmsg);
