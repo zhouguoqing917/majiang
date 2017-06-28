@@ -162,9 +162,14 @@ pro.getFanNum = function(){
     //1 开口 2,发财杠 3,红中杠 4 癞子杠 5 暗杠 6 明杠 7 放冲 8 自摸 9,庄家
     //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞
     this.funNum = 1;
+    let kaikouFan = true;
     for(let i = 0 ;i < this.resultRecord.length; i++){
         let type = this.resultRecord[i].type;
-        if(type == 1 || type == 2 || type == 3 || type == 6 || type == 7 || type == 8 || type == 9 || type == 10){
+        if(kaikouFan && type == 1){
+            this.funNum = this.funNum * 2;
+            kaikouFan = false;
+        }
+        if(type == 2 || type == 3 || type == 6 || type == 7 || type == 8 || type == 9 || type == 10){
             this.funNum = this.funNum * 2;
         }
         if(type == 5 || type == 4){

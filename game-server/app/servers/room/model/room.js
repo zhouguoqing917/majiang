@@ -1189,16 +1189,19 @@ roomPro.handlerHu = async function(uid,isFlow){
             preUser.addResultRecord(7);
         }
 
-
-        //判断自摸番
-        let hasZimoFan = true;
-        for(let i = 0 ; i < isHu.length; i++){
-            if(isHu[i] == 7 || isHu[i] == 8){
-                hasZimoFan = false;
-                break;
-            }
+        if(isZimo == 1){
+            preUser.addResultRecord(8);
         }
-        if(!hasZimoFan){
+
+        ////判断自摸番
+        //let hasZimoFan = true;
+        //for(let i = 0 ; i < isHu.length; i++){
+        //    if(isHu[i] == 7 || isHu[i] == 8){
+        //        hasZimoFan = false;
+        //        break;
+        //    }
+        //}
+        if(isZimo == 1){
             user.addResultRecord(8);
         }
 
@@ -1316,7 +1319,7 @@ roomPro.handlerHu = async function(uid,isFlow){
                             }
                         }
                     }
-                    if(arr[2] != uid){
+                    if(arr[2].uid != uid){
                         let uid = arr[2].uid;
                         isBaoPai = true;
                         preUser = this.getUserByUid(uid);
@@ -1367,6 +1370,7 @@ roomPro.handlerHu = async function(uid,isFlow){
             this.result[user.uid].id  = user.id;
             this.result[user.uid].headimgurl  = user.headimgurl;
             this.result[user.uid].packBrand = false;
+            this.result[user.uid].mahjong = user.mahjong;
             if(preUser.uid == user.uid && isBaoPai){
                 this.result[user.uid].packBrand = true;
             }
