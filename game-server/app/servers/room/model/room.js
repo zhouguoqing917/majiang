@@ -1350,9 +1350,9 @@ roomPro.handlerHu = async function(uid,isFlow){
             let resUser = this.users[i];
             this.allResult[resUser.uid] = this.allResult[resUser.uid] || {};
             this.allResult[resUser.uid].win = this.allResult[resUser.uid].win || 0;
-            this.allResult[user.uid].score = user.score ;
+            this.allResult[resUser.uid].score = resUser.score ;
             if(resUser.uid == user.uid){
-                this.allResult[user.uid].win += 1;
+                this.allResult[resUser.uid].win += 1;
             }
         }
 

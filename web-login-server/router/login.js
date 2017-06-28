@@ -38,7 +38,7 @@ router.get('/login', async function(req, res, next) {
         let {access_token,expires_in,refresh_token,openid,scope,unionid} = wxlogin;
 
         let wechat_userinfo = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}`;
-        data=await http.getLocal(wechat_userinfo);
+        data = await http.getLocal(wechat_userinfo);
         let wxuserinfo=JSON.parse(data);
         if(wxuserinfo.errcode){
             throw new Error(wxuserinfo.errmsg);
