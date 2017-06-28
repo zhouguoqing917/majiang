@@ -1,6 +1,7 @@
 const Room = require('../model/room.js');
 const roomManager = require('../model/roomManager.js');
 const gameUserModel = require('mongoose').models['GameUser'];
+const roomConfig = require('../../../../config/roomConfig.json');
 module.exports = function (app) {
     return new Handler(app);
 };
@@ -457,4 +458,9 @@ handler.getGameRecordByCode = async function(msg, session, next){
     }
     let result = await roomManager.getGameRecordByCode(code);
     next(null, {code: 200, data : {result : result}});
+};
+
+
+handler.getRoomConfig = function(){
+    next(null, {code: 200, data : roomConfig});
 };
