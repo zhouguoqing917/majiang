@@ -1,5 +1,35 @@
 [
-    {"ins_type":"1","ins_play_type":"1","ins_name":"红中赖子杠","ins_pay_type":"1|2|3","ins_antes":"1|0.5|2","ins_min_multiple":"4|16|32|64","ins_max_multiple":"300|500","ins_board_number":"8|16","ins_price":"4|8-4-8-1|2"},
-    {"ins_type":"1","ins_play_type":"2","ins_name":"红中晃晃","ins_pay_type":"1|2|3","ins_antes":"1|0.5|2","ins_min_multiple":"4|16|32|64","ins_max_multiple":"300|500","ins_board_number":"8|16","ins_price":"4|8-4-8-1|2"},
-    {"ins_type":"1","ins_play_type":"3","ins_name":"发财晃晃","ins_pay_type":"1|2|3","ins_antes":"1|0.5|2","ins_min_multiple":"4|16|32|64","ins_max_multiple":"300|500","ins_board_number":"8|16","ins_price":"4|8-4-8-1|2"},
+  {
+    "ins_type": "1",
+    "ins_play_type": "1",
+    "ins_name": "红中赖子杠",
+    "ins_pay_type": "1|2|3",
+    "ins_antes": "1|0.5|2",
+    "ins_min_multiple": "4|16|32|64",
+    "ins_max_multiple": "300|500",
+    "ins_board_number": "8|16",
+    "ins_price": "4|8-4-8-1|2"
+  },
+  {
+    "ins_type": "1",
+    "ins_play_type": "2",
+    "ins_name": "红中晃晃",
+    "ins_pay_type": "1|2|3",
+    "ins_antes": "1|0.5|2",
+    "ins_min_multiple": "4|16|32|64",
+    "ins_max_multiple": "300|500",
+    "ins_board_number": "8|16",
+    "ins_price": "4|8-4-8-1|2"
+  },
+  {
+    "ins_type": "1",
+    "ins_play_type": "3",
+    "ins_name": "发财晃晃",
+    "ins_pay_type": "1|2|3",
+    "ins_antes": "1|0.5|2",
+    "ins_min_multiple": "4|16|32|64",
+    "ins_max_multiple": "300|500",
+    "ins_board_number": "8|16",
+    "ins_price": "4|8-4-8-1|2"
+  }
 ]
