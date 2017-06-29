@@ -1,4 +1,4 @@
-const room = require('../model/room.js');
+const room = require('../model/hzfcg/room.js');
 const roomManager = require('../model/roomManager.js');
 module.exports = function(app) {
     return new Handler(app);
