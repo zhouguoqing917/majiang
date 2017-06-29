@@ -1202,9 +1202,9 @@ roomPro.handlerHu = async function(uid,isFlow){
         //        break;
         //    }
         //}
-        if(isZimo == 1){
-            user.addResultRecord(8);
-        }
+        //if(isZimo == 1){
+        //    user.addResultRecord(8);
+        //}
 
         //计算大胡番
         for(let i = 0 ; i < isHu.length; i++){
