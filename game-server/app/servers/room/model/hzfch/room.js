@@ -60,7 +60,6 @@ let Room = function (app) {
     this.huCount;//需要多少番起胡
     this.laizi ; //癞子
     this.laizipi ; //癞子皮
-    this.gameType ;
 };
 roomPro = Room.prototype;
 

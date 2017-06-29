@@ -1,4 +1,5 @@
-const Room = require('../model/room.js');
+const Room1 = require('../model/hzfcg/room.js');
+const Room2 = require('../model/hzfch/room.js');
 const roomManager = require('../model/roomManager.js');
 const gameUserModel = require('mongoose').models['GameUser'];
 const roomConfig = require('../../../../config/roomConfig.json');
@@ -14,7 +15,15 @@ var handler = Handler.prototype;
 //创建房间
 handler.createRoom = async function (msg, session, next) {
     try {
-        const data = await new Room(this.app).createRoom(session,msg);
+        let gameType = msg.gameType || 1;
+        let room ;
+        if(gameType == 1){
+            room = new Room1();
+        }
+        if(gameType == 2){
+            room = new Room2();
+        }
+        const data = await new room(this.app).createRoom(session,msg);
         next(null, {code: 200, msg: '创建房间成功', data: data});
     } catch (ex) {
         console.error(ex);
