@@ -1191,7 +1191,7 @@ roomPro.handlerHu = async function(uid,isFlow){
         }
 
         if(isZimo == 1){
-            preUser.addResultRecord(8);
+            user.addResultRecord(8);
         }
 
         ////判断自摸番
