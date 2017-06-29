@@ -18,12 +18,12 @@ handler.createRoom = async function (msg, session, next) {
         let gameType = msg.gameType || 1;
         let room ;
         if(gameType == 1){
-            room = new Room1();
+            room = new Room1(this.app);
         }
         if(gameType == 2){
-            room = new Room2();
+            room = new Room2(this.app);
         }
-        const data = await new room(this.app).createRoom(session,msg);
+        const data = await room.createRoom(session,msg);
         next(null, {code: 200, msg: '创建房间成功', data: data});
     } catch (ex) {
         console.error(ex);
