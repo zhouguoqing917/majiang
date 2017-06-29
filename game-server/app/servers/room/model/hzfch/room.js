@@ -10,14 +10,14 @@ const gameRecordModel = require('mongoose').models['GameRecord'];
 const recordModel = require('mongoose').models['Record'];
 
 
-const RoomChannel = require('./roomChannel.js');
-const roomManager = require('./roomManager.js');
-const uuid = require('../../../util/uuid.js');
+const RoomChannel = require('../roomChannel.js');
+const roomManager = require('../roomManager.js');
+const uuid = require('../../../../util/uuid.js');
 const User = require('./user.js');
 const Mahjong = require('./mahjong.js');
-let mailModel = require('../../../util/mail.js');
-let GameRecord = require('./gameRecord.js');
-const xfyunModel = require('../../../xfyun/xfyunModel.js');
+let mailModel = require('../../../../util/mail.js');
+let GameRecord = require('../gameRecord.js');
+const xfyunModel = require('../../../../xfyun/xfyunModel.js');
 
 //todo 癞子打出去 红中 发财 算是杠
 
