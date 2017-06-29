@@ -461,6 +461,6 @@ handler.getGameRecordByCode = async function(msg, session, next){
 };
 
 
-handler.getRoomConfig = function(){
+handler.getRoomConfig = function(msg, session, next){
     next(null, {code: 200, data : roomConfig});
 };
