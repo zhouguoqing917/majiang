@@ -149,7 +149,8 @@ handler.checkLogin = async function(msg, session, next) {
             roomCard : gameUser.roomCard,
             ipaddress : gameUser.ipaddress,
             currRoomNo : gameUser.currRoomNo,
-            sex : sex
+            sex : sex,
+            xfToken : gameUser.xfToken
         };
 
         next(null,{code:200,msg:'登录成功',data: data});
