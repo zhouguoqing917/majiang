@@ -39,7 +39,6 @@ pro.checkHu = function(user,pai){
 
     var laziCount = this.getLaiziCount(mahjongs);
     var huType = [];
-    console.log(isHu,'===111');
     if(isHu){
         //判断大胡
         var dahuArr = this.checkDaHu(user,pai,laziCount);

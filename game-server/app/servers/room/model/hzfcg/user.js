@@ -182,4 +182,29 @@ pro.getFanNum = function(){
     }
     return this.funNum;
 };
+
+pro.getFunRecord = function(){
+    let arr = [];
+    let kaikouFan = true;
+    for(let i = 0 ;i < this.resultRecord.length; i++){
+        let obj = {};
+        let type = this.resultRecord[i].type;
+        if(kaikouFan && type == 1){
+            kaikouFan = false;
+            obj[type] = 2 ;
+        }
+        if(type == 2 || type == 3 || type == 6 || type == 7 || type == 8 || type == 9 || type == 10){
+            obj[type] = 2 ;
+        }
+        if(type == 5 || type == 4){
+            obj[type] = 4 ;
+        }
+
+        if(type == 11 || type == 12 || type == 13 || type == 14 || type == 15 || type == 16 || type == 17 || type == 18){
+            obj[type] = 20 ;
+        }
+        arr.push(obj);
+    }
+    return arr;
+}
 module.exports = User;

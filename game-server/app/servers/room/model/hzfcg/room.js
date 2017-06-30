@@ -924,7 +924,7 @@ roomPro.handlerGang = function(uid,pai){
             preUser.clearOutMahjongByNum(mahjong);
         }
     }
-    if(!Object || !Object.keys(gangObj).length){
+    if(!gangObj || !Object.keys(gangObj).length){
         throw '不能杠或者参数错误';
     }
 
@@ -1365,14 +1365,14 @@ roomPro.handlerHu = async function(uid,isFlow){
             let user = this.users[i];
             this.result[user.uid].nickname = user.nickname;
             this.result[user.uid].score = user.score - this.result[user.uid].score;
-            this.result[user.uid].funRecord = user.resultRecord;
+            this.result[user.uid].funRecord = user.getFunRecord();
             this.result[user.uid].funNum = user.funNum;
             this.result[user.uid].winUserFunNum = winUserFun;
             this.result[user.uid].id  = user.id;
             this.result[user.uid].headimgurl  = user.headimgurl;
             this.result[user.uid].packBrand = false;
             this.result[user.uid].mahjong = user.mahjong;
-            if(preUser.uid == user.uid && isBaoPai){
+            if(preUser && preUser.uid == user.uid && isBaoPai){
                 this.result[user.uid].packBrand = true;
             }
         }

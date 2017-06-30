@@ -1413,3 +1413,8 @@
 [2017-06-30 00:20:23.860] [INFO] pomelo - [32m[/Users/li/Documents/work/BumperHu/game-server/node_modules/pomelo/lib/application.js] [39m"connector-server-3" enter after start...
 [2017-06-30 00:20:23.870] [INFO] pomelo - [32m[/Users/li/Documents/work/BumperHu/game-server/node_modules/pomelo/lib/application.js] [39m"connector-server-3" finish start
 [2017-06-30 00:20:23.870] [INFO] pomelo - [32m[/Users/li/Documents/work/BumperHu/game-server/node_modules/pomelo/lib/application.js] [39m"connector-server-3" startup in 747 ms
+[2017-06-30 00:25:05.553] [INFO] pomelo - [32m[/Users/li/Documents/work/BumperHu/game-server/node_modules/pomelo/lib/application.js] [39mapplication inited: "connector-server-3"
+[2017-06-30 00:25:06.854] [INFO] pomelo - [32m[/Users/li/Documents/work/BumperHu/game-server/node_modules/pomelo/lib/application.js] [39m"connector-server-3" enter after start...
+[2017-06-30 00:25:06.874] [INFO] pomelo - [32m[/Users/li/Documents/work/BumperHu/game-server/node_modules/pomelo/lib/application.js] [39m"connector-server-3" finish start
+[2017-06-30 00:25:06.875] [INFO] pomelo - [32m[/Users/li/Documents/work/BumperHu/game-server/node_modules/pomelo/lib/application.js] [39m"connector-server-3" startup in 1107 ms
+[2017-06-30 00:25:06.880] [DEBUG] pomelo - [36m[/Users/li/Documents/work/BumperHu/game-server/node_modules/pomelo/lib/modules/monitorwatcher.js] [39m[connector-server-3] receive addServer signal: {"action":"addServer","server":{"main":"/Users/li/Documents/work/BumperHu/game-server/app.js","env":"development","id":"connector-server-2","host":"127.0.0.1","port":8001,"clientPort":8101,"frontend":"true","serverType":"connector","pid":33660}}
