@@ -247,11 +247,10 @@ pro.jianjianghu = function(user,pai){
     }
 
     var pais = this.transform(mahjongs);
-    console.log(pais,'=====>>>pais');
+    //console.log(pais,'=====>>>pais');
     for(var i = 0; i < pais.length ; i++){
         for(var j = 0; j < pais[i].length; j++){
             if(pais[i][j] > 0 && (j != 1 && j != 4 && j != 7)){
-                console.log(11111,j);
                 return false;
             }
 
@@ -876,7 +875,8 @@ pro.playToTing = function(user){
             continue;
         }
         for(let i = 0 ; i < mahjongs.length;i++){
-            if(this.checkHu(cloneUser,mahjongs[i])){
+            let isHu = this.checkHu(cloneUser,mahjongs[i]);
+            if(isHu && isHu.length){
                 arr.push(cloneUser.mahjong[j]);
                 break;
             }
@@ -891,7 +891,7 @@ pro.playToTing = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check(28);
+var checks = new Check(21);
 
 var getMahjong = function(){
     var arr = [];
@@ -1010,19 +1010,17 @@ var test = function(){
 };
 
 var member = {
-    mahjong: [2,3,4,5,6,7,8,9,9,9,8],
-    peng : [{
-        uid : 111,
-        pai : [1,1,1]
-    }],
-    gang : [],
-    chi : []
+    "mahjong":[7,14,13,5],
+    "peng":[{"uid":"59472f7aeccf6136bfb1889d",
+    "pai":[15,15,15],"ts":1498813811310},{"uid":"59472f7aeccf6136bfb1889d","pai":[9,9,9],"ts":1498815670526}],
+    "gang":[],
+    "chi":[{"uid":"59472f9feccf6136bfb1889f","pai":[22,21,23],"ts":1498813477766}],
 }
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 ////console.log(checks.canHu(member));
-console.log(checks.playToTing(member));
-console.log(member)
+console.log(checks.checkGang(member,15),'===>>');
+//console.log(member)
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))

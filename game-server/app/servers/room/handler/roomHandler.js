@@ -169,7 +169,7 @@ handler.cannelAction = function(msg, session, next){
 //杠
 handler.handlerGang = function(msg, session, next){
     let roomNo = msg.roomNo;
-    if (!roomNo || !msg.mahjong) {
+    if (!roomNo || !msg.mahjong || msg.mahjong.pai) {
         return next(null, {code: 500, msg: '参数错误!'});
     }
     let room = roomManager.getRoomByRoomNo(roomNo);
@@ -181,7 +181,7 @@ handler.handlerGang = function(msg, session, next){
         return next(null, {code: 400, msg: '不在此房间!'});
     }
     try {
-        room.handlerGang(uid,msg.mahjong);
+        room.handlerGang(uid,msg.mahjong.pai);
         next(null, {code: 200, msg: '杠'});
     } catch (ex) {
         console.error(ex,'========>>>>>>');
