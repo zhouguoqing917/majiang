@@ -33,7 +33,7 @@ Mahjong.prototype.createMahjong = function(){
 
 Mahjong.prototype.washMahjong = function(){
     let arr = [];
-    for(let i = 0 ; i < 112; i++){
+    for(let i = 0 ; i < 136; i++){
         let random = parseInt(Math.random() * this.mahjong.length);
         let delArr = this.mahjong.splice(random,1);
         arr = arr.concat(delArr);

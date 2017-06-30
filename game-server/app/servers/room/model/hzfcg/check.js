@@ -864,6 +864,27 @@ pro.canHu = function(user){
 };
 
 
+pro.playToTing = function(user){
+    let arr = [];
+    let leth = user.mahjong.length;
+
+    for(let j = 0; j < leth; j++){
+        let cloneUser = Object.assign({},user);
+        cloneUser.mahjong = [].concat(cloneUser.mahjong);
+        cloneUser.mahjong.splice(j,1);
+        if(arr.indexOf(cloneUser.mahjong[j]) != -1 || !cloneUser.mahjong[j]){
+            continue;
+        }
+        for(let i = 0 ; i < mahjongs.length;i++){
+            if(this.checkHu(cloneUser,mahjongs[i])){
+                arr.push(cloneUser.mahjong[j]);
+                break;
+            }
+        }
+    }
+    return arr;
+}
+
 
 
 
@@ -989,27 +1010,19 @@ var test = function(){
 };
 
 var member = {
-    mahjong: [8],
-    peng:
-        [ { uid: '59361a8eeccf6136bfb18895',
-            pai: [31,31,31],
-            ts: 1498651943904 },
-            { uid: '59361aa0eccf6136bfb18896',
-                pai: [32,32,32],
-                ts: 1498651960270 },
-            { uid: '59361aa0eccf6136bfb18896',
-                pai: [21,21,21],
-                ts: 1498652010663 },
-            { uid: '59361a73eccf6136bfb18894',
-                pai: [9,9,9],
-                ts: 1498652185665 } ],
-    gang: [],
-    chi: []
+    mahjong: [2,3,4,5,6,7,8,9,9,9,8],
+    peng : [{
+        uid : 111,
+        pai : [1,1,1]
+    }],
+    gang : [],
+    chi : []
 }
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 ////console.log(checks.canHu(member));
-//console.log(checks.checkHu(member,3));
+console.log(checks.playToTing(member));
+console.log(member)
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))

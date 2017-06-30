@@ -388,7 +388,8 @@ roomPro.getRoomUserInfo = function(uid,isAll){
             funNum : user.getFanNum(),
             funRecord : user.resultRecord,
             roomCard : user.roomCard,
-            isAction : user.isAction
+            isAction : user.isAction,
+            funNum : user.funNum
         };
 
         if(this.users[i].uid == uid || isAll){
@@ -608,7 +609,7 @@ roomPro.playMahjong = async function(uid,pai){
 
     if(pai == 41 || pai == 42 || pai == this.laizi){
         //推送杠广播
-        this.roomChannel.sendMsgToRoom('onLaiziGang',{code : 200 ,data : { gangUid : uid , beGangUid : uid,mahjong : pai}});
+        this.roomChannel.sendMsgToRoom('onLaiziGang',{code : 200 ,data : { gangUid : uid , beGangUid : uid,mahjong : pai ,funNum: user.getFanNum()}});
         this.gameRecord.addRecord(this.round,5,user,pai);
         if(pai == 41){
             user.addResultRecord(2);
@@ -955,7 +956,7 @@ roomPro.handlerGang = function(uid,pai){
     this.userPeng = false;
 
     //推送杠广播
-    this.roomChannel.sendMsgToRoom('onGang',{code : 200 ,data : { gangUid : uid , beGangUid : beUid,mahjong : mahjong,type : gangObj.type}});
+    this.roomChannel.sendMsgToRoom('onGang',{code : 200 ,data : { gangUid : uid , beGangUid : beUid,mahjong : mahjong,type : gangObj.type,funNum: user.getFanNum()}});
 
     this.gameRecord.addRecord(this.round,5,user,mahjong);
     if(this.userHu){
@@ -1038,7 +1039,7 @@ roomPro.handlerPeng = function(uid){
     this.previousOut = null;
     user.addResultRecord(1);
     //pengUid 碰牌玩家  bePengUid被碰牌玩家
-    this.roomChannel.sendMsgToRoom('onPeng',{code : 200 ,data : {pengUid : uid , bePengUid : previousUid,mahjongs : mahjongs}})
+    this.roomChannel.sendMsgToRoom('onPeng',{code : 200 ,data : {pengUid : uid , bePengUid : previousUid,mahjongs : mahjongs ,funNum: user.getFanNum()}})
 };
 
 roomPro.clearOptions = function(){
@@ -1777,7 +1778,7 @@ roomPro.handlerChi = function(uid,mahjongs){
     mahjongs = user.addChiToUser(previousUid,mahjongs,mahjong);
     this.gameRecord.addRecord(this.round,8,user,mahjong);
     //pengUid 碰牌玩家  bePengUid被碰牌玩家
-    this.roomChannel.sendMsgToRoom('onChi',{code : 200 ,data : {chiUid : uid , beChiUid : previousUid,mahjong : mahjongs.join(',')}})
+    this.roomChannel.sendMsgToRoom('onChi',{code : 200 ,data : {chiUid : uid , beChiUid : previousUid,mahjong : mahjongs.join(','),funNum: user.getFanNum()}})
 };
 
 module.exports = Room;
