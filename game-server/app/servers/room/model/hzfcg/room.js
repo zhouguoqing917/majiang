@@ -952,9 +952,7 @@ roomPro.handlerGang = function(uid,pai){
         }
     }
 
-
     this.userPeng = false;
-
     //推送杠广播
     this.roomChannel.sendMsgToRoom('onGang',{code : 200 ,data : { gangUid : uid , beGangUid : beUid,mahjong : mahjong,type : gangObj.type,funNum: user.getFanNum()}});
 

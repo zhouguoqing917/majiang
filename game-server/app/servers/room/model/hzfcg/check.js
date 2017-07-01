@@ -50,7 +50,6 @@ pro.checkHu = function(user,pai){
         }
     }
     isHu = this.checkUnHasJiang(user,pai);
-    console.log(isHu);
     if(isHu){
         var dahuArr = this.checkDaHu(user,pai,laziCount);
         if(dahuArr && dahuArr.length){
@@ -262,14 +261,12 @@ pro.jianjianghu = function(user,pai){
 
     for(var i = 0; i < user.gang.length ; i ++){
         if(user.gang[i].pai[0] >= 40 || (user.gang[i].pai[0] % 10 != 2 && user.gang[i].pai[0] % 10  != 5 && user.gang[i].pai[0] % 10  != 8)){
-            console.log(3333,user.gang[i].pai[0]);
             return false;
         }
     }
 
     for(var i = 0; i < user.peng.length ; i ++){
         if(user.peng[i].pai[0] >= 40 || (user.peng[i].pai[0] % 10 != 2 && user.peng[i].pai[0] % 10  != 5 && user.peng[i].pai[0] % 10  != 8)){
-            console.log(4444);
             return false;
         }
     }
@@ -295,7 +292,6 @@ pro.pengpenghu = function(user,pais,laiziCount,pai){
     }
     needCount -= 1;
 
-    console.log(needCount,'======>>>needCount',laiziCount);
 
     if(needCount == laiziCount || (needCount == 0 && laiziCount == 3) || (needCount == -1 && laiziCount == 2)){
         return 2;
@@ -324,7 +320,6 @@ pro.qingyise = function(user,pai,pais){
     }
 
     var laiziCount = this.getLaiziCount(mahjongs);
-    console.log(type,'======>>>>>>type');
     for(var i = 0; i < user.gang.length ; i ++){
 
         if(type != getType(user.gang[i].pai[0])){
@@ -390,7 +385,6 @@ pro.quanqiuren = function(user,pai){
     if(laiziCount == 2){
         return false;
     }
-    console.log(allMahjong,'======>>>>>');
     for(var i = 0 ; i < allMahjong.length ; i ++){
         if(allMahjong[i] > 40){
             return false;
@@ -554,7 +548,6 @@ var getDoublePos = function(arr){
     return doubArr;
 };
 var getDoubleJiangPos = function(arr){
-    console.log(arr)
     var doubArr = [];
     for(var i = 0 ; i < arr.length ; i++){
         if(i > 2){
@@ -855,7 +848,8 @@ var mahjongs = [
 pro.canHu = function(user){
     var arr = [];
     for(var i = 0 ; i < mahjongs.length;i++){
-        if(this.checkHu(user,mahjongs[i])){
+        let isHu = this.checkHu(user,mahjongs[i]);
+        if(isHu && isHu.length ){
             arr.push(mahjongs[i]);
         }
     }
@@ -870,14 +864,15 @@ pro.playToTing = function(user){
     for(let j = 0; j < leth; j++){
         let cloneUser = Object.assign({},user);
         cloneUser.mahjong = [].concat(cloneUser.mahjong);
-        cloneUser.mahjong.splice(j,1);
-        if(arr.indexOf(cloneUser.mahjong[j]) != -1 || !cloneUser.mahjong[j]){
+        let pai = cloneUser.mahjong.splice(j,1)[0];
+
+        if(arr.indexOf(pai) != -1 || !pai){
             continue;
         }
         for(let i = 0 ; i < mahjongs.length;i++){
             let isHu = this.checkHu(cloneUser,mahjongs[i]);
             if(isHu && isHu.length){
-                arr.push(cloneUser.mahjong[j]);
+                arr.push(pai);
                 break;
             }
         }
@@ -1010,16 +1005,16 @@ var test = function(){
 };
 
 var member = {
-    "mahjong":[7,14,13,5],
+    "mahjong":[7,7,7,21,21,21,16,16],
     "peng":[{"uid":"59472f7aeccf6136bfb1889d",
     "pai":[15,15,15],"ts":1498813811310},{"uid":"59472f7aeccf6136bfb1889d","pai":[9,9,9],"ts":1498815670526}],
     "gang":[],
-    "chi":[{"uid":"59472f9feccf6136bfb1889f","pai":[22,21,23],"ts":1498813477766}],
+    "chi" : []
 }
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 ////console.log(checks.canHu(member));
-console.log(checks.checkGang(member,15),'===>>');
+console.log(checks.checkHu(member),'===>>');
 //console.log(member)
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);

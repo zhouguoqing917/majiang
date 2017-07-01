@@ -296,5 +296,4 @@ RoomManager.prototype.getGameRecordByCode = async function(code){
     return result;
 };
 
-
 module.exports = new RoomManager();
