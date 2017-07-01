@@ -352,15 +352,9 @@ roomPro.whoIsBanker = function(){
     if(this.banker){
         return this.banker;
     }
-    let user = this.getUserByUid(this.ownerUid);
-    let uid  ;
-    if(user){
-        user.isBanker = true;
-        uid = user.uid;
-    }else{
-        this.users[0].isBanker = true;
-        uid = this.users[0].uid;
-    }
+
+    this.users[0].isBanker = true;
+    let uid = this.users[0].uid;
     return  uid;
 }
 /**
@@ -612,7 +606,6 @@ roomPro.playMahjong = async function(uid,pai){
 
     if(pai == 41 || pai == 42 || pai == this.laizi){
         //推送杠广播
-        this.roomChannel.sendMsgToRoom('onLaiziGang',{code : 200 ,data : { gangUid : uid , beGangUid : uid,mahjong : pai ,funNum: user.getFanNum()}});
         this.gameRecord.addRecord(this.round,5,user,pai);
         if(pai == 41){
             user.addResultRecord(2);
@@ -623,7 +616,7 @@ roomPro.playMahjong = async function(uid,pai){
         if(pai == this.laizi){
             user.addResultRecord(4);
         }
-
+        this.roomChannel.sendMsgToRoom('onLaiziGang',{code : 200 ,data : { gangUid : uid , beGangUid : uid,mahjong : pai ,funNum: user.getFanNum()}});
         //给玩家一张牌
         if(this.isRoundOver()){
             //todo  房间内信息 初始化 当前玩家坐庄

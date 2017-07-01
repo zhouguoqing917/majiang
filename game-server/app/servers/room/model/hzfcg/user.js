@@ -204,7 +204,9 @@ pro.getFunRecord = function(){
         if(type == 11 || type == 12 || type == 13 || type == 14 || type == 15 || type == 16 || type == 17 || type == 18){
             obj[type] = 20 ;
         }
-        arr.push(obj);
+        if(obj[type]){
+            arr.push(obj);
+        }
     }
     return arr;
 }
