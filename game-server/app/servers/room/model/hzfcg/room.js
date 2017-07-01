@@ -1549,6 +1549,7 @@ roomPro.roundInit = function(){
         this.users[i].unHu = [];
         this.users[i].funNum = 1;
         this.users[i].resultRecord = [];
+        this.users[i].funRecord = [];
     }
 };
 

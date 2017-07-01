@@ -489,10 +489,12 @@ pro.checkPeng = function(user,pai){
 pro.checkChi = function(user,pai){
     var mahjongs = user.mahjong;
     var arr = [];
-
+    if(pai == this.laizi){
+        return arr;
+    }
 
     if(mahjongs.indexOf(pai + 1) != -1 &&  mahjongs.indexOf(pai + 2) != -1 &&  pai < 30 &&
-        pai + 1 != this.laizi &&  pai + 1 != this.laizi
+        pai + 1 != this.laizi &&  pai + 2 != this.laizi
     ){
         arr.push(pai);
         arr.push(pai + 1);
@@ -886,7 +888,7 @@ pro.playToTing = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check(21);
+var checks = new Check(28);
 
 var getMahjong = function(){
     var arr = [];
@@ -1005,7 +1007,7 @@ var test = function(){
 };
 
 var member = {
-    "mahjong":[7,7,7,15,15,16,17,22],
+    "mahjong":[16,2,3,12,28,8,17,27,3,4,18,32,13],
     "peng":[{"uid":"59472f7aeccf6136bfb1889d",
     "pai":[15,15,15],"ts":1498813811310},{"uid":"59472f7aeccf6136bfb1889d","pai":[9,9,9],"ts":1498815670526}],
     "gang":[],
@@ -1014,7 +1016,7 @@ var member = {
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 ////console.log(checks.canHu(member));
-console.log(checks.playToTing(member),'===>>');
+console.log(checks.checkChi(member,26),'===>>');
 //console.log(member)
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
