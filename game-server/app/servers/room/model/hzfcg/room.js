@@ -740,7 +740,7 @@ roomPro.isLicensing = function(uid,pai,isCannel){
         this.previousOut = {};
         this.roomChannel.sendMsgToRoomExceptUid('onMahjong',{code : 200,data : {mahjong : -1 , uid : nextUser.uid}  },uArr);
         this.currUserInaugurated = mahjong;
-        this.userPeng = false;
+        user.userAction = false;
 
         nextUser.unHu = [];
         nextUser.addMahjongToUser([mahjong]);
@@ -952,7 +952,7 @@ roomPro.handlerGang = function(uid,pai){
         }
     }
 
-    this.userPeng = false;
+    user.userAction = false;
     //推送杠广播
     this.roomChannel.sendMsgToRoom('onGang',{code : 200 ,data : { gangUid : uid , beGangUid : beUid,mahjong : mahjong,type : gangObj.type,funNum: user.getFanNum()}});
 
@@ -1026,7 +1026,7 @@ roomPro.handlerPeng = function(uid){
         }
     }
     this.clearOptions();
-    this.userPeng = true;
+    user.userAction = true;
 
     let preUser = this.getUserByUid(previousUid);
     preUser.clearOutMahjongByNum(mahjong);
@@ -1046,7 +1046,7 @@ roomPro.clearOptions = function(){
         this.users[i].options = 0;
         this.users[i].readyChi = [];
     }
-}
+};
 
 // 顺时钟玩家
 roomPro.getMeBetweenBankerUsers = function(beUid,uid,usersArr){
@@ -1068,12 +1068,13 @@ roomPro.getMeBetweenBankerUsers = function(beUid,uid,usersArr){
  * @param uid
  */
 roomPro.handlerHu = async function(uid,isFlow){
-    if(this.userPeng){
+    let user = this.getUserByUid(uid);
+    if(user.userAction){
         throw '碰了之后不能胡';
     }
 
-    //判断上一次出牌的玩家是不是自己
-    let user = this.getUserByUid(uid);
+
+
     let pai , preUid, isZimo = 1 ;//1为 自摸  2, 抢杠 3,别人放炮 ,4 自己杠到的
     let preBanker = this.banker;
     let isBaoPai = false;

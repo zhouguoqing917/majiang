@@ -1005,7 +1005,7 @@ var test = function(){
 };
 
 var member = {
-    "mahjong":[7,7,7,21,21,21,16,16],
+    "mahjong":[7,7,7,15,15,16,17,22],
     "peng":[{"uid":"59472f7aeccf6136bfb1889d",
     "pai":[15,15,15],"ts":1498813811310},{"uid":"59472f7aeccf6136bfb1889d","pai":[9,9,9],"ts":1498815670526}],
     "gang":[],
@@ -1014,11 +1014,10 @@ var member = {
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 ////console.log(checks.canHu(member));
-console.log(checks.checkHu(member),'===>>');
+console.log(checks.playToTing(member),'===>>');
 //console.log(member)
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))
 //console.log(max);
 //test();
-
