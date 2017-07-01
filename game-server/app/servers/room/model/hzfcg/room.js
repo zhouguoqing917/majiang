@@ -349,6 +349,9 @@ roomPro.getRoomMessage = function(uid,isAll){
  * @returns {*}
  */
 roomPro.whoIsBanker = function(){
+    if(this.banker){
+        return this.banker;
+    }
     let user = this.getUserByUid(this.ownerUid);
     let uid  ;
     if(user){
@@ -517,7 +520,7 @@ roomPro.confirmLaizi = function(){
     let laizi = mahjong + 1;
 
     if(laizi % 10 == 0){
-        laizi = parseInt(laizi / 10) * 10 + 1;
+        laizi = parseInt(mahjong / 10) * 10 + 1;
     }
 
     if(mahjong == 35){
@@ -1073,8 +1076,6 @@ roomPro.handlerHu = async function(uid,isFlow){
         throw '碰了之后不能胡';
     }
 
-
-
     let pai , preUid, isZimo = 1 ;//1为 自摸  2, 抢杠 3,别人放炮 ,4 自己杠到的
     let preBanker = this.banker;
     let isBaoPai = false;
@@ -1388,9 +1389,12 @@ roomPro.handlerHu = async function(uid,isFlow){
     //}
 
     if(this.round <= this.roundCount ){
-        this.banker = uid;
+        if(!isFlow){
+            this.banker = uid;
+        }else{
+            this.banker = this.currPlayUid;
+        }
         this.roundInit();
-
         let bankerUser = this.getUserByUid(this.banker);
         bankerUser.isBanker = 1;
 
@@ -1540,6 +1544,8 @@ roomPro.roundInit = function(){
         this.users[i].mahjong = [];
         this.users[i].peng = [];
         this.users[i].gang = [];//外杠
+        this.users[i].chi = [];
+        this.users[i].userAction = false;
         this.users[i].playOutMahjong = [];
         this.users[i].isAction = false;
         this.users[i].status = 0;
