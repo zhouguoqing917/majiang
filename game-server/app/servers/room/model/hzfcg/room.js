@@ -1119,7 +1119,7 @@ roomPro.handlerHu = async function(uid,isFlow){
         //判断我和打出之间的玩家  也有可以胡的 则等待
         console.error('=====>>>preUid',preUid);
         if(isZimo != 1 && isZimo != 4){
-            let users = this.getMeBetweenBankerUsers(preUid,uid);
+            let users = this.getMeBetweenBankerUsers(uid,preUid);
             console.error(users,'=======>>>>>users');
             for(let i = 0 ; i < users.length ; i ++){
                 let isHu = this.check.checkHu(users[i],pai);
@@ -1254,7 +1254,8 @@ roomPro.handlerHu = async function(uid,isFlow){
             for(let i = 0; i < this.users.length; i ++) {
                 let user = this.users[i];
                 if(user.uid != uid){
-                    user.funNum = winUserFun * user.funNum;
+                    let num = winUserFun * user.funNum > 300 ? 300 : winUserFun * user.funNum > 300
+                    user.funNum = num;
                 }
             }
         }

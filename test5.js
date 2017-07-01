@@ -29,4 +29,4 @@ let getMeBetweenBankerUsers = function(beUid,uid,usersArr){
 }
 
 console.log(getMeBetweenBankerUsers(3,4));
-console.log(getMeBetweenBankerUsers(1,4));
+console.log(getMeBetweenBankerUsers(4,3));
