@@ -116,7 +116,7 @@ RoomManager.prototype.getRoomsForDatabase = async function(uid){
  */
 RoomManager.prototype.clearRoom = function(){
     const outTime = 30 * 60 * 1000;
-    const outTime2 = 120 * 60 * 1000;
+    const outTime2 = 24 * 60 * 60 * 1000;
     let self = this;
     setInterval(async function(){
         try {

@@ -1254,7 +1254,7 @@ roomPro.handlerHu = async function(uid,isFlow){
             for(let i = 0; i < this.users.length; i ++) {
                 let user = this.users[i];
                 if(user.uid != uid){
-                    let num = winUserFun * user.funNum > 300 ? 300 : winUserFun * user.funNum > 300
+                    let num = winUserFun * user.funNum > 300 ? 300 : winUserFun * user.funNum ;
                     user.funNum = num;
                 }
             }
