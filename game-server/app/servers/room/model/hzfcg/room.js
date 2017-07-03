@@ -1176,7 +1176,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         throw '碰了之后不能胡';
     }
 
-    let pai , preUid, isZimo = 1 ;//1为 自摸  2, 抢杠 3,别人放炮 ,4 自己杠到的
+    let pai , preUid, isZimo = 1 ,preUser;//1为 自摸  2, 抢杠 3,别人放炮 ,4 自己杠到的
     let preBanker = this.banker;
     let isBaoPai = false;
     if(user.isAction & 8 != 8){
@@ -1206,6 +1206,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                     }
                 }
             }
+            preUser = this.getUserByUid(preUid);
             if(preIsGang){
                 isZimo = 2;
             }else{
@@ -1216,6 +1217,12 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             throw '非法胡牌操作'
         }
 
+        //记录之前 resultRecord
+        let userBeforeRecord = user.funRecord;
+        let preUserBeforeRecord = [];
+        if(preUser){
+            preUserBeforeRecord = preUser.funRecord;
+        }
         //初始化 resut
         for(let i = 0; i < this.users.length; i ++){
             this.result[this.users[i].uid] = this.result[this.users[i].uid] || {};
@@ -1272,6 +1279,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         //判断是否硬胡
         let check = new Check(0);
         let yinghu = false;
+        let funResultArr = [];
         if(isZimo == 1 || isZimo == 4){
             yinghu = check.checkHu(user)
         }else{
@@ -1280,7 +1288,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         if(yinghu && yinghu.length){
             user.addResultRecord(10);
         }
-        let preUser = this.getUserByUid(preUid);
+
         if(isZimo == 2){ //抢杠
             preUser.addResultRecord(7);
             user.addResultRecord(16);
@@ -1442,6 +1450,11 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                         maxFunNum = user.funNum;
                     }
                 }
+            }
+
+            user.funRecord = userBeforeRecord;
+            if(preUser){
+                preUser.funRecord = preUserBeforeRecord;
             }
             if(maxFunNum >= this.huCount){
                 return true;
