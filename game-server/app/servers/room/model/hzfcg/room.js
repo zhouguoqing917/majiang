@@ -643,6 +643,7 @@ roomPro.playMahjong = async function(uid,pai){
         let huUserIdArr = [];
         try{
             let isHu = this.handlerHu(user.uid,false,true);
+            console.error(isHu,'=======>>isHuommahjong');
             if(isHu === true){
                 user.isAction = 8;
                 huUserIdArr.push(user.uid);
@@ -764,6 +765,7 @@ roomPro.isLicensing = function(uid,pai,isCannel){
 
         try{
             let isHu = this.handlerHu(nextUser.uid,false,true);
+            console.error(isHu,'=======>>isHuommahjong');
             if(isHu === true ){
                 user.isAction = 8;
                 huUserIdArr.push(user.uid);
@@ -894,6 +896,7 @@ roomPro.cannelAction = function(uid){
             let huUserIdArr = [];
             try{
                 let isHu = this.handlerHu(nextUser.uid,false,true);
+                console.error(isHu,'=======>>isHuommahjong');
                 if(isHu === true){
                     nextUser.isAction = 8;
                     huUserIdArr.push(nextUser.uid);
@@ -1079,6 +1082,7 @@ roomPro.handlerGang = async function(uid,pai){
         let huUserIdArr = [];
         try{
             let isHu = await this.handlerHu(user.uid,false,true);
+            console.error(isHu,'=======>>isHuommahjong');
             if(isHu === true){
                 user.isAction = 8;
                 huUserIdArr.push(user.uid);
