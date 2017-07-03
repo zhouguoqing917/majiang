@@ -1617,7 +1617,7 @@ roomPro.userReady = async function(uid){
         this.dice = this.mahjong.diceRoller();
         this.banker = this.whoIsBanker();
 
-        //this.deductRoomCard();//扣除房卡
+        this.deductRoomCard();//扣除房卡
         this.licensing();
         this.confirmLaizi();
         this.status = 2;
