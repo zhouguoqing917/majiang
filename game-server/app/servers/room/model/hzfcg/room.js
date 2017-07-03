@@ -689,8 +689,8 @@ roomPro.isLicensing = function(uid,pai,isCannel){
             console.error(user.isAction , '======>>>>>>>isAction1....');
             try{
                 let isHu = this.handlerHu(user.uid,false,true);
-                console.error(isHu,'======ishu.....');
-                if(isHu && pai){
+                console.error(!!isHu,'======ishu.....');
+                if(isHu === true && pai){
                     isCanLicensing = false;
                     huUserIdArr.push(user.uid);
                     user.isAction = user.isAction | 8;
@@ -846,7 +846,7 @@ roomPro.cannelAction = function(uid){
 
     user.isAction = 0;
     user.options = 0;
-
+    console.error(this.gangUid,'====>>>this.gangUid');
     if(this.gangUid){
         for(let i = 0 ; i < this.users.length; i ++){
             if(this.users[i].isAction >= 8){
