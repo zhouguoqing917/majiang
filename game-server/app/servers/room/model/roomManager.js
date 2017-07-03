@@ -83,21 +83,10 @@ RoomManager.prototype.getRoomsForDatabase = async function(uid){
 
         if(Date.now() - rooms[i].createTime >= 40 * 60 * 1000){
             await roomModel.update({_id : rooms[i]._id},{status : 5});
-            if(rooms[i].status < 3){
-                let roundCount = rooms[i].data.configure.roundCount ;
-                let cardNum = roundCount == 8 ? 1 : 2;
-                await this.returnRoomCard(rooms[i].createUserId , rooms[i]._id,cardNum);
-            }
             continue;
         }
         if(result == 0 && rooms[i].status > 1){
-            if(rooms[i].status < 3){
-                let roundCount = rooms[i].data.configure.roundCount ;
-                let cardNum = roundCount == 8 ? 1 : 2;
-                await this.returnRoomCard(rooms[i].createUserId , rooms[i]._id,cardNum);
-            }else{
-                await roomModel.update({_id : rooms[i]._id},{status : 5});
-            }
+            await roomModel.update({_id : rooms[i]._id},{status : 5});
             continue;
         }
 

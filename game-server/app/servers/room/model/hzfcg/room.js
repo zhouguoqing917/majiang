@@ -687,6 +687,7 @@ roomPro.isLicensing = function(uid,pai,isCannel){
                 continue;
             }
             let isHu = this.handlerHu(user.uid,false,true);
+            console.error(isHu,'======ishu.....');
             try{
                 if(isHu && pai){
                     isCanLicensing = false;
@@ -1241,7 +1242,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         if(!isHu && isHu.length){
             throw '没有可以胡的玩家';
         }
-        console.log(isHu,'========>>>>isHu');
+        console.error(isHu,'========>>>>isHu');
         //判断是否海底捞 7
         if((isZimo == 1 || isZimo == 4) && this.mahjong.mahjong.length < 14){
             if(isHu.length == 1 && isHu[0] == 1){
