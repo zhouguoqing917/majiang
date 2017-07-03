@@ -980,7 +980,7 @@ roomPro.cannelAction = function(uid){
  * @uid userId
  * 分为内杠和外杠
  */
-roomPro.handlerGang = function(uid,pai){
+roomPro.handlerGang = async function(uid,pai){
     let user = this.getUserByUid(uid);
     if(user.isAction & 4 != 4){
         throw '不能杠或者已经取消';
@@ -1078,7 +1078,7 @@ roomPro.handlerGang = function(uid,pai){
         }
         let huUserIdArr = [];
         try{
-            let isHu = this.handlerHu(user.uid,false,true);
+            let isHu = await this.handlerHu(user.uid,false,true);
             if(isHu){
                 user.isAction = 8;
                 huUserIdArr.push(user.uid);
@@ -1240,7 +1240,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             isHu = this.check.checkHu(user,pai);
         }
 
-        if(!isHu && isHu.length > 0){
+        if(!isHu || isHu.length == 0){
             throw '没有可以胡的玩家';
         }
         console.error(isHu,'========>>>>isHu');
