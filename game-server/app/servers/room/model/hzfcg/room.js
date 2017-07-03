@@ -1783,11 +1783,7 @@ roomPro.dissolveRoom = async function(isTime){
         await this.addGameResult();
         roomManager.destroyRoom(this.roomNo);
         this.ressolveTimer && clearTimeout(this.ressolveTimer);
-        if(this.status < 3){ // 返回房卡
-            roomManager.returnRoomCard(this.ownerUid,this.roomId);
-        }else{
-            await roomModel.update({_id : this.roomId},{status : 5});
-        }
+        await roomModel.update({_id : this.roomId},{status : 5});
     }
 
     if(cannelRate >= 0.5){
@@ -1807,11 +1803,7 @@ roomPro.dissolveRoom = async function(isTime){
         await this.addGameResult();
         roomManager.destroyRoom(this.roomNo);
         this.ressolveTimer && clearTimeout(this.ressolveTimer);
-        if(this.status < 3){ // 返回房卡
-            roomManager.returnRoomCard(this.ownerUid,this.roomId);
-        }else{
-            await roomModel.update({_id : this.roomId},{status : 5});
-        }
+        await roomModel.update({_id : this.roomId},{status : 5});
         this.ressolveTimer && clearTimeout(this.ressolveTimer);
     }
 };
