@@ -50,11 +50,11 @@ schema.statics={
     register:async function(obj){
         const data=await this.findOne({ openid : obj.openid });
         if(data){
-            this.update({openid:obj.openid}, {$set : obj}, {upsert : true}).exec();
+            await this.update({openid:obj.openid}, {$set : obj}, {upsert : true}).exec();
         }else{
-            let n=await autoNumber.getNewNumber(modelName);
+            let n = await autoNumber.getNewNumber(modelName);
             let gameUser=Object.assign({},obj,{id:n,roomCard:3});
-            this.create(gameUser,(error)=>{
+            await this.create(gameUser,(error)=>{
                 if(error) {
                     console.log(`新增用户失败 ${error.msg}`);
                 } else {
