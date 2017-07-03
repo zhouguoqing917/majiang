@@ -642,7 +642,7 @@ roomPro.playMahjong = async function(uid,pai){
         user.addMahjongToUser([mahjong]);
         let huUserIdArr = [];
         try{
-            let isHu = this.handlerHu(user.uid,false,true);
+            let isHu = await this.handlerHu(user.uid,false,true);
             console.error(isHu,'=======>>isHuommahjong');
             if(isHu === true){
                 user.isAction = 8;
@@ -663,7 +663,7 @@ roomPro.playMahjong = async function(uid,pai){
     }
 };
 
-roomPro.isLicensing = function(uid,pai,isCannel){
+roomPro.isLicensing = async function(uid,pai,isCannel){
     let isCanLicensing = true;
     //判断出的这张牌 其它玩家是否 吃 碰 杠 胡
     let nextUser = this.getNextUserByUid(uid);
@@ -689,7 +689,7 @@ roomPro.isLicensing = function(uid,pai,isCannel){
             }
             console.error(user.isAction , '======>>>>>>>isAction1....');
             try{
-                let isHu = this.handlerHu(user.uid,false,true);
+                let isHu = await this.handlerHu(user.uid,false,true);
                 console.error(isHu,'======ishu.....');
                 if(isHu === true && pai){
                     isCanLicensing = false;
@@ -764,7 +764,7 @@ roomPro.isLicensing = function(uid,pai,isCannel){
         nextUser.addMahjongToUser([mahjong]);
 
         try{
-            let isHu = this.handlerHu(nextUser.uid,false,true);
+            let isHu = await this.handlerHu(nextUser.uid,false,true);
             console.error(isHu,'=======>>isHuommahjong');
             if(isHu === true ){
                 user.isAction = 8;
@@ -824,7 +824,7 @@ roomPro.getNextUserByUid = function(uid){
  * 取消操作
  * @param uid  用户id
  */
-roomPro.cannelAction = function(uid){
+roomPro.cannelAction = async function(uid){
     let user = this.getUserByUid(uid);
     if(!user){
         throw '此用户不在此房间';
@@ -895,7 +895,7 @@ roomPro.cannelAction = function(uid){
             nextUser.addMahjongToUser([mahjong]);
             let huUserIdArr = [];
             try{
-                let isHu = this.handlerHu(nextUser.uid,false,true);
+                let isHu = await this.handlerHu(nextUser.uid,false,true);
                 console.error(isHu,'=======>>isHuommahjong');
                 if(isHu === true){
                     nextUser.isAction = 8;
@@ -1035,7 +1035,7 @@ roomPro.handlerGang = async function(uid,pai){
         for(let i = 0 ; i < this.users.length; i++){
             let user = this.users[i];
             try{
-                let isHu = this.handlerHu(user.uid,false,true);
+                let isHu = await this.handlerHu(user.uid,false,true);
                 if(uid != user.uid && isHu === true){
                     user.isAction = 8;
                     isHaveUserHu = true;
