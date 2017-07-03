@@ -697,7 +697,7 @@ roomPro.isLicensing = async function(uid,pai,isCannel){
                     user.isAction = user.isAction | 8;
                 }
             }catch(e){
-                console.log(error);
+                console.log(e);
             }
             console.error(user,pai,'======>>>>huUser');
 
