@@ -2,10 +2,12 @@ let express = require('express');
 let router = express.Router();
 let http = require('../lib/httpHelper');
 let cryptUtil = require("./crypt");
+const mongoose = require('mongoose');
+
 //var xml2js = require('xml2js');
 //let randomutils = require('../lib/randomutils');
 
-const mongoose = require('mongoose');
+
 
 let wechat_AppID = 'wx010656fcc8f87eea';
 let wechat_AppSecret = '41d7386f0f977ba715e8012bae278062';
@@ -13,7 +15,6 @@ let wechat_AppSecret = '41d7386f0f977ba715e8012bae278062';
 router.get('/', function(req, res, next) {
     //var a=JSON.parse(req.body.a);
     res.json({a:1});
-    next();
 });
 
 /**
@@ -22,6 +23,7 @@ router.get('/', function(req, res, next) {
 router.get('/login', async function(req, res, next) {
     console.log(`获取到query: ${JSON.stringify(req.query)}`);
     console.log(`获取到code: ${JSON.stringify(req.query.code)}`);
+    const gameUser = mongoose.models['GameUser'];
     // 加解密，预留
     // let encrypt_text = cryptUtil.des.encrypt(JSON.stringify(req.body),0);
     // let decrypt_text = cryptUtil.des.decrypt(encrypt_text,0);
@@ -45,10 +47,9 @@ router.get('/login', async function(req, res, next) {
         }
         let gameUserObject={openid:openid,token:access_token,wxlogin:wxlogin,wxuserinfo:wxuserinfo};
         console.log(gameUserObject);
-        const gameUser = mongoose.models['GameUser'];
-        await gameUser.register(gameUserObject);
 
-        res.json({code:200,openid:openid,token:access_token});
+        await gameUser.register(gameUserObject);
+        res.json({code:200,openid:gameUserObject.openid,token:gameUserObject.token});
     }catch(ex){
         res.json({code:500,msg:ex.message});
     }

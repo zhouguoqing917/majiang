@@ -56,7 +56,7 @@ schema.statics={
             let gameUser=Object.assign({},obj,{id:n,roomCard:3});
             await this.create(gameUser,(error)=>{
                 if(error) {
-                    console.log(`新增用户失败 ${error.msg}`);
+                    console.log(`新增用户失败 ${error}`);
                 } else {
                     console.log('新增用户成功');
                 }
