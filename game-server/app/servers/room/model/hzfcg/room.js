@@ -690,7 +690,7 @@ roomPro.isLicensing = function(uid,pai,isCannel){
             console.error(user.isAction , '======>>>>>>>isAction1....');
             try{
                 let isHu = this.handlerHu(user.uid,false,true);
-                console.error(!!isHu,'======ishu.....');
+                console.error(isHu,'======ishu.....');
                 if(isHu === true && pai){
                     isCanLicensing = false;
                     huUserIdArr.push(user.uid);
