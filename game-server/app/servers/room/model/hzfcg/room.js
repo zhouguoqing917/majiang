@@ -219,10 +219,14 @@ roomPro.entryRoom = async function(roomNo,session){
 
 roomPro.deductRoomCard = async function(){
     let useCardNumber = this.roundCount === 8 ? 4 : 8;
+    console.error(this.roomType ,'======this.roomType ');
     if(this.roomType == 1){//房主开房
         let uid = this.ownerUid ;
-        let gameUser = gameUserModel.findOne({_id : uid});
+        console.error(uid ,'======uid ');
+        let gameUser = await gameUserModel.findOne({_id : uid});
+        console.error(gameUser ,'======gameUser');
         gameUser.roomCard -= useCardNumber;
+        console.error(gameUser ,'======gameUser');
         await gameUserModel.update({_id : uid}, {$set: gameUser});
         //写入房卡消耗记录
         await roomCardRecordModel.create({
@@ -240,7 +244,7 @@ roomPro.deductRoomCard = async function(){
         useCardNumber = useCardNumber / 4;
         for(var i = 0; i < this.users.length; i ++){
             var uid = this.users[i];
-            let gameUser = gameUserModel.findOne({_id : uid});
+            let gameUser = await gameUserModel.findOne({_id : uid});
             gameUser.roomCard -= useCardNumber;
             await gameUserModel.update({_id : uid}, {$set: gameUser});
             //写入房卡消耗记录
