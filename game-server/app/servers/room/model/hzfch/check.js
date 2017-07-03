@@ -14,11 +14,6 @@ var pro = Check.prototype ;
  * @returns Array 1,屁胡 2,碰碰胡 ,3全球人, 4 , 将将胡 ,5, 清一色 , 6 风一色 ,7 海底捞 ,8 ,杠上花
  */
 pro.checkHu = function(user,pai){
-    //是否开口
-    var isKaikou = this.checkIsKaikou(user);
-    if(!isKaikou){
-        return false;
-    }
     user.unHu = user.unHu || [];
     if(user.unHu.indexOf(pai) != -1){
         return false;
@@ -34,23 +29,11 @@ pro.checkHu = function(user,pai){
         return false;
     }
 
-    var isHu = this.checkHasJiang(user,pai);
     mahjongs = [].concat(mahjongs);
 
     var laziCount = this.getLaiziCount(mahjongs);
     var huType = [];
-    console.log(isHu,'===111');
-    if(isHu){
-        //判断大胡
-        var dahuArr = this.checkDaHu(user,pai,laziCount);
-        if(dahuArr && dahuArr.length){
-            huType = dahuArr.concat(huType);
-        }else if(laziCount <= 1){
-            //屁胡
-            huType.push(1)
-        }
-    }
-    isHu = this.checkUnHasJiang(user,pai);
+    let isHu = this.checkUnHasJiang(user,pai);
     console.log(isHu);
     if(isHu){
         var dahuArr = this.checkDaHu(user,pai,laziCount);
@@ -497,26 +480,23 @@ pro.checkPeng = function(user,pai){
 pro.checkChi = function(user,pai){
     var mahjongs = user.mahjong;
     var arr = [];
+    if(pai == this.laizi){
+        return arr;
+    }
 
-
-    if(mahjongs.indexOf(pai + 1) != -1 &&  mahjongs.indexOf(pai + 2) != -1 &&  pai < 30 &&
-        pai + 1 != this.laizi &&  pai + 1 != this.laizi
-    ){
+    if(mahjongs.indexOf(pai + 1) != -1 &&  mahjongs.indexOf(pai + 2) != -1 &&  pai < 30){
         arr.push(pai);
         arr.push(pai + 1);
         arr.push(pai + 2);
     }
 
-    if(mahjongs.indexOf(pai + 1) != -1 &&  mahjongs.indexOf(pai - 1) != -1 &&  pai < 30 &&
-        pai + 1 != this.laizi &&  pai - 1 != this.laizi){
+    if(mahjongs.indexOf(pai + 1) != -1 &&  mahjongs.indexOf(pai - 1) != -1 &&  pai < 30){
         arr.push(pai - 1);
         arr.push(pai);
         arr.push(pai + 1);
     }
 
-    if(mahjongs.indexOf(pai - 1) != -1 &&  mahjongs.indexOf(pai - 2) != -1 &&  pai < 30 &&
-        pai - 1 != this.laizi &&  pai - 2 != this.laizi
-    ){
+    if(mahjongs.indexOf(pai - 1) != -1 &&  mahjongs.indexOf(pai - 2) != -1 &&  pai < 30){
         arr.push(pai - 1);
         arr.push(pai - 2);
         arr.push(pai);
@@ -865,7 +845,13 @@ pro.canHu = function(user){
 };
 
 
-
+pro.checkBrightMahjong = function(user){
+    let mahjongs = user.mahjong;
+    if(mahjongs.indexOf(35) != -1 && mahjongs.indexOf(41) != -1 && mahjongs.indexOf(42) != -1){
+        return true;
+    }
+    return false;
+};
 
 
 var testmahjongs = [

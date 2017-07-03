@@ -29,7 +29,7 @@ let User = function(session,roomCard){
     this.unHu = [];
     this.funNum = 1;
     this.userAction = false;
-    this.resultRecord = [];//{type : 1} , 1 开口 2,发财杠 3,红中杠 4 癞子杠 5 暗杠 6 明杠 7 放冲 8 自摸 9,庄家
+    this.funRecord = [];//{type : 1} , 1 开口 2,发财杠 3,红中杠 4 癞子杠 5 暗杠 6 明杠 7 放冲 8 自摸 9,庄家
     //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞
 };
 
@@ -144,19 +144,18 @@ pro.addResultRecord = function(type){
 
     if(type == 1 || type == 6 ){
         let has = false;
-        for(let i = 0 ; i < this.resultRecord.length; i++){
-            if(this.resultRecord['type'] == 1){
+        for(let i = 0 ; i < this.funRecord.length; i++){
+            if(this.funRecord['type'] == 1){
                 has = true;
                 break;
             }
         }
         if(!has){
-            this.resultRecord.push(obj);
+            this.funRecord.push(obj);
         }
     }else{
-        this.resultRecord.push(obj);
+        this.funRecord.push(obj);
     }
-
 };
 
 pro.getFanNum = function(){
@@ -164,8 +163,8 @@ pro.getFanNum = function(){
     //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞
     this.funNum = 1;
     let kaikouFan = true;
-    for(let i = 0 ;i < this.resultRecord.length; i++){
-        let type = this.resultRecord[i].type;
+    for(let i = 0 ;i < this.funRecord.length; i++){
+        let type = this.funRecord[i].type;
         if(kaikouFan && type == 1){
             this.funNum = this.funNum * 2;
             kaikouFan = false;
@@ -187,9 +186,9 @@ pro.getFanNum = function(){
 pro.getFunRecord = function(){
     let arr = [];
     let kaikouFan = true;
-    for(let i = 0 ;i < this.resultRecord.length; i++){
+    for(let i = 0 ;i < this.funRecord.length; i++){
         let obj = {};
-        let type = this.resultRecord[i].type;
+        let type = this.funRecord[i].type;
         if(kaikouFan && type == 1){
             kaikouFan = false;
             obj[type] = 2 ;

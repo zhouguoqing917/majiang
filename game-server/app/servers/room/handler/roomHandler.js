@@ -23,6 +23,7 @@ handler.createRoom = async function (msg, session, next) {
         if(gameType == 2){
             room = new Room2(this.app);
         }
+
         const data = await room.createRoom(session,msg);
         next(null, {code: 200, msg: '创建房间成功', data: data});
     } catch (ex) {
@@ -117,6 +118,7 @@ handler.playMahjong = async function(msg, session, next){
         next(null, {code: 500, msg: ex});
     }
 };
+
 
 handler.handlerChi = async function(msg, session, next){
     let roomNo = msg.roomNo;
@@ -472,4 +474,26 @@ handler.getGameRecordByCode = async function(msg, session, next){
 
 handler.getRoomConfig = function(msg, session, next){
     next(null, {code: 200, data : roomConfig});
+};
+
+handler.brightMahjong = async function(msg, session, next){
+    try {
+        let uid = session.uid;
+        let roomNo = msg.roomNo;
+        let message = msg.message;
+        if (!roomNo || !message) {
+            return next(null, {code: 500, msg: '参数错误!'});
+        }
+        let room = await roomManager.getRoomByRoomNo(roomNo);
+        if(!room){
+            return next(null, {code: 500, msg: '房间不存在!'});
+        }
+        if(!room.getUserByUid(uid)){
+            return next(null, {code: 400, msg: '不在此房间!'});
+        }
+        room.brightMahjong(uid);
+        next(null, {code: 200, msg: '发送成功', data: {}});
+    } catch (ex) {
+        next(null, {code: 500, msg: ex});
+    }
 };

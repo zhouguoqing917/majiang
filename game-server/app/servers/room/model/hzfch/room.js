@@ -60,6 +60,9 @@ let Room = function (app) {
     this.huCount;//需要多少番起胡
     this.laizi ; //癞子
     this.laizipi ; //癞子皮
+    this.gameType ;//游戏类型
+    this.hhType ;//1 红中杠 2,发财红中杠
+    this.brightOver = false;
 };
 roomPro = Room.prototype;
 
@@ -74,6 +77,8 @@ roomPro.createRoom = async function (session, roomData) {
     this.roomType = roomData.roomType || 1;
     this.huCount = roomData.huCount || 0;
     this.maxHuCount = roomData.maxHuCount || 300;
+    this.gameType = roomData.gameType;
+    this.hhType = roomData.hhType;
     if(this.roomType == 3){
         useCardNumber = useCardNumber / 4 ;
     }
@@ -483,6 +488,8 @@ roomPro.licensing = async function(){
             //this.users[i].mahjong.push(pai);
             this.currUserInaugurated = this.users[i].mahjong[this.users[i].mahjong.length - 1];
         }
+
+        this.brightOver = this.checkAllBright();
         try{
             this.gameRecord.addRecord(this.round,1,this.users[i]);
         }catch(e){
@@ -518,11 +525,18 @@ roomPro.confirmLaizi = function(){
         laizi = parseInt(laizi / 10) * 10 + 1;
     }
 
-    if(mahjong == 35){
-        laizi = 31;
+
+    if(this.hhType == 1){
+        if(mahjong == 42 || mahjong == 35){
+            laizi = 41;
+        }
+
+        if(mahjong == 41){
+            laizi = 35;
+        }
     }
 
-    if(mahjong == 41 || mahjong == 42){
+    if(this.hhType == 2 && mahjong == 41 || mahjong == 42){
         laizi = 35;
     }
 
@@ -585,6 +599,10 @@ roomPro.playMahjong = async function(uid,pai){
     //判断玩家是否可以是出牌的玩家
     if(this.currPlayUid != uid){
         throw '不是可以出牌的玩家';
+    }
+
+    if(!this.brightOver){
+        throw '还有玩家没有亮牌';
     }
 
     let user = this.getUserByUid(uid);
@@ -937,20 +955,6 @@ roomPro.handlerGang = function(uid,pai){
     this.clearOptions();
 
     user.addGangToUser(mahjong,beUid,gangObj.type);
-    let  isCanLicensing = false;
-    if(gangObj.type == 2){
-        for(let i = 0 ; i < this.users.length; i++){
-            let user = this.users[i];
-            let isHu = this.check.checkHu(user,mahjong);
-            if(uid != user.uid && isHu && isHu.length ){
-                this.userHu = {};
-                this.userHu[user.uid] = mahjong;
-                break;
-            }
-        }
-    }
-
-
     this.userPeng = false;
 
     //推送杠广播
@@ -1074,7 +1078,7 @@ roomPro.handlerHu = async function(uid,isFlow){
 
     //判断上一次出牌的玩家是不是自己
     let user = this.getUserByUid(uid);
-    let pai , preUid, isZimo = 1 ;//1为 自摸  2, 抢杠 3,别人放炮 ,4 自己杠到的
+    let pai , preUid, isZimo = 1 ;//1为 自摸   3,别人放炮
     let preBanker = this.banker;
     let isBaoPai = false;
     if(user.isAction & 8 != 8){
@@ -1091,24 +1095,7 @@ roomPro.handlerHu = async function(uid,isFlow){
             let user = this.getUserByUid(preUid);
             let preIsGang = false;
             pai = this.previousOut[preUid];
-            for(let i = 0 ; i < user.gang.length; i ++){
-                if(user.gang[i].pai[0] == pai){
-                    if(user.gang[i].type == 2){
-                        preIsGang = true;
-                        user.gang.splice(i,1);
-                    }
-                    //自己杠的
-                    if(preUid == uid){
-                        isZimo = 4;
-                    }
-                }
-            }
-            if(preIsGang){
-                isZimo = 2;
-            }else{
-                isZimo = 3;
-            }
-
+            isZimo = 2;
         }else{
             console.error('=========>>>>>>',user);
             throw '非法胡牌操作'
@@ -1123,7 +1110,7 @@ roomPro.handlerHu = async function(uid,isFlow){
 
         //判断我和打出之间的玩家  也有可以胡的 则等待
         console.error('=====>>>preUid',preUid);
-        if(isZimo != 1 && isZimo != 4){
+        if(isZimo != 1 ){
             let users = this.getMeBetweenBankerUsers(preUid,uid);
             console.error(users,'=======>>>>>users');
             for(let i = 0 ; i < users.length ; i ++){
@@ -1147,31 +1134,11 @@ roomPro.handlerHu = async function(uid,isFlow){
             throw '没有可以胡的玩家';
         }
         console.log(isHu,'========>>>>isHu');
-        //判断是否海底捞 7
-        if((isZimo == 1 || isZimo == 4) && this.mahjong.mahjong.length < 14){
-            if(isHu.length == 1 && isHu[0] == 1){
-                isHu = [7];
-            }else{
-                isHu.push(7);
-            }
-        }
-
-        //是否是杠上花 8
-        if(isZimo == 4){
-            let isHu = this.check.checkUnHasJiang(user,pai);
-            if(isHu){
-                if(isHu.length == 1 && isHu[0] == 1){
-                    isHu = [8];
-                }else{
-                    isHu.push(8);
-                }
-            }
-        }
 
         //判断是否硬胡
         let check = new Check(0);
         let yinghu = false;
-        if(isZimo == 1 || isZimo == 4){
+        if(isZimo == 1 ){
             yinghu = check.checkHu(user)
         }else{
             yinghu = check.checkHu(user,pai)
@@ -1180,12 +1147,8 @@ roomPro.handlerHu = async function(uid,isFlow){
             user.addResultRecord(10);
         }
         let preUser = this.getUserByUid(preUid);
-        if(isZimo == 2){ //抢杠
-            preUser.addResultRecord(7);
-            user.addResultRecord(16);
-        }
 
-        if(isZimo == 3){ //别人放冲
+        if(isZimo == 2){ //别人放冲
             preUser.addResultRecord(7);
         }
 
@@ -1193,17 +1156,6 @@ roomPro.handlerHu = async function(uid,isFlow){
             user.addResultRecord(8);
         }
 
-        ////判断自摸番
-        //let hasZimoFan = true;
-        //for(let i = 0 ; i < isHu.length; i++){
-        //    if(isHu[i] == 7 || isHu[i] == 8){
-        //        hasZimoFan = false;
-        //        break;
-        //    }
-        //}
-        if(isZimo == 1){
-            user.addResultRecord(8);
-        }
 
         //计算大胡番
         for(let i = 0 ; i < isHu.length; i++){
@@ -1778,6 +1730,30 @@ roomPro.handlerChi = function(uid,mahjongs){
     //pengUid 碰牌玩家  bePengUid被碰牌玩家
     this.roomChannel.sendMsgToRoom('onChi',{code : 200 ,data : {chiUid : uid , beChiUid : previousUid,mahjong : mahjongs.join(',')}})
 };
+
+/**
+ * 亮牌
+ */
+roomPro.brightMahjong = function(uid){
+    let user = this.getUserByUid(uid);
+    if(!this.check.checkBrightMahjong(user)){
+        throw '没有亮牌'
+    }
+    user.addBrightMahjong(user);
+    let brightOver = this.checkAllBright();
+    this.brightOver = brightOver;
+    this.roomChannel.sendMsgToRoom('onBrightMahjong',{code : 200 , data : {uid : uid , mahjong : [42,41,25] ,brightOver : this.brightOver}});
+};
+
+roomPro.checkAllBright = function(){
+    for(let i = 0; i < this.users.length;i ++){
+        let isBright = this.check.checkBrightMahjong(this.users[i]);
+        if(isBright){
+            return false;
+        }
+    }
+    return true;
+}
 
 module.exports = Room;
 

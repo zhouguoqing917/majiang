@@ -30,6 +30,7 @@ let User = function(session,roomCard){
     this.funNum = 1;
     this.resultRecord = [];//{type : 1} , 1 开口 2,发财杠 3,红中杠 4 癞子杠 5 暗杠 6 明杠 7 放冲 8 自摸 9,庄家
     //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞
+    this.brightMahjong = [];
 };
 
 pro = User.prototype;
@@ -182,4 +183,26 @@ pro.getFanNum = function(){
     }
     return this.funNum;
 };
+
+pro.addBrightMahjong = function(){
+    let arr = [];
+    for(let i = this.mahjong.length - 1; i >= 0 ; i--){
+        let pai = this.mahjong[i];
+        if(pai == 41 && arr.indexOf(41) == -1){
+            arr.push(pai);
+            this.mahjong.splice(i,1);
+        }
+
+        if(pai == 42 && arr.indexOf(42) == -1){
+            arr.push(pai);
+            this.mahjong.splice(i,1);
+        }
+
+        if(pai == 35 && arr.indexOf(35) == -1){
+            arr.push(pai);
+            this.mahjong.splice(i,1);
+        }
+    }
+    this.brightMahjong.push(arr);
+}
 module.exports = User;

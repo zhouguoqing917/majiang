@@ -2,8 +2,9 @@
  * Created by Mrli on 17/5/8.
  */
 
-var Check = function(laizi){
+var Check = function(laizi,huCount){
     this.laizi = laizi;
+    this.huCount = huCount || 4;
 };
 //console.log = function(){}
 var max = 4;
@@ -24,6 +25,9 @@ pro.checkHu = function(user,pai){
         return false;
     }
 
+
+
+
     var mahjongs = user.mahjong;
     if(pai){
         mahjongs = mahjongs.concat([pai]);
@@ -35,6 +39,7 @@ pro.checkHu = function(user,pai){
     }
 
     var isHu = this.checkHasJiang(user,pai);
+    console.log(isHu);
     mahjongs = [].concat(mahjongs);
 
     var laziCount = this.getLaiziCount(mahjongs);
@@ -66,6 +71,9 @@ pro.checkHu = function(user,pai){
     }
     return huType;
 };
+
+
+
 pro.hasHongzhong = function(mahjongs){
     for(var i = 0; i < mahjongs.length; i++){
         if(mahjongs[i] == 42 || mahjongs[i] == 41){
@@ -291,7 +299,6 @@ pro.pengpenghu = function(user,pais,laiziCount,pai){
         needCount += getFengNeedCount(pais[i]);
     }
     needCount -= 1;
-
 
     if(needCount == laiziCount || (needCount == 0 && laiziCount == 3) || (needCount == -1 && laiziCount == 2)){
         return 2;
@@ -852,7 +859,21 @@ pro.canHu = function(user){
     for(var i = 0 ; i < mahjongs.length;i++){
         let isHu = this.checkHu(user,mahjongs[i]);
         if(isHu && isHu.length ){
-            arr.push(mahjongs[i]);
+            let funNum = user.funNum ;
+            for(let j = 0; j < isHu.length; j ++){
+                if(isHu[j] == 1){
+                    funNum = funNum * 2;
+                }else{
+                    funNum = funNum * 20;
+                }
+            }
+            let yinghu = new Check().checkHu(user,mahjongs[i]);
+            if(yinghu && yinghu.length){
+                funNum = funNum * 2;
+            }
+            let obj = {};
+            obj[mahjongs[i]] = funNum;
+            arr.push(obj);
         }
     }
     return arr;
@@ -888,7 +909,7 @@ pro.playToTing = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check(28);
+var checks = new Check();
 
 var getMahjong = function(){
     var arr = [];
@@ -1007,16 +1028,17 @@ var test = function(){
 };
 
 var member = {
-    "mahjong":[16,2,3,12,28,8,17,27,3,4,18,32,13],
-    "peng":[{"uid":"59472f7aeccf6136bfb1889d",
-    "pai":[15,15,15],"ts":1498813811310},{"uid":"59472f7aeccf6136bfb1889d","pai":[9,9,9],"ts":1498815670526}],
+    "mahjong":[8,8,22,23,23,24,24,25,26,27,28,13,15],
+    "peng":[],
+    "pai":[],
     "gang":[],
-    "chi" : []
+    "chi" : [],
+    "funNum" : 1
 }
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 ////console.log(checks.canHu(member));
-console.log(checks.checkChi(member,26),'===>>');
+console.log(checks.canHu(member),'===>>');
 //console.log(member)
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);

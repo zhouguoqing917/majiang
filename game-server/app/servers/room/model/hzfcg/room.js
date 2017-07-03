@@ -61,6 +61,7 @@ let Room = function (app) {
     this.laizi ; //癞子
     this.laizipi ; //癞子皮
     this.gameType ;
+    this.gangUid;
 };
 roomPro = Room.prototype;
 
@@ -383,7 +384,7 @@ roomPro.getRoomUserInfo = function(uid,isAll){
             longitude : user.longitude,
             unHu : user.unHu,
             funNum : user.getFanNum(),
-            funRecord : user.resultRecord,
+            funRecord : user.funRecord,
             roomCard : user.roomCard,
             isAction : user.isAction,
             funNum : user.funNum
@@ -596,9 +597,9 @@ roomPro.playMahjong = async function(uid,pai){
         throw '不是可以出牌的玩家22';
     }
 
-
     user.playAMahjong(pai);
     user.playOutMahjong.push(pai);
+    this.gangUid = null;
     this.previousOut = {};
     this.currUserInaugurated = null;
     //记录上一次谁出了什么牌
@@ -632,20 +633,25 @@ roomPro.playMahjong = async function(uid,pai){
         let uArr = this.getExceptUids(user.uid);
         this.previousOut = {};
         user.unHu = [];
-        this.roomChannel.sendMsgToRoomExceptUid('onMahjong',{code : 200,data : {mahjong : -1, uid : user.uid,isGang : true}},uArr);
+        this.roomChannel.sendMsgToRoomExceptUid('onMahjong',{code : 200,data : {mahjong : -1, uid : user.uid,isGang : true , huUserIdArr : []}},uArr);
         this.currUserInaugurated = mahjong;
         user.addMahjongToUser([mahjong]);
-        let isHu = this.check.checkHu(user);
-        if(isHu && isHu.length){
-            user.isAction = 8;
+        let huUserIdArr = [];
+        try{
+            let isHu = this.handlerHu(user.uid,false,true);
+            if(isHu){
+                user.isAction = 8;
+                huUserIdArr.push(user.uid);
+            }
+        }catch(e){
+            console.error(e);
         }
 
-        this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong, uid : user.uid,isGang : true}},user);
+        this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong, uid : user.uid,isGang : true,huUserIdArr : huUserIdArr}},user);
         this.gameRecord.addRecord(this.round,3,user,mahjong);
     }else{
         //广播
         this.currPlayUid = null;
-        this.roomChannel.sendMsgToRoom('onPlayMahjong' , {code : 200, data : {uid : uid, mahjong : pai}});
         user.isAction = 0 ;
         this.gameRecord.addRecord(this.round,2,user,pai);
         this.isLicensing(uid,pai);
@@ -670,17 +676,24 @@ roomPro.isLicensing = function(uid,pai,isCannel){
             }
         }
     }else{
+        let huUserIdArr = [];
         for(let i = 0 ; i < this.users.length; i++){
             let user = this.users[i];
             if(uid == user.uid){
                 continue;
             }
-            let isHu = this.check.checkHu(user,pai);
-            console.error(user,pai,'======>>>>huUser');
-            if(isHu && isHu.length && pai){
-                isCanLicensing = false;
-                user.isAction = user.isAction | 8;
+            let isHu = this.handlerHu(user.uid,false,true);
+            try{
+                if(isHu && pai){
+                    isCanLicensing = false;
+                    huUserIdArr.push(user.uid);
+                    user.isAction = user.isAction | 8;
+                }
+            }catch(e){
+                console.log(error);
             }
+            console.error(user,pai,'======>>>>huUser');
+
             console.error(user.isAction , '======>>>>>>>isAction1');
             if(this.check.checkWaiGang(user,pai) ){
                 user.isAction = user.isAction | 4;
@@ -698,6 +711,8 @@ roomPro.isLicensing = function(uid,pai,isCannel){
             }
             console.error(user.isAction ,'======>>>>>>>isAction4',this.check.laizi);
         }
+
+        this.roomChannel.sendMsgToRoom('onPlayMahjong' , {code : 200, data : {uid : uid, mahjong : pai ,huUserIdArr : huUserIdArr}});
     }
 
     if(!isCanLicensing){
@@ -717,7 +732,7 @@ roomPro.isLicensing = function(uid,pai,isCannel){
         let outUid = Object.keys(this.previousOut)[0];
         let user = this.getUserByUid(outUid);
         let nextUser = this.getNextUserByUid(outUid);
-
+        this.gangUid = null;
         this.currPlayUid = nextUser.uid;
         let uArr = this.getExceptUids(nextUser.uid);
         let mahjong ;
@@ -732,19 +747,25 @@ roomPro.isLicensing = function(uid,pai,isCannel){
         if(!mahjong){
             mahjong = this.mahjong.next();
         }
-
+        let huUserIdArr = [];
         this.previousOut = {};
-        this.roomChannel.sendMsgToRoomExceptUid('onMahjong',{code : 200,data : {mahjong : -1 , uid : nextUser.uid}  },uArr);
+        this.roomChannel.sendMsgToRoomExceptUid('onMahjong',{code : 200,data : {mahjong : -1 , uid : nextUser.uid , huUserIdArr : huUserIdArr}  },uArr);
         this.currUserInaugurated = mahjong;
         user.userAction = false;
 
         nextUser.unHu = [];
         nextUser.addMahjongToUser([mahjong]);
-        let isHu = this.check.checkHu(nextUser);
-        if(isHu && isHu.length){
-            nextUser.isAction = 8;
+
+        try{
+            let isHu = this.handlerHu(nextUser.uid,false,true);
+            if(isHu){
+                user.isAction = 8;
+                huUserIdArr.push(user.uid);
+            }
+        }catch(e){
+            console.error(e);
         }
-        this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong , uid : nextUser.uid}},nextUser);
+        this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong , uid : nextUser.uid , huUserIdArr : huUserIdArr}},nextUser);
         this.gameRecord.addRecord(this.round,3,nextUser,mahjong);
     }
 };
@@ -819,6 +840,66 @@ roomPro.cannelAction = function(uid){
 
     user.isAction = 0;
     user.options = 0;
+
+    if(this.gangUid){
+        for(let i = 0 ; i < this.users.length; i ++){
+            if(this.users[i].isAction >= 8){
+                return ;
+            }
+        }
+
+        this.gangUid = null;
+        //发牌给杠的玩家
+        if(this.isRoundOver()){
+            let keys = Object.keys(this.previousOut);
+            let preUid =  keys[0];
+            this.banker = preUid;
+            this.getUserByUid(preUid).isBanker = 1;
+            return this.handlerHu(uid,true);
+        }
+
+        //是否可以发牌给下一个玩家
+        if(!this.isRoundOver()){
+            let outUid = Object.keys(this.previousOut)[0];
+            let nextUser = this.getUserByUid(outUid);
+
+            this.currPlayUid = nextUser.uid;
+            let uArr = this.getExceptUids(nextUser.uid);
+            let mahjong ;
+            if(this.next[nextUser.uid]){
+                let nextMahjong = parseInt(this.next[nextUser.uid]);
+                let index = this.mahjong.mahjong.indexOf(nextMahjong);
+                if(this.mahjong.mahjong.indexOf(nextMahjong) != -1){
+                    this.mahjong.mahjong.splice(index,1);
+                    mahjong = nextMahjong;
+                }
+            }
+            if(!mahjong){
+                mahjong = this.mahjong.next();
+            }
+
+            this.previousOut = {};
+            this.roomChannel.sendMsgToRoomExceptUid('onMahjong',{code : 200,data : {mahjong : -1 , uid : nextUser.uid ,huUserIdArr : []}  },uArr);
+            this.currUserInaugurated = mahjong;
+            user.userAction = false;
+
+            nextUser.unHu = [];
+            nextUser.addMahjongToUser([mahjong]);
+            let huUserIdArr = [];
+            try{
+                let isHu = this.handlerHu(nextUser.uid,false,true);
+                if(isHu){
+                    nextUser.isAction = 8;
+                    huUserIdArr.push(nextUser.uid);
+                }
+            }catch(e){
+                console.error(e);
+            }
+            this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong , uid : nextUser.uid ,huUserIdArr : huUserIdArr}},nextUser);
+            this.gameRecord.addRecord(this.round,3,nextUser,mahjong);
+        }
+        return;
+    }
     user.readyChi = [];
     user.readyPeng = null;
     user.readyGang = null;
@@ -936,28 +1017,34 @@ roomPro.handlerGang = function(uid,pai){
 
     user.addGangToUser(mahjong,beUid,gangObj.type);
     let  isCanLicensing = false;
+    let isHaveUserHu = false;
+    let huUserIdArr = [];
     if(gangObj.type == 2){
+        this.previousOut = {};
+        this.previousOut[uid] = pai;
+        this.gangUid = uid;
         for(let i = 0 ; i < this.users.length; i++){
             let user = this.users[i];
-            let isHu = this.check.checkHu(user,mahjong);
-            if(uid != user.uid && isHu && isHu.length ){
-                this.userHu = {};
-                this.userHu[user.uid] = mahjong;
-                break;
+            try{
+                let isHu = this.handlerHu(user.uid,false,true);
+                if(uid != user.uid && isHu ){
+                    user.isAction = 8;
+                    isHaveUserHu = true;
+                    huUserIdArr.push(user.uid);
+                }
+            }catch(e){
+                console.error(e);
             }
         }
     }
 
     user.userAction = false;
     //推送杠广播
-    this.roomChannel.sendMsgToRoom('onGang',{code : 200 ,data : { gangUid : uid , beGangUid : beUid,mahjong : mahjong,type : gangObj.type,funNum: user.getFanNum()}});
-
+    this.roomChannel.sendMsgToRoom('onGang',{code : 200 ,data : { gangUid : uid , beGangUid : beUid,mahjong : mahjong,type : gangObj.type,funNum: user.getFanNum(), huUserIdArr : huUserIdArr}});
     this.gameRecord.addRecord(this.round,5,user,mahjong);
-    if(this.userHu){
-        this.previousOut = {};
-        this.previousOut[uid] = pai;
+    if(isHaveUserHu){
         return;
-    }else { //给玩家一张牌
+    }else {
         if(this.isRoundOver()){
             //todo  房间内信息 初始化 当前玩家坐庄
             // this.roundInit();
@@ -967,12 +1054,15 @@ roomPro.handlerGang = function(uid,pai){
             return this.handlerHu(uid,true);
             // return this.roomChannel.sendMsgToMem('onFlow',{code : 200});
         }
+
+        //给玩家一张牌
         let mahjong = this.mahjong.next();
         this.currPlayUid = user.uid;
         let uArr = this.getExceptUids(user.uid);
         this.previousOut = {};
+        this.gangUid = null;
         user.unHu = [];
-        this.roomChannel.sendMsgToRoomExceptUid('onMahjong',{code : 200,data : {mahjong : -1, uid : user.uid,isGang : true}},uArr);
+        this.roomChannel.sendMsgToRoomExceptUid('onMahjong',{code : 200,data : {mahjong : -1, uid : user.uid,isGang : true,huUserIdArr : []}},uArr);
         this.currUserInaugurated = mahjong;
         user.addMahjongToUser([mahjong]);
         if(gangObj.type == 1){
@@ -980,11 +1070,18 @@ roomPro.handlerGang = function(uid,pai){
         }else{
             user.addResultRecord(6);
         }
-        let isHu = this.check.checkHu(user);
-        if(isHu && isHu.length){
-            user.isAction = 8;
+        let huUserIdArr = [];
+        try{
+            let isHu = this.handlerHu(user.uid,false,true);
+            if(isHu){
+                user.isAction = 8;
+                huUserIdArr.push(user.uid);
+            }
+        }catch(e){
+            console.error(e);
         }
-        this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong, uid : user.uid,isGang : true}},user);
+
+        this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong, uid : user.uid,isGang : true,huUserIdArr : huUserIdArr}},user);
         this.gameRecord.addRecord(this.round,3,user,mahjong);
     }
 };
@@ -1063,7 +1160,7 @@ roomPro.getMeBetweenBankerUsers = function(beUid,uid,usersArr){
  * 胡牌
  * @param uid
  */
-roomPro.handlerHu = async function(uid,isFlow){
+roomPro.handlerHu = async function(uid,isFlow,isCheck){
     let user = this.getUserByUid(uid);
     if(user.userAction){
         throw '碰了之后不能胡';
@@ -1075,6 +1172,7 @@ roomPro.handlerHu = async function(uid,isFlow){
     if(user.isAction & 8 != 8){
         throw '不能胡或者已经取消胡';
     }
+
     //如果可以胡牌 判断是自摸还是抢杠
     if(!isFlow){
         if(this.currPlayUid == uid ){ //自摸
@@ -1103,7 +1201,6 @@ roomPro.handlerHu = async function(uid,isFlow){
             }else{
                 isZimo = 3;
             }
-
         }else{
             console.error('=========>>>>>>',user);
             throw '非法胡牌操作'
@@ -1115,7 +1212,6 @@ roomPro.handlerHu = async function(uid,isFlow){
             this.result[this.users[i].uid].score = this.users[i].score;
         }
 
-
         //判断我和打出之间的玩家  也有可以胡的 则等待
         console.error('=====>>>preUid',preUid);
         if(isZimo != 1 && isZimo != 4){
@@ -1124,7 +1220,7 @@ roomPro.handlerHu = async function(uid,isFlow){
             for(let i = 0 ; i < users.length ; i ++){
                 let isHu = this.check.checkHu(users[i],pai);
                 console.error(isHu,'======>>>isHu');
-                if(isHu && isHu.length){
+                if(isHu && isHu.length && !isCheck){
                     return;
                 }
             }
@@ -1324,6 +1420,25 @@ roomPro.handlerHu = async function(uid,isFlow){
 
             }
         }
+        let maxFunNum = 0;
+        if(isCheck){
+            for(let i = 0; i < this.users.length; i ++) {
+                let user = this.users[i];
+                if(preUid ){
+                    if(preUid == user.uid){
+                        maxFunNum = user.funNum;
+                        break;
+                    }else if(user.uid != uid && user.funNum > maxFunNum){
+                        maxFunNum = user.funNum;
+                    }
+                }
+            }
+            if(maxFunNum >= this.huCount){
+                return true;
+            }
+            return false;
+        }
+
         if(isZimo == 2 || isBaoPai){ //包牌
             for(let i = 0; i < this.users.length; i ++) {
                 let user = this.users[i];
@@ -1334,15 +1449,16 @@ roomPro.handlerHu = async function(uid,isFlow){
             }
         }
 
+
         //计算分数
         for(let i = 0; i < this.users.length; i ++) {
             let otherUser = this.users[i];
             if(otherUser.uid != uid){
                 otherUser.score -= otherUser.funNum;
+
                 user.score += otherUser.funNum;
             }
         }
-
 
         //总结算
         for(let i = 0; i < this.users.length; i ++) {

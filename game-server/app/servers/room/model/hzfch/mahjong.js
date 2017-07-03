@@ -18,10 +18,6 @@ Mahjong.prototype.createMahjong = function(){
         }
     }
     for(let i = 0 ; i < 4 ; i ++){
-        mahjong.push(31);//东
-        mahjong.push(32);//南
-        mahjong.push(33);//西
-        mahjong.push(34);//北
         mahjong.push(35);//白板
 
         mahjong.push(41);//发财
@@ -33,7 +29,7 @@ Mahjong.prototype.createMahjong = function(){
 
 Mahjong.prototype.washMahjong = function(){
     let arr = [];
-    for(let i = 0 ; i < 112; i++){
+    for(let i = 0 ; i < 120; i++){
         let random = parseInt(Math.random() * this.mahjong.length);
         let delArr = this.mahjong.splice(random,1);
         arr = arr.concat(delArr);
