@@ -1240,7 +1240,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             isHu = this.check.checkHu(user,pai);
         }
 
-        if(!isHu && isHu.length >= 0){
+        if(!isHu && isHu.length > 0){
             throw '没有可以胡的玩家';
         }
         console.error(isHu,'========>>>>isHu');
