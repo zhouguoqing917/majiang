@@ -94,7 +94,7 @@ handler.checkLogin = async function(msg, session, next) {
 
             if(!gameUser.xfToken){
                 let result = await xfyunModel.userImport(gameUser._id,gameUser.wxuserinfo.nickname,gameUser.wxuserinfo.headimgurl);
-                if(result){
+                if(!result){
                     console.error(result,'========>>>>result');
                     //导入用户失败
                     throw '讯科云导入用户失败!'

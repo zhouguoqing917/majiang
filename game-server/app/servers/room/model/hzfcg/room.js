@@ -76,6 +76,8 @@ roomPro.createRoom = async function (session, roomData) {
     this.roomType = roomData.roomType || 1;
     this.huCount = roomData.huCount || 0;
     this.maxHuCount = roomData.maxHuCount || 300;
+    this.gameType = roomData.gameType;
+    this.hhType = roomData.hhType;
     if(this.roomType == 3){
         useCardNumber = useCardNumber / 4 ;
     }
@@ -611,6 +613,7 @@ roomPro.playMahjong = async function(uid,pai){
 
     if(pai == 41 || pai == 42 || pai == this.laizi){
         //推送杠广播
+        this.roomChannel.sendMsgToRoom('onLaiziGang',{code : 200 ,data : { gangUid : uid , beGangUid : uid,mahjong : pai}});
         this.gameRecord.addRecord(this.round,5,user,pai);
         if(pai == 41){
             user.addResultRecord(2);
@@ -1302,17 +1305,6 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             user.addResultRecord(8);
         }
 
-        ////判断自摸番
-        //let hasZimoFan = true;
-        //for(let i = 0 ; i < isHu.length; i++){
-        //    if(isHu[i] == 7 || isHu[i] == 8){
-        //        hasZimoFan = false;
-        //        break;
-        //    }
-        //}
-        //if(isZimo == 1){
-        //    user.addResultRecord(8);
-        //}
 
         //计算大胡番
         for(let i = 0 ; i < isHu.length; i++){
@@ -1478,10 +1470,10 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             let otherUser = this.users[i];
             if(otherUser.uid != uid){
                 otherUser.score -= otherUser.funNum;
-
                 user.score += otherUser.funNum;
             }
         }
+
 
         //总结算
         for(let i = 0; i < this.users.length; i ++) {

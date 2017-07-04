@@ -28,7 +28,8 @@ let User = function(session,roomCard){
     this.readyChi = [];
     this.unHu = [];
     this.funNum = 1;
-    this.resultRecord = [];//{type : 1} , 1 开口 2,发财杠 3,红中杠 4 癞子杠 5 暗杠 6 明杠 7 放冲 8 自摸 9,庄家
+    this.userAction = false;
+    this.funRecord = [];//{type : 1} , 1 开口 2,发财杠 3,红中杠 4 癞子杠 5 暗杠 6 明杠 7 放冲 8 自摸 9,庄家
     //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞
     this.brightMahjong = [];
 };
@@ -144,19 +145,18 @@ pro.addResultRecord = function(type){
 
     if(type == 1 || type == 6 ){
         let has = false;
-        for(let i = 0 ; i < this.resultRecord.length; i++){
-            if(this.resultRecord['type'] == 1){
+        for(let i = 0 ; i < this.funRecord.length; i++){
+            if(this.funRecord['type'] == 1){
                 has = true;
                 break;
             }
         }
         if(!has){
-            this.resultRecord.push(obj);
+            this.funRecord.push(obj);
         }
     }else{
-        this.resultRecord.push(obj);
+        this.funRecord.push(obj);
     }
-
 };
 
 pro.getFanNum = function(){
@@ -164,8 +164,8 @@ pro.getFanNum = function(){
     //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞
     this.funNum = 1;
     let kaikouFan = true;
-    for(let i = 0 ;i < this.resultRecord.length; i++){
-        let type = this.resultRecord[i].type;
+    for(let i = 0 ;i < this.funRecord.length; i++){
+        let type = this.funRecord[i].type;
         if(kaikouFan && type == 1){
             this.funNum = this.funNum * 2;
             kaikouFan = false;
@@ -184,25 +184,30 @@ pro.getFanNum = function(){
     return this.funNum;
 };
 
-pro.addBrightMahjong = function(){
+pro.getFunRecord = function(){
     let arr = [];
-    for(let i = this.mahjong.length - 1; i >= 0 ; i--){
-        let pai = this.mahjong[i];
-        if(pai == 41 && arr.indexOf(41) == -1){
-            arr.push(pai);
-            this.mahjong.splice(i,1);
+    let kaikouFan = true;
+    for(let i = 0 ;i < this.funRecord.length; i++){
+        let obj = {};
+        let type = this.funRecord[i].type;
+        if(kaikouFan && type == 1){
+            kaikouFan = false;
+            obj[type] = 2 ;
+        }
+        if(type == 2 || type == 3 || type == 6 || type == 7 || type == 8 || type == 9 || type == 10){
+            obj[type] = 2 ;
+        }
+        if(type == 5 || type == 4){
+            obj[type] = 4 ;
         }
 
-        if(pai == 42 && arr.indexOf(42) == -1){
-            arr.push(pai);
-            this.mahjong.splice(i,1);
+        if(type == 11 || type == 12 || type == 13 || type == 14 || type == 15 || type == 16 || type == 17 || type == 18){
+            obj[type] = 20 ;
         }
-
-        if(pai == 35 && arr.indexOf(35) == -1){
-            arr.push(pai);
-            this.mahjong.splice(i,1);
+        if(obj[type]){
+            arr.push(obj);
         }
     }
-    this.brightMahjong.push(arr);
+    return arr;
 }
 module.exports = User;
