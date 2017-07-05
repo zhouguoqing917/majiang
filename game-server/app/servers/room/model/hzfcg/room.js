@@ -1228,7 +1228,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             throw '非法胡牌操作'
         }
 
-        //记录之前 resultRecord
+        //记录之前 funRecord
         let userBeforeRecord = user.funRecord;
         let preUserBeforeRecord = [];
         if(preUser){
@@ -1384,8 +1384,8 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                 let user = this.users[i];
                 let temp = true;
                 if(user.uid != uid){
-                    for(let j = 0; j < user.resultRecord.length;j++){
-                        if(user.resultRecord[j]['type'] == 1){
+                    for(let j = 0; j < user.funRecord.length;j++){
+                        if(user.funRecord[j]['type'] == 1){
                             temp = false;
                         }
                     }
@@ -1691,7 +1691,6 @@ roomPro.roundInit = function(){
         this.users[i].readyChi = [];
         this.users[i].unHu = [];
         this.users[i].funNum = 1;
-        this.users[i].resultRecord = [];
         this.users[i].funRecord = [];
     }
 };
