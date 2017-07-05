@@ -612,8 +612,8 @@ roomPro.playMahjong = async function(uid,pai){
     this.previousOut[uid] = pai;
 
     if(pai == 41 || pai == 42 || pai == this.laizi){
+
         //推送杠广播
-        this.roomChannel.sendMsgToRoom('onLaiziGang',{code : 200 ,data : { gangUid : uid , beGangUid : uid,mahjong : pai}});
         this.gameRecord.addRecord(this.round,5,user,pai);
         if(pai == 41){
             user.addResultRecord(2);
@@ -762,6 +762,7 @@ roomPro.isLicensing = async function(uid,pai,isCannel){
         this.roomChannel.sendMsgToRoomExceptUid('onMahjong',{code : 200,data : {mahjong : -1 , uid : nextUser.uid , huUserIdArr : huUserIdArr}  },uArr);
         this.currUserInaugurated = mahjong;
         user.userAction = false;
+        nextUser.userAction = false;
 
         nextUser.unHu = [];
         nextUser.addMahjongToUser([mahjong]);
@@ -836,6 +837,8 @@ roomPro.cannelAction = async function(uid){
         throw '上次玩家出牌为空';
     }
 
+
+
     if(user.mahjong.length % 3 == 2 || !user.isAction){
         throw '玩家牌数不对 或者不能操作';
     }
@@ -851,6 +854,10 @@ roomPro.cannelAction = async function(uid){
 
     user.isAction = 0;
     user.options = 0;
+    //如果取消者 等于当前出牌玩家 则不做处理
+    if(this.currPlayUid == uid){
+        return;
+    }
     console.error(this.gangUid,'====>>>this.gangUid');
     if(this.gangUid){
         for(let i = 0 ; i < this.users.length; i ++){
@@ -1283,10 +1290,13 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         let check = new Check(0);
         let yinghu = false;
         let funResultArr = [];
-        if(isZimo == 1 || isZimo == 4){
-            yinghu = check.checkHu(user)
-        }else{
-            yinghu = check.checkHu(user,pai)
+        let laiziCount = this.check.getLaiziCount(user);
+        if(laiziCount <= 1){
+            if(isZimo == 1 || isZimo == 4){
+                yinghu = check.checkHu(user)
+            }else{
+                yinghu = check.checkHu(user,pai)
+            }
         }
         if(yinghu && yinghu.length){
             user.addResultRecord(10);
@@ -1588,7 +1598,7 @@ roomPro.addGameResult = async function(){
 
         for(let key in records){
             let obj = records[key];
-            obj.roomNo =  this.gameRecord.roomNo;
+            obj.roomNo =  this.roomNo;
             obj.round = parseInt(key);
             obj.roundCount = this.gameRecord.roundCount;
             obj.createTime = Date.now();
@@ -1900,6 +1910,7 @@ roomPro.handlerChi = function(uid,mahjongs){
     this.currPlayUid = uid;
     mahjongs = user.addChiToUser(previousUid,mahjongs,mahjong);
     this.gameRecord.addRecord(this.round,8,user,mahjong);
+    user.addResultRecord(1);
     //pengUid 碰牌玩家  bePengUid被碰牌玩家
     this.roomChannel.sendMsgToRoom('onChi',{code : 200 ,data : {chiUid : uid , beChiUid : previousUid,mahjong : mahjongs.join(','),funNum: user.getFanNum()}})
 };

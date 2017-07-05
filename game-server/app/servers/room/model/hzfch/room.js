@@ -62,6 +62,7 @@ let Room = function (app) {
     this.laizipi ; //癞子皮
     this.gameType ;//游戏类型
     this.hhType ;//1 红中杠 2,发财红中杠
+    this.theTop = 300;
     this.brightOver = false;
 };
 roomPro = Room.prototype;
@@ -79,6 +80,7 @@ roomPro.createRoom = async function (session, roomData) {
     this.maxHuCount = roomData.maxHuCount || 300;
     this.gameType = roomData.gameType;
     this.hhType = roomData.hhType;
+    this.theTop = roomData.hhType || 300;
     if(this.roomType == 3){
         useCardNumber = useCardNumber / 4 ;
     }
@@ -490,7 +492,7 @@ roomPro.licensing = async function(){
             this.currUserInaugurated = this.users[i].mahjong[this.users[i].mahjong.length - 1];
         }
 
-        this.brightOver = this.checkAllBright();
+        this.addBrightMahjongStatus();
         try{
             this.gameRecord.addRecord(this.round,1,this.users[i]);
         }catch(e){
@@ -624,9 +626,8 @@ roomPro.playMahjong = async function(uid,pai){
     //记录上一次谁出了什么牌
     this.previousOut[uid] = pai;
 
-    if(pai == 41 || pai == 42 || pai == this.laizi){
+    if((this.hhType == 1 && pai == 42) ||(this.hhType == 2 && (pai == 41 || pai == 42))|| pai == this.laizi){
         //推送杠广播
-        this.roomChannel.sendMsgToRoom('onLaiziGang',{code : 200 ,data : { gangUid : uid , beGangUid : uid,mahjong : pai}});
         this.gameRecord.addRecord(this.round,5,user,pai);
         if(pai == 41){
             user.addResultRecord(2);
@@ -848,10 +849,15 @@ roomPro.cannelAction = async function(uid){
     if(!this.previousOut || !Object.keys(this.previousOut).length){
         throw '上次玩家出牌为空';
     }
+    //如果取消者 等于当前出牌玩家 则不做处理
+    if(this.currPlayUid == uid){
+        return;
+    }
 
     if(user.mahjong.length % 3 == 2 || !user.isAction){
         throw '玩家牌数不对 或者不能操作';
     }
+
 
     let key = Object.keys(this.previousOut)[0];
     let mahjong = this.previousOut[key];
@@ -867,6 +873,12 @@ roomPro.cannelAction = async function(uid){
     user.readyChi = [];
     user.readyPeng = null;
     user.readyGang = null;
+
+    //如果取消者 等于当前出牌玩家 则不做处理
+    if(this.currPlayUid == uid){
+        return;
+    }
+
     this.gameRecord.addRecord(this.round,7,user);
 
     let maxOption = 0;
@@ -1033,6 +1045,12 @@ roomPro.handlerGang = async function(uid,pai){
         }else{
             user.addResultRecord(6);
         }
+        //三铺倒
+        let allLen = user.chi.length + user.peng.length + user.gang.length;
+        if(allLen == 3){
+            user.addResultRecord(25);
+        }
+
         let huUserIdArr = [];
         try{
             let isHu = await this.handlerHu(user.uid,false,true);
@@ -1092,7 +1110,12 @@ roomPro.handlerPeng = function(uid){
     let mahjongs = user.addPengToUser(mahjong,previousUid);
     this.gameRecord.addRecord(this.round,4,user,mahjong);
     this.previousOut = null;
-    user.addResultRecord(1);
+
+    //三铺倒
+    let allLen = user.chi.length + user.peng.length + user.gang.length;
+    if(allLen == 3){
+        user.addResultRecord(25);
+    }
     //pengUid 碰牌玩家  bePengUid被碰牌玩家
     this.roomChannel.sendMsgToRoom('onPeng',{code : 200 ,data : {pengUid : uid , bePengUid : previousUid,mahjongs : mahjongs ,funNum: user.getFanNum()}})
 };
@@ -1130,7 +1153,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         throw '碰了之后不能胡';
     }
 
-    let pai , preUid, isZimo = 1 ,preUser;//1为 自摸  2, 抢杠 3,别人放炮 ,4 自己杠到的
+    let pai , preUid, isZimo = 1 ,preUser;//1为 自摸  2, 别人放炮
     let preBanker = this.banker;
     let isBaoPai = false;
     if(user.isAction & 8 != 8){
@@ -1169,7 +1192,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
 
         //判断我和打出之间的玩家  也有可以胡的 则等待
         console.error('=====>>>preUid',preUid);
-        if(isZimo != 1 && isZimo != 4){
+        if(isZimo != 1){
             let users = this.getMeBetweenBankerUsers(uid,preUid);
             console.error(users,'=======>>>>>users');
             for(let i = 0 ; i < users.length ; i ++){
@@ -1180,6 +1203,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                 }
             }
         }
+
 
         //验证胡牌
         let isHu = false;
@@ -1198,13 +1222,17 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         let check = new Check(0);
         let yinghu = false;
         let funResultArr = [];
-        if(isZimo == 1 || isZimo == 4){
-            yinghu = check.checkHu(user)
-        }else{
-            yinghu = check.checkHu(user,pai)
-        }
-        if(yinghu && yinghu.length){
-            user.addResultRecord(10);
+
+        let laiziCount = this.check.getLaiziCount(user);
+        if(laiziCount <= 1){
+            if(isZimo == 1){
+                yinghu = check.checkHu(user)
+            }else{
+                yinghu = check.checkHu(user,pai)
+            }
+            if(yinghu && yinghu.length){
+                user.addResultRecord(10);
+            }
         }
 
 
@@ -1216,12 +1244,15 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             user.addResultRecord(8);
         }
 
-
         //计算大胡番
         for(let i = 0 ; i < isHu.length; i++){
-            //1,屁胡 2,碰碰胡 ,3全球人, 4 , 将将胡 ,5, 清一色 , 6 风一色 ,7 海底捞 ,8 ,杠上花
+            //1,屁胡 2,碰碰胡 ,3全球人, 4 , 将将胡 ,5, 清一色 , 6 风一色 ,7 海底捞 ,8 ,杠上花 9, 7对,10 豪华7对 ,11 ,双豪七 12,三豪七  13 门清
+
             //1 开口 2,发财杠 3,红中杠 4 癞子杠 5 暗杠 6 明杠 7 放冲 8 自摸 9,庄家
-            //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞
+            //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞 ,19 7对,20 豪华7对 ,21 ,双豪七 22,三豪七  23 门清 24 吃癞子 25 三铺倒 ,26 ,小胡
+            if(isHu[i] == 1){
+                user.addResultRecord(26);
+            }
             if(isHu[i] == 2){
                 user.addResultRecord(13);
             }
@@ -1243,15 +1274,26 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             if(isHu[i] == 8){
                 user.addResultRecord(15);
             }
+            if(isHu[i] == 9){
+                user.addResultRecord(19);
+            }
+            if(isHu[i] == 10){
+                user.addResultRecord(20);
+            }
+            if(isHu[i] == 11){
+                user.addResultRecord(21);
+            }
+
+            if(isHu[i] == 12){
+                user.addResultRecord(22);
+            }
+            if(isHu[i] == 13){
+                user.addResultRecord(23);
+            }
         }
 
-        //庄家
-        let bankerUid = this.banker;
-        let bankerUser = this.getUserByUid(bankerUid);
-        bankerUser.addResultRecord(9);
 
         let winUserFun = user.getFanNum();
-
         //计算每个玩家的番数
         let isTop = false;
         let topCount = 0;
@@ -1271,11 +1313,12 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             for(let i = 0; i < this.users.length; i ++) {
                 let user = this.users[i];
                 if(user.uid != uid){
-                    let num = winUserFun * user.funNum > 300 ? 300 : winUserFun * user.funNum ;
+                    let num = winUserFun * user.funNum > this.theTop ? this.theTop : winUserFun * user.funNum ;
                     user.funNum = num;
                 }
             }
         }
+
         //计算顶
         if(topCount >= 3 ){
             let kaikouCount = 0;
@@ -1309,38 +1352,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                 }
             }
         }
-        // 计算包牌
-        if(isZimo == 3 ){ //计算包牌情况
-            if(isHu && isHu.length == 1 && isHu[0] == 3 && !this.check.canHu(preUser).length){
-                //包牌
-                isBaoPai = true;
-            }else if(isHu.indexOf(4) != -1 && isHu.indexOf(5) != -1){ //大胡 第三铺 玩家 包牌
-                //第三铺
-                let arr = [];
-                arr = arr.concat(user.chi);
-                arr = arr.concat(user.peng);
-                arr = arr.concat(user.gang);
-                if(arr.length >= 3){
-                    //排序
-                    for(let i = 0; i < arr.length;i++){
-                        let temp;
-                        for(let j = 0; j < arr.length; j ++){
-                            if(arr[i].ts > arr[j].ts){
-                                temp = arr[i].ts;
-                                arr[i] = arr[j];
-                                arr[j] = temp;
-                            }
-                        }
-                    }
-                    if(arr[2].uid != uid){
-                        let uid = arr[2].uid;
-                        isBaoPai = true;
-                        preUser = this.getUserByUid(uid);
-                    }
-                }
 
-            }
-        }
         let maxFunNum = 0;
         if(isCheck){
             for(let i = 0; i < this.users.length; i ++) {
@@ -1364,17 +1376,6 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             }
             return false;
         }
-
-        if(isZimo == 2 || isBaoPai){ //包牌
-            for(let i = 0; i < this.users.length; i ++) {
-                let user = this.users[i];
-                if(user.uid != uid && preUser.uid != user.uid){
-                    preUser.funNum += user.funNum ;
-                    user.funNum = 0;
-                }
-            }
-        }
-
 
         //计算分数
         for(let i = 0; i < this.users.length; i ++) {
@@ -1811,7 +1812,17 @@ roomPro.handlerChi = function(uid,mahjongs){
     this.currPlayUid = uid;
     mahjongs = user.addChiToUser(previousUid,mahjongs,mahjong);
     this.gameRecord.addRecord(this.round,8,user,mahjong);
-    //pengUid 碰牌玩家  bePengUid被碰牌玩家
+
+    //吃癞子
+    if(mahjongs.indexOf(this.laizi) != -1){
+        user.addResultRecord(24);
+    }
+
+    //三铺倒
+    let allLen = user.chi.length + user.peng.length + user.gang.length;
+    if(allLen == 3){
+        user.addResultRecord(25);
+    }
     this.roomChannel.sendMsgToRoom('onChi',{code : 200 ,data : {chiUid : uid , beChiUid : previousUid,mahjong : mahjongs.join(','),funNum: user.getFanNum()}})
 };
 
@@ -1824,20 +1835,42 @@ roomPro.brightMahjong = function(uid){
         throw '没有亮牌'
     }
     user.addBrightMahjong(user);
-    let brightOver = this.checkAllBright();
+    let brightOver = this.checkAllUserBright();
     this.brightOver = brightOver;
-    this.roomChannel.sendMsgToRoom('onBrightMahjong',{code : 200 , data : {uid : uid , mahjong : [42,41,25] ,brightOver : this.brightOver}});
+    this.roomChannel.sendMsgToRoom('onBrightMahjong',{code : 200 , data : {uid : uid , mahjong : [42,41,25] }});
+    if(this.brightOver){
+        this.roomChannel.sendMsgToRoom('onBrightMahjongOver',{code : 200 });
+    }
 };
 
-roomPro.checkAllBright = function(){
+roomPro.cannelBrightMahjong = function(uid){
+    let user = this.getUserByUid(uid);
+    user.hasBrightMahjong = false;
+    let isAll = this.checkAllUserBright();
+    this.brightOver = isAll;
+    if(this.brightOver){
+        this.roomChannel.sendMsgToRoom('onBrightMahjongOver',{code : 200 });
+    }
+};
+
+roomPro.addBrightMahjongStatus = function(){
     for(let i = 0; i < this.users.length;i ++){
         let isBright = this.check.checkBrightMahjong(this.users[i]);
         if(isBright){
+            this.users[i].hasBrightMahjong = true;
+            this.brightOver = false;
+        }
+    }
+};
+
+roomPro.checkAllUserBright = function(){
+    for(let i = 0; i < this.users.length;i ++){
+        if(this.users[i].hasBrightMahjong){
             return false;
         }
     }
     return true;
-}
+};
 
 module.exports = Room;
 

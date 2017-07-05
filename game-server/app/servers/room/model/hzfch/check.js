@@ -2,8 +2,9 @@
  * Created by Mrli on 17/5/8.
  */
 
-var Check = function(laizi){
+var Check = function(laizi,hhType){
     this.laizi = laizi;
+    this.hhType = hhType;
 };
 //console.log = function(){}
 var max = 4;
@@ -11,7 +12,7 @@ var pro = Check.prototype ;
 /**
  * 检测胡牌
  * @param user
- * @returns Array 1,屁胡 2,碰碰胡 ,3全球人, 4 , 将将胡 ,5, 清一色 , 6 风一色 ,7 海底捞 ,8 ,杠上花
+ * @returns Array 1,屁胡 2,碰碰胡 ,3全球人 4 , 将将胡 ,5, 清一色 ,6 风一色 ,7 海底捞 ,8 ,杠上花 ,9 7对,10 豪华7对 ,11 ,双豪七 12,三豪七  13 门清
  */
 pro.checkHu = function(user,pai){
     user.unHu = user.unHu || [];
@@ -49,13 +50,76 @@ pro.checkHu = function(user,pai){
     if(isHu){
         huType.push(isHu);
     }
+    isHu = this.qidui(user,pai);
+    if(isHu){
+        huType.push(isHu);
+    }
     return huType;
 };
+
+pro.getLaiziCount = function(mahjongs){
+    let laiziCount = 0;
+    for(let i = 0 ; i < mahjongs.length; i++){
+        if(mahjongs[i] == this.laizi){
+            laiziCount += 1;
+        }
+    }
+    return laiziCount;
+};
+
+pro.qidui = function(user,pai){
+    var mahjongs = user.mahjong ;
+    if(pai){
+        mahjongs.concat(pai);
+    }
+    if(mahjongs.length != 14){
+        return false;
+    }
+    let laiziCount = this.getLaiziCount(mahjongs);
+    let allPai = this.transform(mahjongs);
+    let duizi = 0;
+    let isHaoqi = 0;
+    for(let i = 0 ; i < allPai.length; i ++){
+        for(let j = 0; j < allPai[i].length; j ++){
+            if(allPai[i][j] == 4){
+                duizi += 2;
+                isHaoqi += 1;
+            }else if(allPai[i][j] >= 2){
+                duizi += 1;
+            }
+        }
+    }
+    let hasLaizi = 7 - duizi;
+    if(hasLaizi <= laiziCount){
+        if(isHaoqi == 0){
+            return 9;
+        }
+        if(isHaoqi == 0){
+            return 10;
+        }
+        if(isHaoqi == 0){
+            return 11
+        }
+        if(isHaoqi == 0){
+            return 12;
+        }
+    }
+    return false;
+}
+
 pro.hasHongzhong = function(mahjongs){
     for(var i = 0; i < mahjongs.length; i++){
-        if(mahjongs[i] == 42 || mahjongs[i] == 41){
-            return true;
+        if(this.hhType == 1){
+            if(mahjongs[i] == 42){
+                return true;
+            }
         }
+        if(this.hhType == 2){
+            if(mahjongs[i] == 42 || mahjongs[i] == 41){
+                return true;
+            }
+        }
+
     }
     return false;
 };
@@ -79,7 +143,7 @@ pro.checkDaHu = function(user,pai,laiziCount){
         huType.push(isHu);
     }
 
-    isHu = this.quanqiuren(user);
+    isHu = this.menqing(user);
     if(isHu){
         huType.push(isHu);
     }
@@ -231,7 +295,6 @@ pro.jianjianghu = function(user,pai){
     }
 
     var pais = this.transform(mahjongs);
-    console.log(pais,'=====>>>pais');
     for(var i = 0; i < pais.length ; i++){
         for(var j = 0; j < pais[i].length; j++){
             if(pais[i][j] > 0 && (j != 1 && j != 4 && j != 7)){
@@ -362,33 +425,21 @@ pro.fengyise = function(user,pai){
     return 6;
 };
 
-pro.quanqiuren = function(user,pai){
-    var allMahjong = user.mahjong;
+pro.menqing = function(user,pai){
+    var mahjongs = user.mahjong;
     if(pai){
-        allMahjong = mahjong.concat(pai);
-    }
-
-    if(allMahjong.length != 2){
         return false;
     }
-    var laiziCount = this.getLaiziCount(allMahjong);
-    if(laiziCount == 2){
+    if(user.peng.length > 0){
         return false;
     }
-    console.log(allMahjong,'======>>>>>');
-    for(var i = 0 ; i < allMahjong.length ; i ++){
-        if(allMahjong[i] > 40){
-            return false;
-        }
-        if(allMahjong[i] == this.laizi){
-            continue;
-        }
 
-        if(allMahjong[i] % 10 != 1 || allMahjong[i] % 10 != 4 || allMahjong[i] % 10 != 7){
+    for(let i = 0; i < user.gang.length; i++){
+        if(user.gang[i].type != 1){
             return false;
         }
     }
-    return 3;
+    return 13;
 }
 
 
