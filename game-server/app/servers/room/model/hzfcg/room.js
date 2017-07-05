@@ -1575,10 +1575,14 @@ roomPro.addGameResult = async function(){
                 this.allResult[this.users[i].uid] = this.allResult[this.users[i].uid] || {};
                 this.allResult[this.users[i].uid].score = 0;
                 this.allResult[this.users[i].uid].nickname = this.users[i].nickname;
+                this.allResult[this.users[i].uid].win = 0;
                 this.result[this.users[i].uid] = this.result[this.users[i].uid] || {};
                 this.result[this.users[i].uid].score = 0;
                 this.result[this.users[i].uid].nickname = this.users[i].nickname;
                 this.result[this.users[i].uid].headimgurl = this.users[i].headimgurl;
+
+
+
                 this.result.createTime = Date.now();
             }
             this.gameRecord.addScore(this.result);
