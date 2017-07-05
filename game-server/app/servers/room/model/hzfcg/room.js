@@ -1492,6 +1492,8 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             this.allResult[resUser.uid] = this.allResult[resUser.uid] || {};
             this.allResult[resUser.uid].win = this.allResult[resUser.uid].win || 0;
             this.allResult[resUser.uid].score = resUser.score ;
+            this.allResult[resUser.uid].nickname = resUser.nickname ;
+            this.allResult[resUser.uid].headimgurl = resUser.headimgurl ;
             if(resUser.uid == user.uid){
                 this.allResult[resUser.uid].win += 1;
             }
@@ -1559,7 +1561,7 @@ roomPro.addGameResult = async function(){
         return ;
     }
     try{
-        if(!this.allResult || !Object.keys(this.allResult).length){
+        if(!this.allResult || Object.keys(this.allResult).length <= 1){
             this.allResult = {};
             this.allResult.ownerUid = this.ownerUid;
             this.allResult.roomNo = this.roomNo;
@@ -1573,11 +1575,6 @@ roomPro.addGameResult = async function(){
                 this.allResult[this.users[i].uid] = this.allResult[this.users[i].uid] || {};
                 this.allResult[this.users[i].uid].score = 0;
                 this.allResult[this.users[i].uid].nickname = this.users[i].nickname;
-                this.allResult[this.users[i].uid].bridCount = 0;
-                this.allResult[this.users[i].uid].pengCount = 0;
-                this.allResult[this.users[i].uid].mingGangCount = 0;
-                this.allResult[this.users[i].uid].anGangCount = 0;
-
                 this.result[this.users[i].uid] = this.result[this.users[i].uid] || {};
                 this.result[this.users[i].uid].score = 0;
                 this.result[this.users[i].uid].nickname = this.users[i].nickname;
