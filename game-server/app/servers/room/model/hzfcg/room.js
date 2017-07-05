@@ -624,6 +624,7 @@ roomPro.playMahjong = async function(uid,pai){
         if(pai == this.laizi){
             user.addResultRecord(4);
         }
+
         this.roomChannel.sendMsgToRoom('onLaiziGang',{code : 200 ,data : { gangUid : uid , beGangUid : uid,mahjong : pai ,funNum: user.getFanNum()}});
         //给玩家一张牌
         if(this.isRoundOver()){
@@ -771,8 +772,8 @@ roomPro.isLicensing = async function(uid,pai,isCannel){
             let isHu = await this.handlerHu(nextUser.uid,false,true);
             console.error(isHu,'=======>>isHuommahjong');
             if(isHu === true ){
-                user.isAction = 8;
-                huUserIdArr.push(user.uid);
+                nextUser.isAction = 8;
+                huUserIdArr.push(nextUser.uid);
             }
         }catch(e){
             console.error(e);
