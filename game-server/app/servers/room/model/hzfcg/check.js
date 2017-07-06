@@ -26,8 +26,6 @@ pro.checkHu = function(user,pai){
     }
 
 
-
-
     var mahjongs = user.mahjong;
     if(pai){
         mahjongs = mahjongs.concat([pai]);
@@ -363,7 +361,7 @@ pro.fengyise = function(user,pai){
     }
 
     for(var i = 0 ; i < mahjongs.length; i++){
-        if(mahjongs[i] < 30 || mahjongs[i] >40){
+        if((mahjongs[i] < 30 || mahjongs[i] >40) && this.laizi != mahjongs[i]){
             return false
         }
     }
@@ -651,6 +649,7 @@ pro.getLaiziCount = function(mahjongs){
     var laiziCount = 0;
     for(var i = 0 ; i < mahjongs.length; i++){
         if(mahjongs[i] == this.laizi){
+            console.log(mahjongs[i]);
             laiziCount += 1;
         }
     }
@@ -917,7 +916,7 @@ pro.playToTing = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check();
+var checks = new Check(15);
 
 var getMahjong = function(){
     var arr = [];
@@ -1036,8 +1035,8 @@ var test = function(){
 };
 
 var member = {
-    "mahjong":[21,21,21,24,24,24,25],
-    "peng":[{pai : [21,21,21]},{pai : [22,22,22]}],
+    "mahjong":[31,31,31,15,15,15,35],
+    "peng":[{pai : [31,31,31]},{pai : [33,33,33]}],
     "pai":[],
     "gang":[],
     "chi" : [],
@@ -1046,7 +1045,7 @@ var member = {
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 ////console.log(checks.canHu(member));
-console.log(checks.checkHu(member,25),'===>>');
+console.log(checks.getLaiziCount(member,35),'===>>');
 //console.log(member)
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);

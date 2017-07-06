@@ -1296,7 +1296,6 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             }
         }
 
-
         let winUserFun = user.getFanNum();
         //计算每个玩家的番数
         let isTop = false;
@@ -1317,7 +1316,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             for(let i = 0; i < this.users.length; i ++) {
                 let user = this.users[i];
                 if(user.uid != uid){
-                    let num = winUserFun * user.funNum > this.theTop ? this.theTop : winUserFun * user.funNum ;
+                    let num = winUserFun * user.funNum > this.theTop * 0.8 ? this.theTop * 0.8 : winUserFun * user.funNum ;
                     user.funNum = num;
                 }
             }
@@ -1328,32 +1327,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             let kaikouCount = 0;
             //判断玩家开口 是否形成光明顶
             for(let i = 0; i < this.users.length; i ++){
-                let user = this.users[i];
-                let temp = true;
-                if(user.uid != uid){
-                    for(let j = 0; j < user.funRecord.length;j++){
-                        if(user.funRecord[j]['type'] == 1){
-                            temp = false;
-                        }
-                    }
-                }
-                if(!temp){
-                    kaikouCount += 1;
-                }
-            }
-
-
-            for(let i = 0; i < this.users.length; i ++) {
-                let user = this.users[i];
-                if(user.uid != uid){
-                    if(kaikouCount == 0){
-                        user.funNum = 900;
-                    }else if (kaikouCount > 0 && kaikouCount < 3){
-                        user.funNum = 700;
-                    }else{
-                        user.funNum = 500;
-                    }
-                }
+                this.users[i].funNum = this.theTop;
             }
         }
 

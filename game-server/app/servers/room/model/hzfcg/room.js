@@ -1293,7 +1293,9 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         let check = new Check(0);
         let yinghu = false;
         let funResultArr = [];
-        let laiziCount = this.check.getLaiziCount(user);
+        let mahjongs = [].concat(user.mahjong);
+        mahjongs.push(pai);
+        let laiziCount = this.check.getLaiziCount(mahjongs);
         if(laiziCount <= 1){
             if(isZimo == 1 || isZimo == 4){
                 yinghu = check.checkHu(user)
@@ -1412,6 +1414,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
 
         // 计算包牌
         console.error(isZimo,'=====>>>>isZimo');
+        let baoPaiuser ;
         if(isZimo == 3 ){ //计算包牌情况
             if(isHu && isHu.length == 1 && isHu[0] == 3 && !this.check.canHu(preUser).length){
                 //包牌
@@ -1439,7 +1442,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                     if(arr[2].uid != uid){
                         let uid = arr[2].uid;
                         isBaoPai = true;
-                        preUser = this.getUserByUid(uid);
+                        baoPaiuser = this.getUserByUid(uid);
                     }
                 }
             }
@@ -1480,8 +1483,8 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         if(isZimo == 2 || isBaoPai){ //包牌
             for(let i = 0; i < this.users.length; i ++) {
                 let user = this.users[i];
-                if(user.uid != uid && preUser.uid != user.uid){
-                    preUser.funNum += user.funNum ;
+                if(user.uid != uid && baoPaiuser.uid != user.uid){
+                    baoPaiuser.funNum += user.funNum ;
                     user.funNum = 0;
                 }
             }
@@ -1522,8 +1525,8 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             this.result[user.uid].headimgurl  = user.headimgurl;
             this.result[user.uid].packBrand = false;
             this.result[user.uid].mahjong = user.mahjong;
-            if(preUser && preUser.uid == user.uid && isBaoPai){
-                this.result[user.uid].packBrand = true;
+            if(baoPaiuser && baoPaiuser.uid == user.uid && isBaoPai){
+                this.result[baoPaiuser.uid].packBrand = true;
             }
         }
 
