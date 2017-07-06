@@ -62,6 +62,7 @@ let Room = function (app) {
     this.laizipi ; //癞子皮
     this.gameType ;
     this.gangUid;
+    this.huanZhuangCount = 0;//荒庄次数
 };
 roomPro = Room.prototype;
 
@@ -1538,7 +1539,9 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         if(!isFlow){
             this.banker = uid;
         }else{
-            this.banker = this.currPlayUid;
+            this.huanZhuangCount += 1;
+            let index = this.huanZhuangCount % 4;
+            this.banker = this.users[index];
         }
         this.roundInit();
         let bankerUser = this.getUserByUid(this.banker);
