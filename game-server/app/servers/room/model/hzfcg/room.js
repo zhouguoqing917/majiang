@@ -1409,6 +1409,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                 }
             }
         }
+
         // 计算包牌
         if(isZimo == 3 ){ //计算包牌情况
             if(isHu && isHu.length == 1 && isHu[0] == 3 && !this.check.canHu(preUser).length){
@@ -1458,6 +1459,14 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             user.funRecord = userBeforeRecord;
             if(preUser){
                 preUser.funRecord = preUserBeforeRecord;
+            }
+
+            let bankerFunRecord = bankerUser.funRecord;
+            for(let i = 0; i < bankerFunRecord.length; i ++){
+                if(bankerFunRecord[i].type == 9){
+                    bankerUser.funRecord.splice(i,1);
+                    break;
+                }
             }
             if(maxFunNum >= this.huCount){
                 return true;

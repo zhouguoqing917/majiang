@@ -812,7 +812,7 @@ roomPro.getExceptUids = function(uid){
  */
 roomPro.isRoundOver = function(){
     let count = 0;
-    if(this.onlyOneBird){
+    if(this.onlyOneBird){h
         count = 1;
     }else if(this.birdNum){
         count = parseInt(this.birdNum);
@@ -1372,6 +1372,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             if(preUser){
                 preUser.funRecord = preUserBeforeRecord;
             }
+
             if(maxFunNum >= this.huCount){
                 return true;
             }
