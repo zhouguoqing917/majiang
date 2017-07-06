@@ -1411,6 +1411,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         }
 
         // 计算包牌
+        console.error(isZimo,'=====>>>>isZimo');
         if(isZimo == 3 ){ //计算包牌情况
             if(isHu && isHu.length == 1 && isHu[0] == 3 && !this.check.canHu(preUser).length){
                 //包牌
@@ -1421,6 +1422,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                 arr = arr.concat(user.chi);
                 arr = arr.concat(user.peng);
                 arr = arr.concat(user.gang);
+                console.error(arr,'=====>>>>>arr1111');
                 if(arr.length >= 3){
                     //排序
                     for(let i = 0; i < arr.length;i++){
@@ -1433,6 +1435,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                             }
                         }
                     }
+                    console.error(arr,'=====>>>>>arr2222',arr[2].uid);
                     if(arr[2].uid != uid){
                         let uid = arr[2].uid;
                         isBaoPai = true;
