@@ -25,7 +25,6 @@ pro.checkHu = function(user,pai){
         return false;
     }
 
-
     var mahjongs = user.mahjong;
     if(pai){
         mahjongs = mahjongs.concat([pai]);

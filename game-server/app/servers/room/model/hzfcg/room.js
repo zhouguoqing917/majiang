@@ -1256,6 +1256,8 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             }
         }
 
+
+
         //验证胡牌
         let isHu = false;
         if(isZimo == 1){
@@ -1266,6 +1268,10 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
 
         if(!isHu || isHu.length == 0){
             throw '没有可以胡的玩家';
+        }
+
+        if(isHu.indexOf(2) != -1 && isHu.indexOf(6) != -1){
+            isHu.splice(isHu.indexOf(6), 1);
         }
         console.error(isHu,'========>>>>isHu');
         //判断是否海底捞 7
@@ -1402,11 +1408,11 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                 let user = this.users[i];
                 if(user.uid != uid){
                     if(kaikouCount == 0){
-                        user.funNum = 900;
+                        user.funNum = 600;
                     }else if (kaikouCount > 0 && kaikouCount < 3){
-                        user.funNum = 700;
-                    }else{
                         user.funNum = 500;
+                    }else{
+                        user.funNum = 400;
                     }
                 }
             }
