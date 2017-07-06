@@ -784,8 +784,8 @@ roomPro.isLicensing = async function(uid,pai,isCannel){
             let isHu = await this.handlerHu(nextUser.uid,false,true);
             console.error(isHu,'=======>>isHuommahjong');
             if(isHu === true ){
-                user.isAction = 8;
-                huUserIdArr.push(user.uid);
+                nextUser.isAction = 8;
+                huUserIdArr.push(nextUser.uid);
             }
         }catch(e){
             console.error(e);
@@ -1810,7 +1810,7 @@ roomPro.handlerChi = function(uid,mahjongs){
     user.unHu = [];
     this.currPlayUid = uid;
     mahjongs = user.addChiToUser(previousUid,mahjongs,mahjong);
-    this.gameRecord.addRecord(this.round,8,user,mahjong);
+    this.gameRecord.addRecord(this.round,9,user,mahjongs);
 
     //吃癞子
     if(mahjongs.indexOf(this.laizi) != -1){
@@ -1822,6 +1822,7 @@ roomPro.handlerChi = function(uid,mahjongs){
     if(allLen == 3){
         user.addResultRecord(25);
     }
+
     this.roomChannel.sendMsgToRoom('onChi',{code : 200 ,data : {chiUid : uid , beChiUid : previousUid,mahjong : mahjongs.join(','),funNum: user.getFanNum()}})
 };
 

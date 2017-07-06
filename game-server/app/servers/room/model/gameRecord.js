@@ -79,6 +79,10 @@ Record.prototype.addRecord = function(round,type,user,mahjong,dice){
     if(type == 8){
         obj.des = '流局';
     }
+    if(type == 9){
+        obj.mahjong = mahjong;
+        obj.des = '吃';
+    }
     this.records[round].actions.push(obj);
 };
 

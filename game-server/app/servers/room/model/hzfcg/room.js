@@ -1605,6 +1605,7 @@ roomPro.addGameResult = async function(){
             obj.roundCount = this.gameRecord.roundCount;
             obj.createTime = Date.now();
             obj.gameRecordId = recordInfo._id;
+            obj.users = this.users;
             await recordModel.create(obj);
         }
     }catch(e){
@@ -1910,7 +1911,7 @@ roomPro.handlerChi = function(uid,mahjongs){
     user.unHu = [];
     this.currPlayUid = uid;
     mahjongs = user.addChiToUser(previousUid,mahjongs,mahjong);
-    this.gameRecord.addRecord(this.round,8,user,mahjong);
+    this.gameRecord.addRecord(this.round,9,user,mahjongs);
     user.addResultRecord(1);
     //pengUid 碰牌玩家  bePengUid被碰牌玩家
     this.roomChannel.sendMsgToRoom('onChi',{code : 200 ,data : {chiUid : uid , beChiUid : previousUid,mahjong : mahjongs.join(','),funNum: user.getFanNum()}})

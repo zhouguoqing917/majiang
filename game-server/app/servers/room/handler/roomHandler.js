@@ -423,7 +423,7 @@ handler.getGameResultList = async function(msg, session, next){
 
 handler.getGameRecordList = async function(msg, session, next){
     try {
-        let resultId = msg.resultId;
+        let resultId = msg.gameResultId;
         let results = await roomManager.getGameRecordList(resultId);
         next(null, {code: 200, data : {result : results}});
     }catch(ex){
