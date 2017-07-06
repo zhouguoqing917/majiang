@@ -1235,7 +1235,6 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             preUserBeforeRecord = [].concat(preUser.funRecord);
         }
 
-
         //初始化 resut
         for(let i = 0; i < this.users.length; i ++){
             this.result[this.users[i].uid] = this.result[this.users[i].uid] || {};
@@ -1318,7 +1317,6 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             user.addResultRecord(8);
         }
 
-
         //计算大胡番
         for(let i = 0 ; i < isHu.length; i++){
             //1,屁胡 2,碰碰胡 ,3全球人, 4 , 将将胡 ,5, 清一色 , 6 风一色 ,7 海底捞 ,8 ,杠上花
@@ -1353,7 +1351,6 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         bankerUser.addResultRecord(9);
 
         let winUserFun = user.getFanNum();
-
         //计算每个玩家的番数
         let isTop = false;
         let topCount = 0;

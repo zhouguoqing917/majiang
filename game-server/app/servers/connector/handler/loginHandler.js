@@ -173,7 +173,7 @@ handler.realNameVerify = async function(msg, session, next){
     let IDNo = msg.IDNo;
     let uid = session.uid;
     await gameUserModel.update({_id : uid},{realName : realName, IDNo : IDNo});
-    next(null,{code:200,msg:'认证成功',data: data});
+    next(null,{code:200,msg:'认证成功'});
 }
 
 //获取用户微信信息
