@@ -58,7 +58,14 @@ let schema=new mongoose.Schema({
     },
     xfToken : {
         type: String
+    },
+    realName:{
+        type: String
+    },
+    IDNo : {
+        type: String
     }
+
 });
 schema.index( {id : 1} , { unique : true });
 schema.index( {openid : 1} , { unique : true });

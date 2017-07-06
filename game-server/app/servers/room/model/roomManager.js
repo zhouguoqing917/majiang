@@ -31,6 +31,11 @@ RoomManager.prototype.getRoomByRoomNo = function(roomNo){
     return this.allRoom[roomNo];
 };
 
+RoomManager.prototype.getGameOverRoom = async function(uid){
+    let result = await roomModel.find({createUserId : uid , status : {$gt : 3}}).sort({createTime : -1 }).limit(10);
+    return result ;
+}
+
 RoomManager.prototype.getMyRooms = function(uid){
     let rooms = this.ownerRoom[uid] || [];
     let roomArr = [];

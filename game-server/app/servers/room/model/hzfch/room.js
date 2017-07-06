@@ -790,6 +790,7 @@ roomPro.isLicensing = async function(uid,pai,isCannel){
         }catch(e){
             console.error(e);
         }
+
         this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong , uid : nextUser.uid , huUserIdArr : huUserIdArr}},nextUser);
         this.gameRecord.addRecord(this.round,3,nextUser,mahjong);
     }

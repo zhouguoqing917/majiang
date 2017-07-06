@@ -153,7 +153,9 @@ handler.checkLogin = async function(msg, session, next) {
                 ipaddress : gameUser.ipaddress,
                 currRoomNo : gameUser.currRoomNo,
                 sex : sex,
-                xfToken : gameUser.xfToken
+                xfToken : gameUser.xfToken,
+                realName : gameUser.realName,
+                IDNo : gameUser.IDNo
             };
 
             next(null,{code:200,msg:'登录成功',data: data});
@@ -165,6 +167,14 @@ handler.checkLogin = async function(msg, session, next) {
     }
 
 };
+
+handler.realNameVerify = async function(msg, session, next){
+    let realName = msg.realName;
+    let IDNo = msg.IDNo;
+    let uid = session.uid;
+    await gameUserModel.update({_id : uid},{realName : realName, IDNo : IDNo});
+    next(null,{code:200,msg:'认证成功',data: data});
+}
 
 //获取用户微信信息
 handler.getWXUserInfo=async function(msg, session, next) {

@@ -498,3 +498,13 @@ handler.brightMahjong = async function(msg, session, next){
         next(null, {code: 500, msg: ex});
     }
 };
+
+handler.getGameOverRoom = async function(msg, session, next){
+    try {
+        let uid = session.uid;
+        let result =  await roomManager.getGameOverRoom(uid);
+        next(null,{code:200 , data : result});
+    }catch(e){
+        next(null, {code: 500, msg: e});
+    }
+}
