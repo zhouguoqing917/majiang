@@ -458,8 +458,28 @@ handler.getRecordCode = async function(msg, session, next){
         console.log(ex,'=======>>>>>')
         next(null, {code: 500, msg: '获取回放码失败'});
     }
-
 };
+
+handler.getCurrRoomResult = async function(msg, session, next){
+    try {
+        let uid = session.uid;
+        let roomNo = msg.roomNo;
+        if (!roomNo ) {
+            return next(null, {code: 500, msg: '参数错误!'});
+        }
+        let room = await roomManager.getRoomByRoomNo(roomNo);
+        if(!room){
+            return next(null, {code: 500, msg: '房间不存在!'});
+        }
+        if(!room.getUserByUid(uid)){
+            return next(null, {code: 400, msg: '不在此房间!'});
+        }
+
+        next(null, {code: 200, msg: '发送成功', data: {scores : room.gameRecord.scores || []}});
+    } catch (ex) {
+        next(null, {code: 500, msg: ex});
+    }
+}
 
 handler.getGameRecordByCode = async function(msg, session, next){
     let code = msg.code ;

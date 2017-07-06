@@ -19,8 +19,6 @@ let mailModel = require('../../../../util/mail.js');
 let GameRecord = require('../gameRecord.js');
 const xfyunModel = require('../../../../xfyun/xfyunModel.js');
 
-//todo 癞子打出去 红中 发财 算是杠
-
 
 var Check = require('./check.js');
 let Room = function (app) {
@@ -1568,7 +1566,12 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         this.allResult.maxHuCount = this.maxHuCount;
 
     }
-    this.gameRecord.addRecord(this.round,6,user,pai);
+    if(isFlow){
+        this.gameRecord.addRecord(this.round,8,user,pai);
+    }else{
+        this.gameRecord.addRecord(this.round,6,user,pai);
+    }
+    this.gameRecord.addScore(this.result);
     if(this.round >= this.roundCount){
         this.addGameResult();
         roomManager.destroyRoom(this.roomNo);

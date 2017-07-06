@@ -1424,7 +1424,13 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         this.allResult.maxHuCount = this.maxHuCount;
 
     }
-    this.gameRecord.addRecord(this.round,6,user,pai);
+    if(isFlow){
+        this.gameRecord.addRecord(this.round,8,user,pai);
+    }else{
+        this.gameRecord.addRecord(this.round,6,user,pai);
+    }
+    this.gameRecord.addScore(this.result);
+
     if(this.round >= this.roundCount){
         this.addGameResult();
         roomManager.destroyRoom(this.roomNo);
