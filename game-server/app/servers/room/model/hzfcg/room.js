@@ -1268,7 +1268,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         }
         console.error(isHu,'========>>>>isHu');
         //判断是否海底捞 7
-        if((isZimo == 1 || isZimo == 4) && this.mahjong.mahjong.length < 14){
+        if((isZimo == 1 || isZimo == 4 || isZimo == 3) && this.mahjong.mahjong.length < 14){
             if(isHu.length == 1 && isHu[0] == 1){
                 isHu = [7];
             }else{

@@ -254,7 +254,7 @@ RoomManager.prototype.getGameResultList = async function(uid){
 };
 
 RoomManager.prototype.getGameRecordList = async function(resultId){
-    let results = await gameRecord.find({gameResultId : resultId} ,{scores : 1});
+    let results = await gameRecord.findOne({gameResultId : resultId} ,{scores : 1});
     return results;
 };
 

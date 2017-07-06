@@ -101,6 +101,10 @@ pro.checkDaHu = function(user,pai,laiziCount){
     if(isHu){
         huType.push(isHu);
     }
+    isHu = this.fengyise(user,pai);
+    if(isHu){
+        huType.push(isHu);
+    }
 
     isHu = this.quanqiuren(user);
     if(isHu){
@@ -321,6 +325,10 @@ pro.qingyise = function(user,pai,pais){
             }
         }
     }
+
+    if(type == 3){
+        return false
+    }
     var mahjongs = user.mahjong;
     if(pai){
         mahjongs = mahjongs.concat(pai)
@@ -354,8 +362,8 @@ pro.fengyise = function(user,pai){
         mahjongs = mahjongs.concat(pai);
     }
 
-    for(var i = 0 ; i < mahjongs; i++){
-        if(mahjongs[i] < 30 && mahjongs[i] >40){
+    for(var i = 0 ; i < mahjongs.length; i++){
+        if(mahjongs[i] < 30 || mahjongs[i] >40){
             return false
         }
     }
@@ -1028,8 +1036,8 @@ var test = function(){
 };
 
 var member = {
-    "mahjong":[8,8,22,23,23,24,24,25,26,27,28,13,15],
-    "peng":[],
+    "mahjong":[21,21,21,24,24,24,25],
+    "peng":[{pai : [21,21,21]},{pai : [22,22,22]}],
     "pai":[],
     "gang":[],
     "chi" : [],
@@ -1038,7 +1046,7 @@ var member = {
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 ////console.log(checks.canHu(member));
-console.log(checks.canHu(member),'===>>');
+console.log(checks.checkHu(member,25),'===>>');
 //console.log(member)
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
