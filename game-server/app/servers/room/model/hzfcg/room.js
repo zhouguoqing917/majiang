@@ -1229,11 +1229,13 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         }
 
         //记录之前 funRecord
-        let userBeforeRecord = user.funRecord;
+        let userBeforeRecord = [].concat(user.funRecord);
         let preUserBeforeRecord = [];
         if(preUser){
-            preUserBeforeRecord = preUser.funRecord;
+            preUserBeforeRecord = [].concat(preUser.funRecord);
         }
+
+
         //初始化 resut
         for(let i = 0; i < this.users.length; i ++){
             this.result[this.users[i].uid] = this.result[this.users[i].uid] || {};

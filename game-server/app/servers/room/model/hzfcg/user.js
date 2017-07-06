@@ -193,9 +193,11 @@ pro.getFunRecord = function(){
             kaikouFan = false;
             obj[type] = 2 ;
         }
+
         if(type == 2 || type == 3 || type == 6 || type == 7 || type == 8 || type == 9 || type == 10){
             obj[type] = 2 ;
         }
+
         if(type == 5 || type == 4){
             obj[type] = 4 ;
         }
@@ -203,6 +205,7 @@ pro.getFunRecord = function(){
         if(type == 11 || type == 12 || type == 13 || type == 14 || type == 15 || type == 16 || type == 17 || type == 18){
             obj[type] = 20 ;
         }
+
         if(obj[type]){
             arr.push(obj);
         }
