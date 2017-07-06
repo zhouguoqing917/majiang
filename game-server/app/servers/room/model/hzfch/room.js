@@ -346,7 +346,8 @@ roomPro.getRoomMessage = function(uid,isAll){
         laizi : this.laizi,
         laizipi : this.laizipi,
         ownerUid : this.ownerUid,
-        gid : this.gid
+        gid : this.gid,
+        brightOver : this.brightOver
     };
     return obj;
 };
@@ -395,7 +396,9 @@ roomPro.getRoomUserInfo = function(uid,isAll){
             funRecord : user.funRecord,
             roomCard : user.roomCard,
             isAction : user.isAction,
-            funNum : user.funNum
+            funNum : user.funNum,
+            brightMahjong : user.brightMahjong,
+            hasBrightMahjong : user.hasBrightMahjong
         };
 
         if(this.users[i].uid == uid || isAll){

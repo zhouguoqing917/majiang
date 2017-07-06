@@ -1416,7 +1416,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             if(isHu && isHu.length == 1 && isHu[0] == 3 && !this.check.canHu(preUser).length){
                 //包牌
                 isBaoPai = true;
-            }else if(isHu.indexOf(4) != -1 && isHu.indexOf(5) != -1){ //大胡 第三铺 玩家 包牌
+            }else if(isHu.indexOf(4) != -1 || isHu.indexOf(5) != -1){ //大胡 第三铺 玩家 包牌
                 //第三铺
                 let arr = [];
                 arr = arr.concat(user.chi);
@@ -1442,9 +1442,9 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                         preUser = this.getUserByUid(uid);
                     }
                 }
-
             }
         }
+
         let maxFunNum = 0;
         if(isCheck){
             for(let i = 0; i < this.users.length; i ++) {
@@ -1486,7 +1486,6 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                 }
             }
         }
-
 
         //计算分数
         for(let i = 0; i < this.users.length; i ++) {
