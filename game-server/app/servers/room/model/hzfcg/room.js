@@ -1078,7 +1078,7 @@ roomPro.handlerGang = async function(uid,pai){
         let mahjong = this.mahjong.next();
         this.currPlayUid = user.uid;
         let uArr = this.getExceptUids(user.uid);
-        this.previousOut = {};
+        //this.previousOut = {};
         this.gangUid = null;
         user.unHu = [];
         this.roomChannel.sendMsgToRoomExceptUid('onMahjong',{code : 200,data : {mahjong : -1, uid : user.uid,isGang : true,huUserIdArr : []}},uArr);

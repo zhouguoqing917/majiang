@@ -44,6 +44,10 @@ pro.checkHu = function(user,pai){
     if(isHu){
         //判断大胡
         var dahuArr = this.checkDaHu(user,pai,laziCount);
+        isHu = this.quanqiuren(user);
+        if(isHu){
+            dahuArr.concat(isHu);
+        }
         if(dahuArr && dahuArr.length){
             huType = dahuArr.concat(huType);
         }else if(laziCount <= 1){
@@ -99,11 +103,6 @@ pro.checkDaHu = function(user,pai,laiziCount){
         huType.push(isHu);
     }
     isHu = this.fengyise(user,pai);
-    if(isHu){
-        huType.push(isHu);
-    }
-
-    isHu = this.quanqiuren(user);
     if(isHu){
         huType.push(isHu);
     }

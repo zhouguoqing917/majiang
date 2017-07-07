@@ -474,12 +474,11 @@ handler.getCurrRoomResult = async function(msg, session, next){
         if(!room.getUserByUid(uid)){
             return next(null, {code: 400, msg: '不在此房间!'});
         }
-
         next(null, {code: 200, msg: '发送成功', data: {scores : room.gameRecord.scores || []}});
     } catch (ex) {
         next(null, {code: 500, msg: ex});
     }
-}
+};
 
 handler.getGameRecordByCode = async function(msg, session, next){
     let code = msg.code ;

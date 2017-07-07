@@ -9,8 +9,8 @@ const mongoose = require('mongoose');
 
 
 
-let wechat_AppID = 'wx010656fcc8f87eea';
-let wechat_AppSecret = '41d7386f0f977ba715e8012bae278062';
+let wechat_AppID = 'wx56eff81f4cea1bca';
+let wechat_AppSecret = '3da55aa8cb60be06c9ae9f3ff00eec17';
 
 router.get('/', function(req, res, next) {
     //var a=JSON.parse(req.body.a);
@@ -51,7 +51,7 @@ router.get('/login', async function(req, res, next) {
         await gameUser.register(gameUserObject);
         res.json({code:200,openid:gameUserObject.openid,token:gameUserObject.token});
     }catch(ex){
-        res.json({code:500,msg:ex.message});
+        res.json({code:500,msg:'请重新授权登录'});
     }
 });
 
