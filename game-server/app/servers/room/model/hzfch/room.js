@@ -214,6 +214,7 @@ roomPro.entryRoom = async function(roomNo,session){
     let route = 'onUserEntry';
     if(!isInRoom){
         user = new User(session,gameuser.roomCard);
+        let isLimit = this.checkAreaLimit(user);
         if(!isLimit){
             throw '距离太近不能进入房间';
         }
