@@ -1386,10 +1386,9 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             let otherUser = this.users[i];
             if(otherUser.uid != uid){
                 otherUser.score -= otherUser.funNum * this.underScore;
-                user.score += otherUser.funNum * this.underScore;;
+                user.score += otherUser.funNum * this.underScore;
             }
         }
-
 
         //总结算
         for(let i = 0; i < this.users.length; i ++) {
