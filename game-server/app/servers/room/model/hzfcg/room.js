@@ -366,7 +366,8 @@ roomPro.getRoomMessage = function(uid,isAll){
         laizi : this.laizi,
         laizipi : this.laizipi,
         ownerUid : this.ownerUid,
-        gid : this.gid
+        gid : this.gid,
+        gameType : this.gameType
     };
     return obj;
 };
