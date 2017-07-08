@@ -13,6 +13,7 @@ const recordModel = require('mongoose').models['Record'];
 const RoomChannel = require('../roomChannel.js');
 const roomManager = require('../roomManager.js');
 const uuid = require('../../../../util/uuid.js');
+const util = require('../../../../util/util.js');
 const User = require('./user.js');
 const Mahjong = require('./mahjong.js');
 let mailModel = require('../../../../util/mail.js');
@@ -64,6 +65,8 @@ let Room = function (app) {
     this.hhType ;//1 红中杠 2,发财红中杠
     this.theTop = 300;
     this.brightOver = false;
+    this.underScore = 1;
+    this.areaLimit = false;
 };
 roomPro = Room.prototype;
 
@@ -81,11 +84,15 @@ roomPro.createRoom = async function (session, roomData) {
     this.gameType = roomData.gameType;
     this.hhType = roomData.hhType;
     this.theTop = roomData.hhType || 300;
+    this.underScore = roomData.underScore || 1;
+    this.areaLimit = roomData.areaLimit || false;
+
     if(this.roomType == 3){
         useCardNumber = useCardNumber / 4 ;
     }
     if (gameuser.roomCard < useCardNumber)
         throw '房卡不足';
+
 
     if(this.roomType == 2){
         const rooms = await roomManager.getRoomsForDatabase(uid);
@@ -149,6 +156,21 @@ roomPro.createRoom = async function (session, roomData) {
 
 };
 
+roomPro.checkAreaLimit = function(user){
+    if(this.areaLimit){
+        for(let i = 0 ; i < this.users.length ; i ++){
+            if(this.users[i].ip == user.ip){
+                return false;
+            }
+            let area = util.getFlatternDistance(user.latitude,user.longitude,this.users[i].latitude,this.users[i].longitude);
+            if(area <= 500 ){
+                return false;
+            }
+        }
+    }
+    return true;
+};
+
 /**
  * 进入房间
  * @param roomNo
@@ -192,6 +214,9 @@ roomPro.entryRoom = async function(roomNo,session){
     let route = 'onUserEntry';
     if(!isInRoom){
         user = new User(session,gameuser.roomCard);
+        if(!isLimit){
+            throw '距离太近不能进入房间';
+        }
         this.users.push(user);
         this.sendToRoomOwner();
     }else{
@@ -1360,8 +1385,8 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         for(let i = 0; i < this.users.length; i ++) {
             let otherUser = this.users[i];
             if(otherUser.uid != uid){
-                otherUser.score -= otherUser.funNum;
-                user.score += otherUser.funNum;
+                otherUser.score -= otherUser.funNum * this.underScore;
+                user.score += otherUser.funNum * this.underScore;;
             }
         }
 

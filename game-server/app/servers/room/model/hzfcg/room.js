@@ -61,6 +61,8 @@ let Room = function (app) {
     this.gameType ;
     this.gangUid;
     this.huanZhuangCount = 0;//荒庄次数
+    this.underScore = 1;
+    this.areaLimit = false;
 };
 roomPro = Room.prototype;
 
@@ -77,6 +79,8 @@ roomPro.createRoom = async function (session, roomData) {
     this.maxHuCount = roomData.maxHuCount || 300;
     this.gameType = roomData.gameType;
     this.hhType = roomData.hhType;
+    this.underScore = roomData.underScore;
+    this.areaLimit = roomData.areaLimit || false;
     if(this.roomType == 3){
         useCardNumber = useCardNumber / 4 ;
     }
@@ -188,6 +192,10 @@ roomPro.entryRoom = async function(roomNo,session){
     let route = 'onUserEntry';
     if(!isInRoom){
         user = new User(session,gameuser.roomCard);
+        let isLimit = this.checkAreaLimit(user);
+        if(!isLimit){
+            throw '距离太近不能进入房间';
+        }
         this.users.push(user);
         this.sendToRoomOwner();
     }else{
@@ -216,6 +224,21 @@ roomPro.entryRoom = async function(roomNo,session){
     await session.pushAll();
     await xfyunModel.joinGroup(this.gid,uid);
     return this.getRoomMessage(uid);
+};
+
+roomPro.checkAreaLimit = function(user){
+    if(this.areaLimit){
+        for(let i = 0 ; i < this.users.length ; i ++){
+            if(this.users[i].ip == user.ip){
+                return false;
+            }
+            let area = util.getFlatternDistance(user.latitude,user.longitude,this.users[i].latitude,this.users[i].longitude);
+            if(area <= 500 ){
+                return false;
+            }
+        }
+    }
+    return true;
 };
 
 roomPro.deductRoomCard = async function(){

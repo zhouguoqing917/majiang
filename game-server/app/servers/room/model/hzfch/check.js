@@ -9,6 +9,8 @@ var Check = function(laizi,hhType){
 //console.log = function(){}
 var max = 4;
 var pro = Check.prototype ;
+
+
 /**
  * 检测胡牌
  * @param user
