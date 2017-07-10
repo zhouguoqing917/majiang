@@ -490,7 +490,7 @@ roomPro.userIsInRoom = function(uid){
  * 发牌给每个玩家
  * @type {Room}
  */
-roomPro.licensing = async function(){
+roomPro.licensing = function(){
     let arr = [
         [1,2,3,1,2,3,1,2,3,5,5,12,13],
         [11,21,13,14,15,1,29,18,19,18,6,9,19],
