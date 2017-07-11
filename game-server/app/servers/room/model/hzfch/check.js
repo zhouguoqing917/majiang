@@ -523,7 +523,7 @@ pro.checkPeng = function(user,pai){
     var arr = user.mahjong;
     var count = 0;
     for(var i = 0 ; i < arr.length ; i++){
-        if(arr[i] == this.laizi || arr[i] > 40){
+        if(arr[i] == this.laizi || (this.hhType == 1 && arr[i] == 42) || (this.hhType == 2 && arr[i] > 40)){
             continue
         }
         if(arr[i] == pai){
