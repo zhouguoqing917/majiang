@@ -63,6 +63,7 @@ let Room = function (app) {
     this.huanZhuangCount = 0;//荒庄次数
     this.underScore = 1;
     this.areaLimit = false;
+    this.ownerNickname ;
 };
 roomPro = Room.prototype;
 
@@ -81,6 +82,7 @@ roomPro.createRoom = async function (session, roomData) {
     this.hhType = roomData.hhType;
     this.underScore = roomData.underScore;
     this.areaLimit = roomData.areaLimit || false;
+    this.ownerNickname = gameuser.wxuserinfo.nickname;
     if(this.roomType == 3){
         useCardNumber = useCardNumber / 4 ;
     }

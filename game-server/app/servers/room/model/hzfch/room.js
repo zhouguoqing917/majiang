@@ -67,6 +67,7 @@ let Room = function (app) {
     this.brightOver = false;
     this.underScore = 1;
     this.areaLimit = false;
+    this.ownerNickname ;
 };
 roomPro = Room.prototype;
 
@@ -86,7 +87,7 @@ roomPro.createRoom = async function (session, roomData) {
     this.theTop = roomData.hhType || 300;
     this.underScore = roomData.underScore || 1;
     this.areaLimit = roomData.areaLimit || false;
-
+    this.ownerNickname = gameuser.wxuserinfo.nickname;
     if(this.roomType == 3){
         useCardNumber = useCardNumber / 4 ;
     }
