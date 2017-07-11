@@ -518,6 +518,29 @@ handler.brightMahjong = async function(msg, session, next){
     }
 };
 
+handler.cannelBrightMahjong = async function(msg, session, next){
+    try {
+        let uid = session.uid;
+        let roomNo = msg.roomNo;
+        let message = msg.message;
+        if (!roomNo || !message) {
+            return next(null, {code: 500, msg: '参数错误!'});
+        }
+        let room = await roomManager.getRoomByRoomNo(roomNo);
+        if(!room){
+            return next(null, {code: 500, msg: '房间不存在!'});
+        }
+        if(!room.getUserByUid(uid)){
+            return next(null, {code: 400, msg: '不在此房间!'});
+        }
+
+        room.cannelBrightMahjong(uid);
+        next(null, {code: 200, msg: '成功', data: {}});
+    } catch (ex) {
+        next(null, {code: 500, msg: ex});
+    }
+};
+
 handler.getGameOverRoom = async function(msg, session, next){
     try {
         let uid = session.uid;
