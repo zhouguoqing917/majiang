@@ -637,7 +637,7 @@ roomPro.playMahjong = async function(uid,pai){
         throw '不是可以出牌的玩家';
     }
 
-    if(!this.brightOver){
+    if(this.brightOver){
         throw '还有玩家没有亮牌';
     }
 
@@ -650,7 +650,6 @@ roomPro.playMahjong = async function(uid,pai){
     if(user.mahjong.length % 3 != 2){
         throw '不是可以出牌的玩家22';
     }
-
 
     user.playAMahjong(pai);
     user.playOutMahjong.push(pai);
