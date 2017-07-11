@@ -1035,7 +1035,7 @@ var test = function(){
 };
 
 var member = {
-    mahjong: [22,26,22,5,26,4,6],
+    mahjong: [3,3,14,14],
     "peng":[{"uid":"59241e49eccf6136bfb18893","pai":[11,11,11],"ts":1499757938310},{"uid":"59241e30eccf6136bfb18892","pai":[9,9,9],"ts":1499758010992}],
     "gang":[],
     "chi":[]
@@ -1043,7 +1043,7 @@ var member = {
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 ////console.log(checks.canHu(member));
-console.log(checks.checkHu(member,26),'====>>>>>>>>>>>>>>');
+console.log(checks.checkHu(member,14),'====>>>>>>>>>>>>>>');
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))

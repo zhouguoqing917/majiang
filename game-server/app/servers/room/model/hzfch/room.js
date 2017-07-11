@@ -1250,7 +1250,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         if(!isHu || isHu.length == 0){
             throw '没有可以胡的玩家';
         }
-        console.log(isHu,'========>>>>isHu');
+        console.error(isHu,'========>>>>isHu111');
 
         //判断是否硬胡
         let check = new Check(0);
@@ -1368,9 +1368,11 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                 if(preUid ){
                     if(preUid == user.uid){
                         maxFunNum = user.funNum;
+                        console.error(maxFunNum,'======>>>>>maxFunNum')
                         break;
                     }else if(user.uid != uid && user.funNum > maxFunNum){
                         maxFunNum = user.funNum;
+                        console.error(maxFunNum,'======>>>>>maxFunNum222')
                     }
                 }
             }
@@ -1379,7 +1381,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             if(preUser){
                 preUser.funRecord = preUserBeforeRecord;
             }
-
+            console.error(maxFunNum,'======>>>>>maxFunNum333')
             if(maxFunNum >= this.huCount){
                 return true;
             }
