@@ -37,7 +37,7 @@ pro.checkHu = function(user,pai){
     var laziCount = this.getLaiziCount(mahjongs);
     var huType = [];
     let isHu = this.checkUnHasJiang(user,pai);
-    console.log(isHu);
+    console.log(isHu,'=====>>>>>>');
     if(isHu){
         var dahuArr = this.checkDaHu(user,pai,laziCount);
         if(dahuArr && dahuArr.length){
@@ -46,6 +46,8 @@ pro.checkHu = function(user,pai){
                     huType.push(dahuArr[i]);
                 }
             }
+        }else{
+            huType.push(1);
         }
     }
     isHu = this.jianjianghu(user,pai);
@@ -55,6 +57,10 @@ pro.checkHu = function(user,pai){
     isHu = this.qidui(user,pai);
     if(isHu){
         huType.push(isHu);
+    }
+    if(huType.length > 1 && huType.indexOf(1) != -1){
+        let index = huType.indexOf(1);
+        huType.splice(index,1);
     }
     return huType;
 };
@@ -1029,35 +1035,23 @@ var test = function(){
 };
 
 var member = {
-    mahjong: [8],
-    peng:
-        [ { uid: '59361a8eeccf6136bfb18895',
-            pai: [31,31,31],
-            ts: 1498651943904 },
-            { uid: '59361aa0eccf6136bfb18896',
-                pai: [32,32,32],
-                ts: 1498651960270 },
-            { uid: '59361aa0eccf6136bfb18896',
-                pai: [21,21,21],
-                ts: 1498652010663 },
-            { uid: '59361a73eccf6136bfb18894',
-                pai: [9,9,9],
-                ts: 1498652185665 } ],
-    gang: [],
-    chi: []
+    mahjong: [22,26,22,5,26,4,6],
+    "peng":[{"uid":"59241e49eccf6136bfb18893","pai":[11,11,11],"ts":1499757938310},{"uid":"59241e30eccf6136bfb18892","pai":[9,9,9],"ts":1499758010992}],
+    "gang":[],
+    "chi":[]
 }
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 ////console.log(checks.canHu(member));
-console.log(checks.checkHu(member,3));
+console.log(checks.checkHu(member,26),'====>>>>>>>>>>>>>>');
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))
 //console.log(max);
 //test();
 
-let roomData = {"roomNo":"113551","roundCount":8,"round":1,"currPlayUid":"59361ab6eccf6136bfb18897","currUserInaugurated":16,"previousOut":null,"userHu":false,"users":[{"ipaddress":"113.57.28.32","nickname":"88888888","headimgurl":"http://wx.qlogo.cn/mmopen/xgghTUGdCxUJiaJIKVYf5BRCl5qkrvFSZkicVZmAOYPEGfqiblKAtsS9JhOUTJibVKlXr9Uy0EGQVlzmFa5QUkTAQXhTVic6oxrMq/0","sex":1,"score":0,"mahjong":[23,42,1,42,16,17,12,6,35,28,6,22,5,16],"peng":[],"gang":[],"chi":[],"status":3,"uid":"59361ab6eccf6136bfb18897","playOutMahjong":[],"id":100008,"latitude":1,"longitude":1,"unHu":[],"funNum":1,"funRecord":[],"roomCard":916,"isAction":0,"brightMahjong":[],"hasBrightMahjong":false},{"ipaddress":"113.57.28.32","nickname":"44444444","headimgurl":"http://wx.qlogo.cn/mmopen/xgghTUGdCxUJiaJIKVYf5BRCl5qkrvFSZkicVZmAOYPEGfqiblKAtsS9JhOUTJibVKlXr9Uy0EGQVlzmFa5QUkTAQXhTVic6oxrMq/0","sex":1,"score":0,"mahjong":[11,8,15,7,23,22,19,26,25,26,15,27,35],"peng":[],"gang":[],"chi":[],"status":3,"uid":"59241e49eccf6136bfb18893","playOutMahjong":[],"id":100004,"latitude":1,"longitude":1,"unHu":[],"funNum":1,"funRecord":[],"roomCard":1000,"isAction":0,"brightMahjong":[],"hasBrightMahjong":false},{"ipaddress":"113.57.28.32","nickname":"33333333","headimgurl":"http://wx.qlogo.cn/mmopen/xgghTUGdCxUJiaJIKVYf5BRCl5qkrvFSZkicVZmAOYPEGfqiblKAtsS9JhOUTJibVKlXr9Uy0EGQVlzmFa5QUkTAQXhTVic6oxrMq/0","sex":1,"score":0,"mahjong":[1,28,16,24,35,41,22,41,26,41,19,6,25],"peng":[],"gang":[],"chi":[],"status":2,"uid":"59241e30eccf6136bfb18892","playOutMahjong":[],"id":100003,"latitude":1,"longitude":1,"unHu":[],"funNum":1,"funRecord":[],"roomCard":1000,"isAction":0,"brightMahjong":[],"hasBrightMahjong":false},{"ipaddress":"113.57.28.32","nickname":"22222222","headimgurl":"http://wx.qlogo.cn/mmopen/xgghTUGdCxUJiaJIKVYf5BRCl5qkrvFSZkicVZmAOYPEGfqiblKAtsS9JhOUTJibVKlXr9Uy0EGQVlzmFa5QUkTAQXhTVic6oxrMq/0","sex":1,"score":0,"mahjong":[14,25,24,18,13,14,14,9,17,2,15,21,13],"peng":[],"gang":[],"chi":[],"status":2,"uid":"59241df8eccf6136bfb18891","playOutMahjong":[1],"id":100002,"latitude":1,"longitude":1,"unHu":[],"funNum":1,"funRecord":[],"roomCard":988,"isAction":0,"brightMahjong":[],"hasBrightMahjong":false}],"dice":{"dice1":1,"dice2":3},"status":2,"banker":"59361ab6eccf6136bfb18897","mahjongCount":66,"cannelDissove":[],"agreeDissolve":[],"dissUid":0,"roomType":"1","huCount":"4","maxHuCount":300,"laizi":2,"laizipi":{"59241df8eccf6136bfb18891":1},"ownerUid":"59361ab6eccf6136bfb18897","gid":"319a8121-d2e9-4eb1-95c6-122c75dfc7f3","brightOver":false,"gameType":"2","hhType":"1","ownerNickname":"88888888"}
-
-for(let i = 0 ; i < roomData.users.length; i ++){
-    console.log(checks.checkBrightMahjong(roomData.users[i]))
-}
+//let roomData = {"roomNo":"113551","roundCount":8,"round":1,"currPlayUid":"59361ab6eccf6136bfb18897","currUserInaugurated":16,"previousOut":null,"userHu":false,"users":[{"ipaddress":"113.57.28.32","nickname":"88888888","headimgurl":"http://wx.qlogo.cn/mmopen/xgghTUGdCxUJiaJIKVYf5BRCl5qkrvFSZkicVZmAOYPEGfqiblKAtsS9JhOUTJibVKlXr9Uy0EGQVlzmFa5QUkTAQXhTVic6oxrMq/0","sex":1,"score":0,"mahjong":[23,42,1,42,16,17,12,6,35,28,6,22,5,16],"peng":[],"gang":[],"chi":[],"status":3,"uid":"59361ab6eccf6136bfb18897","playOutMahjong":[],"id":100008,"latitude":1,"longitude":1,"unHu":[],"funNum":1,"funRecord":[],"roomCard":916,"isAction":0,"brightMahjong":[],"hasBrightMahjong":false},{"ipaddress":"113.57.28.32","nickname":"44444444","headimgurl":"http://wx.qlogo.cn/mmopen/xgghTUGdCxUJiaJIKVYf5BRCl5qkrvFSZkicVZmAOYPEGfqiblKAtsS9JhOUTJibVKlXr9Uy0EGQVlzmFa5QUkTAQXhTVic6oxrMq/0","sex":1,"score":0,"mahjong":[11,8,15,7,23,22,19,26,25,26,15,27,35],"peng":[],"gang":[],"chi":[],"status":3,"uid":"59241e49eccf6136bfb18893","playOutMahjong":[],"id":100004,"latitude":1,"longitude":1,"unHu":[],"funNum":1,"funRecord":[],"roomCard":1000,"isAction":0,"brightMahjong":[],"hasBrightMahjong":false},{"ipaddress":"113.57.28.32","nickname":"33333333","headimgurl":"http://wx.qlogo.cn/mmopen/xgghTUGdCxUJiaJIKVYf5BRCl5qkrvFSZkicVZmAOYPEGfqiblKAtsS9JhOUTJibVKlXr9Uy0EGQVlzmFa5QUkTAQXhTVic6oxrMq/0","sex":1,"score":0,"mahjong":[1,28,16,24,35,41,22,41,26,41,19,6,25],"peng":[],"gang":[],"chi":[],"status":2,"uid":"59241e30eccf6136bfb18892","playOutMahjong":[],"id":100003,"latitude":1,"longitude":1,"unHu":[],"funNum":1,"funRecord":[],"roomCard":1000,"isAction":0,"brightMahjong":[],"hasBrightMahjong":false},{"ipaddress":"113.57.28.32","nickname":"22222222","headimgurl":"http://wx.qlogo.cn/mmopen/xgghTUGdCxUJiaJIKVYf5BRCl5qkrvFSZkicVZmAOYPEGfqiblKAtsS9JhOUTJibVKlXr9Uy0EGQVlzmFa5QUkTAQXhTVic6oxrMq/0","sex":1,"score":0,"mahjong":[14,25,24,18,13,14,14,9,17,2,15,21,13],"peng":[],"gang":[],"chi":[],"status":2,"uid":"59241df8eccf6136bfb18891","playOutMahjong":[1],"id":100002,"latitude":1,"longitude":1,"unHu":[],"funNum":1,"funRecord":[],"roomCard":988,"isAction":0,"brightMahjong":[],"hasBrightMahjong":false}],"dice":{"dice1":1,"dice2":3},"status":2,"banker":"59361ab6eccf6136bfb18897","mahjongCount":66,"cannelDissove":[],"agreeDissolve":[],"dissUid":0,"roomType":"1","huCount":"4","maxHuCount":300,"laizi":2,"laizipi":{"59241df8eccf6136bfb18891":1},"ownerUid":"59361ab6eccf6136bfb18897","gid":"319a8121-d2e9-4eb1-95c6-122c75dfc7f3","brightOver":false,"gameType":"2","hhType":"1","ownerNickname":"88888888"}
+//
+//for(let i = 0 ; i < roomData.users.length; i ++){
+//    console.log(checks.checkBrightMahjong(roomData.users[i]))
+//}

@@ -377,7 +377,6 @@ roomPro.getRoomMessage = function(uid,isAll){
 };
 
 
-
 /**
  * 游戏开始时 判断谁是庄
  * @returns {*}
