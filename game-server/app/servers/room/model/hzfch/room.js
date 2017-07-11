@@ -376,7 +376,8 @@ roomPro.getRoomMessage = function(uid,isAll){
         gid : this.gid,
         brightOver : this.brightOver,
         gameType : this.gameType,
-        hhType : this.hhType
+        hhType : this.hhType,
+        ownerNickname : this.ownerNickname
     };
     return obj;
 };
