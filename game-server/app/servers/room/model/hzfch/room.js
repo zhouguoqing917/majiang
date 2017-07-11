@@ -420,7 +420,7 @@ roomPro.getRoomUserInfo = function(uid,isAll){
             latitude : user.latitude,
             longitude : user.longitude,
             unHu : user.unHu,
-            funNum : user.getFanNum(),
+            funNum : user.getFanNum(this.hhType,this.laizi),
             funRecord : user.funRecord,
             roomCard : user.roomCard,
             isAction : user.isAction,
@@ -669,7 +669,7 @@ roomPro.playMahjong = async function(uid,pai){
         if(pai == this.laizi){
             user.addResultRecord(4);
         }
-        this.roomChannel.sendMsgToRoom('onLaiziGang',{code : 200 ,data : { gangUid : uid , beGangUid : uid,mahjong : pai ,funNum: user.getFanNum()}});
+        this.roomChannel.sendMsgToRoom('onLaiziGang',{code : 200 ,data : { gangUid : uid , beGangUid : uid,mahjong : pai ,funNum: user.getFanNum(this.hhType,this.laizi)}});
         //给玩家一张牌
         if(this.isRoundOver()){
             //todo  房间内信息 初始化 当前玩家坐庄
@@ -1048,7 +1048,7 @@ roomPro.handlerGang = async function(uid,pai){
 
     user.userAction = false;
     //推送杠广播
-    this.roomChannel.sendMsgToRoom('onGang',{code : 200 ,data : { gangUid : uid , beGangUid : beUid,mahjong : mahjong,type : gangObj.type,funNum: user.getFanNum(), huUserIdArr : huUserIdArr}});
+    this.roomChannel.sendMsgToRoom('onGang',{code : 200 ,data : { gangUid : uid , beGangUid : beUid,mahjong : mahjong,type : gangObj.type,funNum: user.getFanNum(this.hhType,this.laizi), huUserIdArr : huUserIdArr}});
     this.gameRecord.addRecord(this.round,5,user,mahjong);
     if(isHaveUserHu){
         return;
@@ -1149,7 +1149,7 @@ roomPro.handlerPeng = function(uid){
         user.addResultRecord(25);
     }
     //pengUid 碰牌玩家  bePengUid被碰牌玩家
-    this.roomChannel.sendMsgToRoom('onPeng',{code : 200 ,data : {pengUid : uid , bePengUid : previousUid,mahjongs : mahjongs ,funNum: user.getFanNum()}})
+    this.roomChannel.sendMsgToRoom('onPeng',{code : 200 ,data : {pengUid : uid , bePengUid : previousUid,mahjongs : mahjongs ,funNum: user.getFanNum(this.hhType,this.laizi)}})
 };
 
 roomPro.clearOptions = function(){
@@ -1324,13 +1324,13 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             }
         }
 
-        let winUserFun = user.getFanNum();
+        let winUserFun = user.getFanNum(this.hhType,this.laizi);
         //计算每个玩家的番数
         let isTop = false;
         let topCount = 0;
         for(let i = 0; i < this.users.length; i ++){
             let user = this.users[i];
-            user.funNum = user.getFanNum();
+            user.funNum = user.getFanNum(this.hhType,this.laizi);
             if(user.uid != uid){
                 if(( winUserFun * user.funNum ) < 300){
                     isTop = true;
@@ -1409,7 +1409,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             let user = this.users[i];
             this.result[user.uid].nickname = user.nickname;
             this.result[user.uid].score = user.score - this.result[user.uid].score;
-            this.result[user.uid].funRecord = user.getFunRecord();
+            this.result[user.uid].funRecord = user.getFunRecord(this.hhType,this.laizi);
             this.result[user.uid].funNum = user.funNum;
             this.result[user.uid].winUserFunNum = winUserFun;
             this.result[user.uid].id  = user.id;
@@ -1834,7 +1834,7 @@ roomPro.handlerChi = function(uid,mahjongs){
         user.addResultRecord(25);
     }
 
-    this.roomChannel.sendMsgToRoom('onChi',{code : 200 ,data : {chiUid : uid , beChiUid : previousUid,mahjong : mahjongs.join(','),funNum: user.getFanNum()}})
+    this.roomChannel.sendMsgToRoom('onChi',{code : 200 ,data : {chiUid : uid , beChiUid : previousUid,mahjong : mahjongs.join(','),funNum: user.getFanNum(this.hhType,this.laizi)}})
 };
 
 /**
@@ -1846,9 +1846,10 @@ roomPro.brightMahjong = function(uid){
         throw '没有亮牌'
     }
     user.addBrightMahjong(user);
+    user.addResultRecord(26);
     let brightOver = this.checkAllUserBright();
     this.brightOver = brightOver;
-    this.roomChannel.sendMsgToRoom('onBrightMahjong',{code : 200 , data : {uid : uid , mahjong : [42,41,25] }});
+    this.roomChannel.sendMsgToRoom('onBrightMahjong',{code : 200 , data : {uid : uid , mahjong : [42,41,25] ,fanNum : user.getFanNum(this.hhType,this.laizi)}});
     if(this.brightOver){
         this.roomChannel.sendMsgToRoom('onBrightMahjongOver',{code : 200 });
     }

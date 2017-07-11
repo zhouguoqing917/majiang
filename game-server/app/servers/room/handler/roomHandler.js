@@ -512,7 +512,7 @@ handler.brightMahjong = async function(msg, session, next){
         }
 
         room.brightMahjong(uid);
-        next(null, {code: 200, msg: '发送成功', data: {}});
+        next(null, {code: 200, msg: '成功', data: {}});
     } catch (ex) {
         next(null, {code: 500, msg: ex});
     }

@@ -30,7 +30,7 @@ let User = function(session,roomCard){
     this.funNum = 1;
     this.userAction = false;
     this.funRecord = [];//{type : 1} , 1 开口 2,发财杠 3,红中杠 4 癞子杠 5 暗杠 6 明杠 7 放冲 8 自摸 9,庄家
-    //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞 ,19 7对,20 豪华7对 ,21 ,双豪七 22,三豪七  23 门清 24 吃癞子 25 三铺倒
+    //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞 ,19 7对,20 豪华7对 ,21 ,双豪七 22,三豪七  23 门清 24 吃癞子 25 三铺倒 26 亮牌
     this.brightMahjong = [];
     this.hasBrightMahjong = false;
 };
@@ -160,7 +160,7 @@ pro.addResultRecord = function(type){
     }
 };
 
-pro.getFanNum = function(){
+pro.getFanNum = function(hhType,laizi){
     //1 开口 2,发财杠 3,红中杠 4 癞子杠 5 暗杠 6 明杠 7 放冲 8 自摸 9,庄家
     //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞
     this.funNum = 1;
@@ -181,7 +181,7 @@ pro.getFanNum = function(){
         //if(type == 11 || type == 12 || type == 13 || type == 14 || type == 15 || type == 16 || type == 17 || type == 18){
         //    this.funNum = this.funNum * 20;
         //}
-        if(type == 26){
+        if(type == 25){
             this.funNum = this.funNum * 3;
         }
 
@@ -200,12 +200,24 @@ pro.getFanNum = function(){
         if(type == 22){
             this.funNum = this.funNum * 30;
         }
+        if(type == 26){
+            if(hhType == 1){
+                this.funNum = this.funNum * 2;
+            }
+            if(hhType == 2){
+                this.funNum = this.funNum * 4;
+            }
 
+            if(laizi == 35){
+                this.funNum = this.funNum * 4;
+            }
+            this.funNUm = this.funNum * 2;
+        }
     }
     return this.funNum;
 };
 
-pro.getFunRecord = function(){
+pro.getFunRecord = function(hhType,laizi){
     let arr = [];
     let kaikouFan = true;
     for(let i = 0 ;i < this.funRecord.length; i++){
@@ -215,16 +227,50 @@ pro.getFunRecord = function(){
             kaikouFan = false;
             obj[type] = 2 ;
         }
+
         if(type == 2 || type == 3 || type == 6 || type == 7 || type == 8 || type == 9 || type == 10){
             obj[type] = 2 ;
         }
-        if(type == 5 || type == 4){
+
+        if(type == 5 || type == 4 || type == 2){
             obj[type] = 4 ;
         }
 
-        if(type == 11 || type == 12 || type == 13 || type == 14 || type == 15 || type == 16 || type == 17 || type == 18){
+        if(type == 25){
+            obj[type] = 3 ;
+        }
+
+        if(type == 23 || type == 11 || type == 12 || type == 13 || type == 14 || type == 15 || type == 16 || type == 17 || type == 18 || type == 19){
+            obj[type] = 5 ;
+        }
+
+        if(type == 20 ){
+            obj[type] = 10 ;
+        }
+
+        if(type == 21){
             obj[type] = 20 ;
         }
+
+        if(type == 22){
+            obj[type] = 30 ;
+        }
+
+        if(type == 26){
+            let num = 1;
+            if(hhType == 1){
+                num = num * 2;
+            }
+            if(hhType == 2){
+                num = num * 4;
+            }
+
+            if(laizi == 35){
+                num = num * 4;
+            }
+            obj[type] = num * 2;
+        }
+
         if(obj[type]){
             arr.push(obj);
         }
