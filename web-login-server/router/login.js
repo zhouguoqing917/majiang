@@ -3,6 +3,7 @@ let router = express.Router();
 let http = require('../lib/httpHelper');
 let cryptUtil = require("./crypt");
 const mongoose = require('mongoose');
+let crypto = require('crypto');
 
 //var xml2js = require('xml2js');
 //let randomutils = require('../lib/randomutils');
@@ -11,6 +12,7 @@ const mongoose = require('mongoose');
 
 let wechat_AppID = 'wx56eff81f4cea1bca';
 let wechat_AppSecret = '3da55aa8cb60be06c9ae9f3ff00eec17';
+let my_token = '3da55aa8cb60be06c9ae9f3ff00eec17';
 
 router.get('/', function(req, res, next) {
     //var a=JSON.parse(req.body.a);
@@ -54,6 +56,66 @@ router.get('/login', async function(req, res, next) {
         res.json({code:500,msg:'请重新授权登录'});
     }
 });
+
+router.get('/getGameUserbyId', async function(req, res, next) {
+    console.log(`获取到query: ${JSON.stringify(req.query)}`);
+    console.log(`获取到uid: ${JSON.stringify(req.query.uid)}`);
+    const gameUser = mongoose.models['GameUser'];
+    // 加解密，预留
+    // let encrypt_text = cryptUtil.des.encrypt(JSON.stringify(req.body),0);
+    // let decrypt_text = cryptUtil.des.decrypt(encrypt_text,0);
+
+    // code 换取 access_token
+    try{
+        let uid = JSON.stringify(req.query.uid);
+        let gameuser = gameUser.findOne({uid : uid});
+        res.json({code:200,gameUser:gameuser});
+    }catch(ex){
+        res.json({code:500,msg:'请重新授权登录'});
+    }
+});
+
+router.get('/addCard', async function(req, res, next) {
+    console.log(`获取到query: ${JSON.stringify(req.query)}`);
+    console.log(`获取到uid: ${JSON.stringify(req.query.uid)}`);
+
+    const gameUser = mongoose.models['GameUser'];
+    // 加解密，预留
+    // let encrypt_text = cryptUtil.des.encrypt(JSON.stringify(req.body),0);
+    // let decrypt_text = cryptUtil.des.decrypt(encrypt_text,0);
+
+    // code 换取 access_token
+    try{
+        let uid = JSON.stringify(req.query.uid);
+        let cardNum = JSON.stringify(req.query.uid);
+        let randomNum = JSON.stringify(req.query.randomNum);
+        let token = JSON.stringify(req.query.token);
+
+        let str = my_token + randomNum;
+        const hash = crypto.createHash('md5');
+        hash.update(str);
+        let checkNum = hash.digest('hex');
+
+        if(checkNum != token){
+            throw 'verify fail';
+        }
+
+        if(!uid || !cardNum || !parseInt(cardNum)){
+            throw 'params error';
+        }
+        let gameuser = gameUser.findOne({uid : uid});
+        if(!gameuser){
+            throw 'user not exeit';
+        }
+
+        gameuser.roomCard += parseInt(cardNum) || 0;
+        await gameuser.save();
+        res.json({code:200,gameUser:gameuser});
+    }catch(ex){
+        res.json({code:500,msg:ex});
+    }
+});
+
 
 /**
  * 微信支付订单获取
