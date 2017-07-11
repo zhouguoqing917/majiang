@@ -516,6 +516,12 @@ roomPro.licensing = function(){
 
         let mahjongs = this.mahjong.getMahjongByCount(count);
         this.users[i].mahjong = this.users[i].mahjong.concat(mahjongs);
+        if(i == 2){
+            this.users[i].mahjong.splice(0,1,41)
+            this.users[i].mahjong.splice(2,1,42)
+            this.users[i].mahjong.splice(3,1,35)
+        }
+
         if(count == 14){
             //let pai = this.mahjong.next();
             //mahjongs.push(pai);
@@ -523,6 +529,7 @@ roomPro.licensing = function(){
             //this.users[i].mahjong = arr[0];
             //let pai = this.mahjong.next();
             //this.users[i].mahjong.push(pai);
+
             this.currUserInaugurated = this.users[i].mahjong[this.users[i].mahjong.length - 1];
         }
 
