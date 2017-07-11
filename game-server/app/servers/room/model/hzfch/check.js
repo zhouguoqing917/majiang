@@ -526,9 +526,11 @@ pro.checkPeng = function(user,pai){
         if(arr[i] == this.laizi || (this.hhType == 1 && arr[i] == 42) || (this.hhType == 2 && arr[i] > 40)){
             continue
         }
+
         if(arr[i] == pai){
             ++count;
         }
+
         if(count >= 2){
             return true;
         }
