@@ -499,8 +499,7 @@ handler.brightMahjong = async function(msg, session, next){
     try {
         let uid = session.uid;
         let roomNo = msg.roomNo;
-        let message = msg.message;
-        if (!roomNo || !message) {
+        if (!roomNo) {
             return next(null, {code: 500, msg: '参数错误!'});
         }
         let room = await roomManager.getRoomByRoomNo(roomNo);
