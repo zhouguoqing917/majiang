@@ -517,7 +517,7 @@ handler.brightMahjong = async function(msg, session, next){
     }
 };
 
-handler.cannelBrightMahjong = async function(msg, session, next){
+handler.cannelbrightMahjong = async function(msg, session, next){
     try {
         let uid = session.uid;
         let roomNo = msg.roomNo;
