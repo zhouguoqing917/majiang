@@ -1164,6 +1164,7 @@ roomPro.clearOptions = function(){
 };
 
 // 顺时钟玩家
+// 顺时钟玩家
 roomPro.getMeBetweenBankerUsers = function(beUid,uid,usersArr){
     usersArr = usersArr || [];
     let temp = false;
@@ -1176,7 +1177,6 @@ roomPro.getMeBetweenBankerUsers = function(beUid,uid,usersArr){
     uid = nextUser.uid;
     return this.getMeBetweenBankerUsers(beUid,uid,usersArr);
 }
-
 
 /**
  * 胡牌
@@ -1198,8 +1198,6 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         user.isAction = 0;
         user.options = 8;
     }
-
-
 
 
     //如果可以胡牌 判断是自摸还是抢杠
@@ -1239,8 +1237,9 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             console.error(users,'=======>>>>>users');
             for(let i = 0 ; i < users.length ; i ++){
                 let isHu = this.check.checkHu(users[i],pai);
-                console.error(isHu,'======>>>isHu');
+                console.error(isHu,'======>>>isHu???');
                 if(isHu && isHu.length && !isCheck){
+                    console.log(isHu,isCheck,'======>>>>???')
                     return;
                 }
             }
