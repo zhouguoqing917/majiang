@@ -516,9 +516,9 @@ roomPro.licensing = function(){
 
         let mahjongs = this.mahjong.getMahjongByCount(count);
         this.users[i].mahjong = this.users[i].mahjong.concat(mahjongs);
-        if(i == 2){
-            this.users[i].mahjong = [1,1,1,16,16,16,2,12,12,23,24,26,26]
-        }
+        //if(i == 2){
+        //    this.users[i].mahjong = [1,1,1,16,16,16,2,12,12,23,24,26,26]
+        //}
 
         if(count == 14){
             //let pai = this.mahjong.next();
@@ -584,8 +584,6 @@ roomPro.confirmLaizi = function(){
     if(this.hhType == 2 && mahjong == 35){
         laizi = 35;
     }
-
-    laizi = 16
 
     this.laizi = laizi;
     this.laizipi = {};
@@ -1572,10 +1570,11 @@ roomPro.userReady = async function(uid){
         this.round += 1;
         this.dice = this.mahjong.diceRoller();
         this.banker = this.whoIsBanker();
-        this.check = new Check(this.laizi);
+
         this.deductRoomCard();//扣除房卡
         this.licensing();
         this.confirmLaizi();
+        this.check = new Check(this.laizi);
         this.status = 2;
         let self = this;
         this.changeUserStatus(2);
