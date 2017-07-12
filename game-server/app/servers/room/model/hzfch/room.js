@@ -64,7 +64,7 @@ let Room = function (app) {
     this.gameType ;//游戏类型
     this.hhType ;//1 红中杠 2,发财红中杠
     this.theTop = 300;
-    this.brightOver = false;
+    this.brightOver = true;
     this.underScore = 1;
     this.areaLimit = false;
     this.ownerNickname ;
@@ -77,7 +77,7 @@ roomPro.createRoom = async function (session, roomData) {
 
     //判断房卡数量是否可以扣除，如果可以，直接扣除
     const gameuser = await gameUserModel.findOne({_id: uid});
-    roomData.roundCount = roomData.roundCount || 8;
+    roomData.roundCount = roomData.roomCount || 8;
     let useCardNumber = roomData.roundCount === 8 ? 4 : 8;
     this.roomType = roomData.roomType || 1;
     this.huCount = roomData.huCount || 0;
@@ -644,7 +644,7 @@ roomPro.playMahjong = async function(uid,pai){
         throw '不是可以出牌的玩家';
     }
 
-    if(this.brightOver){
+    if(!this.brightOver){
         throw '还有玩家没有亮牌';
     }
 
