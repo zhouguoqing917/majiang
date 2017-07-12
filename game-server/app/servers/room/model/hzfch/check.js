@@ -960,7 +960,7 @@ module.exports = Check;
 
 
 var member = {
-    mahjong: [12, 16, 26, 16, 1, 24, 16, 26, 1, 23, 2, 12, 1 ],
+    mahjong: [11 ],
     peng:
         [ { uid: '59472fb2eccf6136bfb188a0',
             pai: [Object],
@@ -974,7 +974,7 @@ var member = {
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 //console.log(checks.canHu(member));
-console.log(checks.checkHu(member,25),'====>>>>>>>>>>>>>>');
+console.log(checks.checkHu(member,11),'====>>>>>>>>>>>>>>');
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))

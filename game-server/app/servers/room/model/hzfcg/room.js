@@ -1498,6 +1498,12 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                         break;
                     }else if(user.uid != uid && user.funNum > maxFunNum){
                         maxFunNum = user.funNum;
+                    }else {
+                        if(uid == user.uid){
+                            maxFunNum = user.funNum;
+                            console.error(maxFunNum,'======>>>>>maxFunNum44')
+                            break;
+                        }
                     }
                 }
             }
