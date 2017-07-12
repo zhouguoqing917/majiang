@@ -10,7 +10,7 @@ let crypto = require('crypto');
 
 
 
-let wechat_AppID = 'wx56eff81f4cea1bca';
+let wechat_AppID = 'wx1c3ae59d3e041afe';
 let wechat_AppSecret = '3da55aa8cb60be06c9ae9f3ff00eec17';
 let my_token = '3da55aa8cb60be06c9ae9f3ff00eec17';
 

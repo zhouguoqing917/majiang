@@ -78,13 +78,14 @@ pro.getLaiziCount = function(mahjongs){
 pro.qidui = function(user,pai){
     var mahjongs = user.mahjong ;
     if(pai){
-        mahjongs.concat(pai);
+        mahjongs = mahjongs.concat(pai);
     }
     if(mahjongs.length != 14){
         return false;
     }
     let laiziCount = this.getLaiziCount(mahjongs);
-    let allPai = this.transform(mahjongs);
+
+    let allPai = this.qiduiQransform(mahjongs);
     let duizi = 0;
     let isHaoqi = 0;
     for(let i = 0 ; i < allPai.length; i ++){
@@ -299,7 +300,7 @@ pro.jianjianghu = function(user,pai){
     }
     var mahjongs = user.mahjong ;
     if(pai){
-        mahjongs.concat(pai);
+        mahjongs = mahjongs.concat(pai);
     }
 
     var pais = this.transform(mahjongs);
@@ -613,6 +614,35 @@ var getDoubleJiangPos = function(arr){
     return doubArr;
 };
 
+
+
+pro.qiduiQransform = function(pai){
+    var arr = [
+        [0,0,0,0,0,0,0,0,0],//万
+        [0,0,0,0,0,0,0,0,0],//硕
+        [0,0,0,0,0,0,0,0,0],//筒
+        [0,0,0,0,0,0,0,0,0], //字
+        [0,0,0,0,0,0,0,0,0], //发财 红中
+    ];
+
+    for(var i = 0; i < pai.length; i++){
+        if(pai[i] == 42){
+            continue;
+        }
+
+        if(this.hhType == 2 && pai[i] == 41){
+            continue;
+        }
+
+        if(pai[i] != this.laizi ){
+            var type = getType(pai[i]);
+            var num = pai[i] % 10 - 1;
+            arr[type][num] += 1;
+        }
+    }
+    return arr;
+};
+
 pro.transform = function(pai){
     var arr = [
         [0,0,0,0,0,0,0,0,0],//万
@@ -677,6 +707,9 @@ var getType = function(num){
     }
     if(num > 30 && num < 40){
         return 3;
+    }
+    if(num > 40 && num < 50){
+        return 4;
     }
 };
 
@@ -898,7 +931,8 @@ var mahjongs = [
 pro.canHu = function(user){
     var arr = [];
     for(var i = 0 ; i < mahjongs.length;i++){
-        if(this.checkHu(user,mahjongs[i])){
+        let isHu = this.checkHu(user,mahjongs[i]);
+        if( isHu && isHu.length > 0 ){
             arr.push(mahjongs[i]);
         }
     }
@@ -918,7 +952,7 @@ pro.checkBrightMahjong = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check(28);
+var checks = new Check(23);
 
 var getMahjong = function(){
     var arr = [];
@@ -1037,15 +1071,21 @@ var test = function(){
 };
 
 var member = {
-    mahjong: [3,3,14,14],
-    "peng":[{"uid":"59241e49eccf6136bfb18893","pai":[11,11,11],"ts":1499757938310},{"uid":"59241e30eccf6136bfb18892","pai":[9,9,9],"ts":1499758010992}],
-    "gang":[],
-    "chi":[]
+    mahjong: [ 1, 12, 12, 23, 1, 7, 5 ],
+    peng:
+        [ { uid: '59472fb2eccf6136bfb188a0',
+            pai: [Object],
+            ts: 1499839823702 },
+            { uid: '59472f7aeccf6136bfb1889d',
+                pai: [Object],
+                ts: 1499839833132 } ],
+    gang: [],
+    chi: [],
 }
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
-////console.log(checks.canHu(member));
-console.log(checks.checkHu(member,14),'====>>>>>>>>>>>>>>');
+//console.log(checks.canHu(member));
+//console.log(checks.checkHu(member,6),'====>>>>>>>>>>>>>>');
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))
