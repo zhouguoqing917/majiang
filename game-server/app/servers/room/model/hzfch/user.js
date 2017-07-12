@@ -284,15 +284,15 @@ pro.addBrightMahjong = function(){
     let count = 0;
     let del = function(pai){
         for(let i = this.mahjong.length - 1; i >= 0 ; i--){
-            if(this.mahjong[i] == pai && count < 2){
-                count += 1;
+            if(this.mahjong[i] == pai ){
                 this.mahjong.splice(i,1);
+                break;
             }
         }
     }
-    del(41);
-    del(42);
-    del(35);
+    del.call(this,41);
+    del.call(this,42);
+    del.call(this,35);
     this.brightMahjong.push([42,41,35]);
 };
 module.exports = User;
