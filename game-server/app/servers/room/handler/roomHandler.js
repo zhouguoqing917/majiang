@@ -224,7 +224,7 @@ handler.getRoomMessage = function(msg, session, next){
     if(!room){
         return next(null, {code: 500, msg: '房间不存在!'});
     }
-    //let uid = session.uid;
+    let uid = session.uid;
     //if(!room.getUserByUid(uid)){
     //    return next(null, {code: 400, msg: '不在此房间!'});
     //}

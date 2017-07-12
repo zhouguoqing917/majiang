@@ -529,7 +529,6 @@ roomPro.licensing = function(){
             //this.users[i].mahjong = arr[0];
             //let pai = this.mahjong.next();
             //this.users[i].mahjong.push(pai);
-
             this.currUserInaugurated = this.users[i].mahjong[this.users[i].mahjong.length - 1];
         }
 
@@ -1860,7 +1859,7 @@ roomPro.brightMahjong = function(uid){
     user.addResultRecord(26);
     let brightOver = this.checkAllUserBright();
     this.brightOver = brightOver;
-    this.roomChannel.sendMsgToRoom('onBrightMahjong',{code : 200 , data : {uid : uid , mahjong : [42,41,25] ,funNum : user.getFanNum(this.hhType,this.laizi)}});
+    this.roomChannel.sendMsgToRoom('onBrightMahjong',{code : 200 , data : {uid : uid , mahjong : [42,41,35] ,funNum : user.getFanNum(this.hhType,this.laizi)}});
     if(this.brightOver){
         this.roomChannel.sendMsgToRoom('onBrightMahjongOver',{code : 200 });
     }
