@@ -279,6 +279,20 @@ pro.getFunRecord = function(hhType,laizi){
 };
 
 pro.addBrightMahjong = function(){
+
+    let arr = [];
+    let count = 0;
+    let del = function(pai){
+        for(let i = this.mahjong.length - 1; i >= 0 ; i--){
+            if(this.mahjong[i] == pai && count < 2){
+                count += 1;
+                this.mahjong.splice(i,1);
+            }
+        }
+    }
+    del(41);
+    del(42);
+    del(35);
     this.brightMahjong.push([42,41,35]);
 };
 module.exports = User;
