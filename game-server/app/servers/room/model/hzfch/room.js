@@ -1253,11 +1253,11 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         }else{
             isHu = this.check.checkHu(user,pai);
         }
-
+        console.error(isHu,'========>>>>isHu111');
         if(!isHu || isHu.length == 0){
             throw '没有可以胡的玩家';
         }
-        console.error(isHu,'========>>>>isHu111');
+        console.error(isHu,'========>>>>isHu222');
 
         //判断是否硬胡
         let check = new Check(0);
