@@ -583,6 +583,10 @@ roomPro.confirmLaizi = function(){
         laizi = 35;
     }
 
+    if(this.hhType == 2 && mahjong == 35){
+        laizi = 35;
+    }
+
     this.laizi = laizi;
     this.laizipi = {};
     this.laizipi[uid] = mahjong;
@@ -680,13 +684,7 @@ roomPro.playMahjong = async function(uid,pai){
         this.roomChannel.sendMsgToRoom('onLaiziGang',{code : 200 ,data : { gangUid : uid , beGangUid : uid,mahjong : pai ,funNum: user.getFanNum(this.hhType,this.laizi)}});
         //给玩家一张牌
         if(this.isRoundOver()){
-            //todo  房间内信息 初始化 当前玩家坐庄
-            // this.roundInit();
-            let preUid = Object.keys(this.previousOut)[0];
-            this.banker = preUid;
-            this.getUserByUid(preUid).isBanker = 1;
             return this.handlerHu(uid,true);
-            // return this.roomChannel.sendMsgToMem('onFlow',{code : 200});
         }
         let mahjong = this.mahjong.next();
         this.currPlayUid = user.uid;
@@ -783,10 +781,6 @@ roomPro.isLicensing = async function(uid,pai,isCannel){
     }
 
     if(this.isRoundOver()){
-        let keys = Object.keys(this.previousOut);
-        let preUid =  keys[0];
-        this.banker = preUid;
-        this.getUserByUid(preUid).isBanker = 1;
         return this.handlerHu(uid,true);
     }
 
@@ -1062,13 +1056,7 @@ roomPro.handlerGang = async function(uid,pai){
         return;
     }else {
         if(this.isRoundOver()){
-            //todo  房间内信息 初始化 当前玩家坐庄
-            // this.roundInit();
-            let preUid = Object.keys(this.previousOut)[0];
-            this.banker = preUid;
-            this.getUserByUid(preUid).isBanker = 1;
             return this.handlerHu(uid,true);
-            // return this.roomChannel.sendMsgToMem('onFlow',{code : 200});
         }
 
         //给玩家一张牌
@@ -1647,7 +1635,6 @@ roomPro.initiateDissolveRoom = async function(uid){
         let  cardNum = this.roundCount == 8 ? 1 : 2;
         await this.addGameResult();
         await roomModel.update({_id : this.roomId},{status : 5});
-        await roomManager.returnRoomCard(this.ownerUid,this.roomId,cardNum);
         roomManager.destroyRoom(this.roomNo);
     }else{
         //发起解散

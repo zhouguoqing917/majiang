@@ -1070,18 +1070,18 @@ var test = function(){
     }
 };
 
-var member = {
-    mahjong: [ 1, 12, 12, 23, 1, 7, 5 ],
-    peng:
-        [ { uid: '59472fb2eccf6136bfb188a0',
-            pai: [Object],
-            ts: 1499839823702 },
-            { uid: '59472f7aeccf6136bfb1889d',
-                pai: [Object],
-                ts: 1499839833132 } ],
-    gang: [],
-    chi: [],
-}
+//var member = {
+//    mahjong: [ 1, 12, 12, 23, 1, 7, 5 ],
+//    peng:
+//        [ { uid: '59472fb2eccf6136bfb188a0',
+//            pai: [Object],
+//            ts: 1499839823702 },
+//            { uid: '59472f7aeccf6136bfb1889d',
+//                pai: [Object],
+//                ts: 1499839833132 } ],
+//    gang: [],
+//    chi: [],
+//}
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 //console.log(checks.canHu(member));
