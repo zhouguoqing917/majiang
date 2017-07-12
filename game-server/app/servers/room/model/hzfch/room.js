@@ -1857,6 +1857,7 @@ roomPro.brightMahjong = function(uid){
     }
     user.addBrightMahjong(user);
     user.addResultRecord(26);
+    user.hasBrightMahjong = this.check.checkBrightMahjong(user);
     let brightOver = this.checkAllUserBright();
     this.brightOver = brightOver;
     this.roomChannel.sendMsgToRoom('onBrightMahjong',{code : 200 , data : {uid : uid , mahjong : [42,41,35] ,funNum : user.getFanNum(this.hhType,this.laizi)}});
