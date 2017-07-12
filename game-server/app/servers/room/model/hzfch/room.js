@@ -1871,6 +1871,7 @@ roomPro.cannelBrightMahjong = function(uid){
     if(!user.hasBrightMahjong){
         return;
     }
+    user.hasBrightMahjong = false;
     let isAll = this.checkAllUserBright();
     this.brightOver = isAll;
     if(this.brightOver){
