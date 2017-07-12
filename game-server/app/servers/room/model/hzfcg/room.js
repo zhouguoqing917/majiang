@@ -1224,8 +1224,10 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
     if(user.isAction & 8 != 8 || user.options & 8 != 8){
         throw '不能胡或者已经取消胡';
     }
-    user.isAction = 0;
-    user.options = 8;
+    if(user.isAction == 8){
+        user.isAction = 0;
+        user.options = 8;
+    }
 
     //如果可以胡牌 判断是自摸还是抢杠
     if(!isFlow){
