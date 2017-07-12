@@ -585,6 +585,8 @@ roomPro.confirmLaizi = function(){
         laizi = 35;
     }
 
+    laizi = 16
+
     this.laizi = laizi;
     this.laizipi = {};
     this.laizipi[uid] = mahjong;
