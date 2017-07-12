@@ -11,7 +11,7 @@ let crypto = require('crypto');
 
 
 let wechat_AppID = 'wx1c3ae59d3e041afe';
-let wechat_AppSecret = '3da55aa8cb60be06c9ae9f3ff00eec17';
+let wechat_AppSecret = 'b54e24ebd45836d90082627a69e40ea5';
 let my_token = '3da55aa8cb60be06c9ae9f3ff00eec17';
 
 router.get('/', function(req, res, next) {
