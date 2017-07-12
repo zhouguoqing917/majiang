@@ -516,11 +516,11 @@ roomPro.licensing = function(){
 
         let mahjongs = this.mahjong.getMahjongByCount(count);
         this.users[i].mahjong = this.users[i].mahjong.concat(mahjongs);
-        if(i == 2){
-            this.users[i].mahjong.splice(0,1,41)
-            this.users[i].mahjong.splice(2,1,42)
-            this.users[i].mahjong.splice(3,1,35)
-        }
+        //if(i == 2){
+        //    this.users[i].mahjong.splice(0,1,41)
+        //    this.users[i].mahjong.splice(2,1,42)
+        //    this.users[i].mahjong.splice(3,1,35)
+        //}
 
         if(count == 14){
             //let pai = this.mahjong.next();
@@ -1191,9 +1191,11 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
     let pai , preUid, isZimo = 1 ,preUser;//1为 自摸  2, 别人放炮
     let preBanker = this.banker;
     let isBaoPai = false;
-    if(user.isAction & 8 != 8){
+    if(user.isAction & 8 != 8 || user.options & 8 != 8){
         throw '不能胡或者已经取消胡';
     }
+    user.isAction = 0;
+    user.options = 8;
 
     //如果可以胡牌 判断是自摸还是抢杠
     if(!isFlow){

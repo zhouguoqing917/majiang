@@ -595,6 +595,7 @@ roomPro.leaveRoom = async function(uid,isOffLine){
                 this.users.splice(i,1);
                 this.sendToRoomOwner();
 
+
                 let data = { uid : uid};
                 if(isKick){
                     data.msg = '玩家 ' + this.users[i].nickname + ' 被房主提出';
@@ -1220,9 +1221,11 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
     let pai , preUid, isZimo = 1 ,preUser;//1为 自摸  2, 抢杠 3,别人放炮 ,4 自己杠到的
     let preBanker = this.banker;
     let isBaoPai = false;
-    if(user.isAction & 8 != 8){
+    if(user.isAction & 8 != 8 || user.options & 8 != 8){
         throw '不能胡或者已经取消胡';
     }
+    user.isAction = 0;
+    user.options = 8;
 
     //如果可以胡牌 判断是自摸还是抢杠
     if(!isFlow){
