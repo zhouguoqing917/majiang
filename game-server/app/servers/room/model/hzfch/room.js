@@ -1238,13 +1238,13 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             for(let i = 0 ; i < users.length ; i ++){
                 let isHu = this.check.checkHu(users[i],pai);
                 console.error(isHu,'======>>>isHu???');
-                if(isHu && isHu.length && !isCheck){
-                    console.log(isHu,isCheck,'======>>>>???')
+                if(isHu && isHu.length > 0 && !isCheck){
+                    console.error(isHu,isCheck,'======>>>>???')
                     return;
                 }
             }
         }
-
+        console.error('========>>>>>>>1111');
 
         //验证胡牌
         let isHu = false;
