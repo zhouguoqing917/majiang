@@ -952,145 +952,33 @@ pro.checkBrightMahjong = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check(23);
+var checks = new Check(16);
 
-var getMahjong = function(){
-    var arr = [];
-    for(var i = 0 ; i < 5 ; i++){
-        var random = parseInt(Math.random() * testmahjongs.length);
-        var mahjong = testmahjongs[random];
-        if(i == 4){
-            arr.push(mahjong);
-            arr.push(mahjong);
-            break;
-        }
-
-        //if(mahjong == 99){
-        //    arr.push(mahjong);
-        //    arr.push(mahjong);
-        //    arr.push(mahjong);
-        //    continue;
-        //}
-
-        var type = parseInt(Math.random() * 2);
-        if(type == 0){
-            arr.push(mahjong);
-            arr.push(mahjong);
-            var random = parseInt(Math.random() * 2);
-            if(random == 1){
-                arr.push(mahjong);
-            }else{
-                arr.push(99);
-            }
-
-        }else{
-            if(mahjong % 10 == 1){
-                arr.push(mahjong);
-                var random = parseInt(Math.random() * 3);
-                if(random == 1){
-                    arr.push(mahjong + 2);
-                    arr.push(99);
-                }else if(random == 0){
-                    arr.push(99);
-                    arr.push(mahjong + 1);
-                }else{
-                    arr.push(mahjong + 1);
-                    arr.push(mahjong + 2);
-                }
-
-
-            }else if(mahjong % 10 == 9){
-                arr.push(mahjong);
-                var random = parseInt(Math.random() * 3);
-                if(random == 1){
-                    arr.push(mahjong - 1);
-                    arr.push(99);
-                }else if(random == 0){
-                    arr.push(99);
-                    arr.push(mahjong - 2);
-                }else{
-                    arr.push(mahjong - 1);
-                    arr.push(mahjong - 2);
-                }
-            }else{
-                var random = parseInt(Math.random() * 3);
-                arr.push(mahjong);
-                if(random == 1){
-                    arr.push(mahjong - 1);
-                    arr.push(99);
-                }else if(random == 0){
-                    arr.push(99);
-                    arr.push(mahjong + 1);
-                }else{
-                    arr.push(mahjong - 1);
-                    arr.push(mahjong + 1);
-                }
-            }
-        }
-
-    }
-    return arr;
-};
-var isvail = function(mahjongs){
-    var allPai = this.transform(mahjongs);
-    //console.log(allPai,'=====>>>');
-    for(var i = 0 ; i < allPai.length ; i ++){
-        for(var j = 0; j < allPai[i].length; j ++){
-            if(allPai[i][j] > 4){
-                return false;
-            }
-        }
-    }
-    return true;
-}
 
 module.exports = Check;
 
 
-var test = function(){
-    console.log = function(){}
-    for(var i = 0 ; i < 1000000000;i++){
-        var mahjongs = getMahjong();
-        if(!isvail(mahjongs)){
-            continue;
-        }
-        var member = {
-            mahjong :mahjongs
-        };
 
-        if(i % 1000000 == 0){
-            console.error(i);
-        }
-        console.error(i);
-        //console.error('???????',i,member.mahjong);
-        if(!checks.checkHu(member)){
-            console.error(i,member.mahjong,checks.checkHu(member));
-            break;
-        }
-    }
-};
-
-//var member = {
-//    mahjong: [ 1, 12, 12, 23, 1, 7, 5 ],
-//    peng:
-//        [ { uid: '59472fb2eccf6136bfb188a0',
-//            pai: [Object],
-//            ts: 1499839823702 },
-//            { uid: '59472f7aeccf6136bfb1889d',
-//                pai: [Object],
-//                ts: 1499839833132 } ],
-//    gang: [],
-//    chi: [],
-//}
+var member = {
+    mahjong: [12, 16, 26, 16, 1, 24, 16, 26, 1, 23, 2, 12, 1 ],
+    peng:
+        [ { uid: '59472fb2eccf6136bfb188a0',
+            pai: [Object],
+            ts: 1499839823702 },
+            { uid: '59472f7aeccf6136bfb1889d',
+                pai: [Object],
+                ts: 1499839833132 } ],
+    gang: [],
+    chi: [],
+}
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 //console.log(checks.canHu(member));
-//console.log(checks.checkHu(member,6),'====>>>>>>>>>>>>>>');
+console.log(checks.checkHu(member,25),'====>>>>>>>>>>>>>>');
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))
 //console.log(max);
-//test();
 
 //let roomData = {"roomNo":"113551","roundCount":8,"round":1,"currPlayUid":"59361ab6eccf6136bfb18897","currUserInaugurated":16,"previousOut":null,"userHu":false,"users":[{"ipaddress":"113.57.28.32","nickname":"88888888","headimgurl":"http://wx.qlogo.cn/mmopen/xgghTUGdCxUJiaJIKVYf5BRCl5qkrvFSZkicVZmAOYPEGfqiblKAtsS9JhOUTJibVKlXr9Uy0EGQVlzmFa5QUkTAQXhTVic6oxrMq/0","sex":1,"score":0,"mahjong":[23,42,1,42,16,17,12,6,35,28,6,22,5,16],"peng":[],"gang":[],"chi":[],"status":3,"uid":"59361ab6eccf6136bfb18897","playOutMahjong":[],"id":100008,"latitude":1,"longitude":1,"unHu":[],"funNum":1,"funRecord":[],"roomCard":916,"isAction":0,"brightMahjong":[],"hasBrightMahjong":false},{"ipaddress":"113.57.28.32","nickname":"44444444","headimgurl":"http://wx.qlogo.cn/mmopen/xgghTUGdCxUJiaJIKVYf5BRCl5qkrvFSZkicVZmAOYPEGfqiblKAtsS9JhOUTJibVKlXr9Uy0EGQVlzmFa5QUkTAQXhTVic6oxrMq/0","sex":1,"score":0,"mahjong":[11,8,15,7,23,22,19,26,25,26,15,27,35],"peng":[],"gang":[],"chi":[],"status":3,"uid":"59241e49eccf6136bfb18893","playOutMahjong":[],"id":100004,"latitude":1,"longitude":1,"unHu":[],"funNum":1,"funRecord":[],"roomCard":1000,"isAction":0,"brightMahjong":[],"hasBrightMahjong":false},{"ipaddress":"113.57.28.32","nickname":"33333333","headimgurl":"http://wx.qlogo.cn/mmopen/xgghTUGdCxUJiaJIKVYf5BRCl5qkrvFSZkicVZmAOYPEGfqiblKAtsS9JhOUTJibVKlXr9Uy0EGQVlzmFa5QUkTAQXhTVic6oxrMq/0","sex":1,"score":0,"mahjong":[1,28,16,24,35,41,22,41,26,41,19,6,25],"peng":[],"gang":[],"chi":[],"status":2,"uid":"59241e30eccf6136bfb18892","playOutMahjong":[],"id":100003,"latitude":1,"longitude":1,"unHu":[],"funNum":1,"funRecord":[],"roomCard":1000,"isAction":0,"brightMahjong":[],"hasBrightMahjong":false},{"ipaddress":"113.57.28.32","nickname":"22222222","headimgurl":"http://wx.qlogo.cn/mmopen/xgghTUGdCxUJiaJIKVYf5BRCl5qkrvFSZkicVZmAOYPEGfqiblKAtsS9JhOUTJibVKlXr9Uy0EGQVlzmFa5QUkTAQXhTVic6oxrMq/0","sex":1,"score":0,"mahjong":[14,25,24,18,13,14,14,9,17,2,15,21,13],"peng":[],"gang":[],"chi":[],"status":2,"uid":"59241df8eccf6136bfb18891","playOutMahjong":[1],"id":100002,"latitude":1,"longitude":1,"unHu":[],"funNum":1,"funRecord":[],"roomCard":988,"isAction":0,"brightMahjong":[],"hasBrightMahjong":false}],"dice":{"dice1":1,"dice2":3},"status":2,"banker":"59361ab6eccf6136bfb18897","mahjongCount":66,"cannelDissove":[],"agreeDissolve":[],"dissUid":0,"roomType":"1","huCount":"4","maxHuCount":300,"laizi":2,"laizipi":{"59241df8eccf6136bfb18891":1},"ownerUid":"59361ab6eccf6136bfb18897","gid":"319a8121-d2e9-4eb1-95c6-122c75dfc7f3","brightOver":false,"gameType":"2","hhType":"1","ownerNickname":"88888888"}
 //

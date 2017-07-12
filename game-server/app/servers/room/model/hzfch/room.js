@@ -612,7 +612,7 @@ roomPro.destoryRoom = function(){
 /**
  * 离开房间
  */
-roomPro.leaveRoom = async function(uid,isOffLine){
+roomPro.leaveRoom = async function(uid,isOffLine,isKick){
     for(let i = 0 ; i < this.users.length; i ++){
         if(this.users[i].uid == uid){
             //if(this.status == 1){
@@ -624,7 +624,11 @@ roomPro.leaveRoom = async function(uid,isOffLine){
             }else{
                 this.users.splice(i,1);
                 this.sendToRoomOwner();
-                this.roomChannel.sendMsgToRoom('onUserLeave',{code : 200 , uid : uid});
+                let data = { uid : uid};
+                if(isKick){
+                    data.msg = '玩家 ' + this.users[i].nickname + ' 被房主提出';
+                }
+                this.roomChannel.sendMsgToRoom('onUserLeave',{code : 200 , data : data});
                 await gameUserModel.update({_id : uid}, {currRoomNo : null,roomId : null});
                 if(uid != this.ownerUid){
                     await xfyunModel.quitGroup(this.gid,uid);
@@ -709,6 +713,9 @@ roomPro.playMahjong = async function(uid,pai){
         this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong, uid : user.uid,isGang : true,huUserIdArr : huUserIdArr}},user);
         this.gameRecord.addRecord(this.round,3,user,mahjong);
     }else{
+        if(this.isRoundOver()){
+            return this.handlerHu(uid,true);
+        }
         //广播
         this.currPlayUid = null;
         user.isAction = 0 ;
