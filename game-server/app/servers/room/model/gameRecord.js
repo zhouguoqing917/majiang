@@ -15,7 +15,7 @@ var Record = function(room){
 
 /**
  * add record
- * @type 操作类型 1 , 发牌 2,出牌 3,抓牌 4,碰 5 杠 6 胡 7 过 8刘局
+ * @type 操作类型 1 , 发牌 2,出牌 3,抓牌 4,碰 5 杠 6 胡 7 过 8刘局 9吃
  */
 Record.prototype.addRecord = function(round,type,user,mahjong,dice){
     this.records[round] = this.records[round] || {
