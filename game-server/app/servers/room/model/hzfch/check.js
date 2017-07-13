@@ -998,7 +998,7 @@ module.exports = Check;
 
 
 var member = {
-    mahjong:  [ 1,1,1,7,7,7,11,11,11,15,15,15,17,17 ] ,
+    mahjong:  [ 21, 24, 25, 8, 9, 6, 7, 22, 6, 6, 23, 26, 1 ] ,
     peng:
         [  ],
     gang: [],
@@ -1007,7 +1007,7 @@ var member = {
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 //console.log(checks.canHu(member));
-console.log(checks.qidui(member),'====>>>>>>>>>>>>>>');
+console.log(checks.checkHu(member,1),'====>>>>>>>>>>>>>>');
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))

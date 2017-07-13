@@ -697,6 +697,7 @@ roomPro.playMahjong = async function(uid,pai){
         this.roomChannel.sendMsgToRoomExceptUid('onMahjong',{code : 200,data : {mahjong : -1, uid : user.uid,isGang : true , huUserIdArr : []}},uArr);
         this.currUserInaugurated = mahjong;
         let huUserIdArr = [];
+        user.addMahjongToUser([mahjong]);
         try{
             let isHu = await this.handlerHu(user.uid,false,true);
             console.error(isHu,'=======>>isHuommahjong');
@@ -707,7 +708,7 @@ roomPro.playMahjong = async function(uid,pai){
         }catch(e){
             console.error(e);
         }
-        user.addMahjongToUser([mahjong]);
+
         this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong, uid : user.uid,isGang : true,huUserIdArr : huUserIdArr}},user);
         this.gameRecord.addRecord(this.round,3,user,mahjong);
     }else{
@@ -816,7 +817,7 @@ roomPro.isLicensing = async function(uid,pai,isCannel){
         user.userAction = false;
 
         nextUser.unHu = [];
-
+        nextUser.addMahjongToUser([mahjong]);
         try{
             let isHu = await this.handlerHu(nextUser.uid,false,true);
             console.error(isHu,'=======>>isHuommahjong');
@@ -827,7 +828,7 @@ roomPro.isLicensing = async function(uid,pai,isCannel){
         }catch(e){
             console.error(e);
         }
-        nextUser.addMahjongToUser([mahjong]);
+
         this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong , uid : nextUser.uid , huUserIdArr : huUserIdArr}},nextUser);
         this.gameRecord.addRecord(this.round,3,nextUser,mahjong);
     }
@@ -1083,6 +1084,7 @@ roomPro.handlerGang = async function(uid,pai){
         }
 
         let huUserIdArr = [];
+        user.addMahjongToUser([mahjong]);
         try{
             let isHu = await this.handlerHu(user.uid,false,true);
             if(isHu === true){
@@ -1092,7 +1094,7 @@ roomPro.handlerGang = async function(uid,pai){
         }catch(e){
             console.error(e);
         }
-        user.addMahjongToUser([mahjong]);
+
         this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong, uid : user.uid,isGang : true,huUserIdArr : huUserIdArr}},user);
         this.gameRecord.addRecord(this.round,3,user,mahjong);
     }
@@ -1249,11 +1251,16 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         }else{
             isHu = this.check.checkHu(user,pai);
         }
-        console.error(isHu,'========>>>>isHu111',user.mahjong,pai);
+        console.error(isHu,'========>>>>isHu111',isZimo,user.mahjong,pai);
         if(!isHu || isHu.length == 0){
             throw '没有可以胡的玩家';
         }
         console.error(isHu,'========>>>>isHu222');
+
+        if(isHu.indexOf(13) != -1 && isZimo != 1){
+            let index = isHu.indexOf(13);
+            isHu.splice(index,1,1);
+        }
 
         //判断是否硬胡
         let check = new Check(0);
