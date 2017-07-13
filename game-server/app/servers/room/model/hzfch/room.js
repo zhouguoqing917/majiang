@@ -251,6 +251,7 @@ roomPro.entryRoom = async function(roomNo,session){
 
 roomPro.deductRoomCard = async function(){
     let useCardNumber = this.roundCount === 8 ? 4 : 8;
+    console.error(this.roomType ,'======this.roomType ');
     if(this.roomType == 1){//房主开房
         let uid = this.ownerUid ;
         console.error(uid ,'======uid ');
@@ -1084,7 +1085,6 @@ roomPro.handlerGang = async function(uid,pai){
         let huUserIdArr = [];
         try{
             let isHu = await this.handlerHu(user.uid,false,true);
-            console.error(isHu,'=======>>isHuommahjong');
             if(isHu === true){
                 user.isAction = 8;
                 huUserIdArr.push(user.uid);
@@ -1214,11 +1214,12 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         }
 
         //记录之前 funRecord
-        let userBeforeRecord = user.funRecord;
+        let userBeforeRecord = [].concat(user.funRecord);
         let preUserBeforeRecord = [];
         if(preUser){
-            preUserBeforeRecord = preUser.funRecord;
+            preUserBeforeRecord = [].concat(preUser.funRecord);
         }
+
         //初始化 resut
         for(let i = 0; i < this.users.length; i ++){
             this.result[this.users[i].uid] = this.result[this.users[i].uid] || {};
@@ -1389,6 +1390,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             if(preUser){
                 preUser.funRecord = preUserBeforeRecord;
             }
+
             console.error(maxFunNum,'======>>>>>maxFunNum333')
             if(maxFunNum >= this.huCount){
                 return true;
