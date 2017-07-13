@@ -17,7 +17,7 @@ var Record = function(room){
  * add record
  * @type 操作类型 1 , 发牌 2,出牌 3,抓牌 4,碰 5 杠 6 胡 7 过 8刘局 9吃
  */
-Record.prototype.addRecord = function(round,type,user,mahjong,dice){
+Record.prototype.addRecord = function(round,type,user,mahjong,dice,laizi){
     this.records[round] = this.records[round] || {
             actions : []
         };
@@ -38,6 +38,11 @@ Record.prototype.addRecord = function(round,type,user,mahjong,dice){
             uid : user.uid
         };
         this.records[round].users.push(obj);
+    }
+
+    if(laizi){
+        this.records[round].laizi = laizi;
+        return;
     }
 
     if(type == 1){ // 一局初始化

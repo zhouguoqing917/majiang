@@ -1532,6 +1532,9 @@ roomPro.addGameResult = async function(){
             obj.roundCount = this.gameRecord.roundCount;
             obj.createTime = Date.now();
             obj.gameRecordId = recordInfo._id;
+            obj.users = this.users;
+            obj.gameType = this.gameType;
+            obj.hhType = this.hhType;
             await recordModel.create(obj);
         }
     }catch(e){
@@ -1571,6 +1574,7 @@ roomPro.userReady = async function(uid){
         this.dice = this.mahjong.diceRoller();
         this.banker = this.whoIsBanker();
         this.confirmLaizi();
+        this.gameRecord.addRecord(this.round,null,null,null,null,this.laizi);
         this.deductRoomCard();//扣除房卡
         this.check = new Check(this.laizi);
         this.licensing();

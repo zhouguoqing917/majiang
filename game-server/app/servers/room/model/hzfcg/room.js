@@ -1673,6 +1673,8 @@ roomPro.addGameResult = async function(){
             obj.createTime = Date.now();
             obj.gameRecordId = recordInfo._id;
             obj.users = this.users;
+            obj.gameType = this.gameType;
+            obj.hhType = this.hhType;
             await recordModel.create(obj);
         }
     }catch(e){
@@ -1718,6 +1720,7 @@ roomPro.userReady = async function(uid){
         this.status = 2;
         let self = this;
         this.check = new Check(this.laizi);
+        this.gameRecord.addRecord(this.round,null,null,null,null,this.laizi);
         this.changeUserStatus(2);
         for(let i = 0 ; i < this.users.length; i ++){
             let fun = function(user){

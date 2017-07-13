@@ -43,6 +43,12 @@ const schema=new mongoose.Schema({
     },
     actions : {
         type : Array
+    },
+    hhType : {
+        type : Number
+    },
+    gameType : {
+        type : Number
     }
 });
 
