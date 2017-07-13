@@ -1651,7 +1651,7 @@ roomPro.initiateDissolveRoom = async function(uid){
     this.dissUid = uid;
     this.dissCreateTime = Date.now();
 
-    if(isBanker && this.users.length < 4){ //当第一局未结束 直接解散房间
+    if(isBanker && this.status <= 1){ //当第一局未结束 直接解散房间
         this.roomChannel.sendMsgToRoom('onRoomDissolve',{code : 200,allResult : this.allResult});
         let  cardNum = this.roundCount == 8 ? 1 : 2;
         await this.addGameResult();
