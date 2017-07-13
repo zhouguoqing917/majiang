@@ -119,7 +119,6 @@ roomPro.createRoom = async function (session, roomData) {
         status:0
     };
 
-
     this.roomChannel = new RoomChannel(roomNo);
     this.roomNo = roomNo;
     this.createTime = Date.now();
