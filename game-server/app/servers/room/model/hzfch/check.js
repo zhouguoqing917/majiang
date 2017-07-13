@@ -80,6 +80,7 @@ pro.qidui = function(user,pai){
     if(pai){
         mahjongs = mahjongs.concat(pai);
     }
+    console.log(mahjongs,'=====>>>>');
     if(mahjongs.length != 14){
         return false;
     }
@@ -88,6 +89,8 @@ pro.qidui = function(user,pai){
     let allPai = this.qiduiQransform(mahjongs);
     let duizi = 0;
     let isHaoqi = 0;
+    let isThree = 0;
+
     for(let i = 0 ; i < allPai.length; i ++){
         for(let j = 0; j < allPai[i].length; j ++){
             if(allPai[i][j] == 4){
@@ -98,18 +101,53 @@ pro.qidui = function(user,pai){
             }
         }
     }
+
     let hasLaizi = 7 - duizi;
     if(hasLaizi <= laiziCount){
+        let lastOne = mahjongs[mahjongs.length - 1];
+        if(lastOne == this.laizi){
+            mahjongs.splice(mahjongs.length - 1,1);
+        }
+        laiziCount = this.getLaiziCount(mahjongs);
+        let allPai = this.qiduiQransform(mahjongs);
+        let needLaiziCount = 0;
+
+        for(let i = 0 ; i < allPai.length; i++){
+            for(let j = 0; j < allPai[i].length; j ++){
+                if(allPai[i][j] == 3){
+                    isThree += 1;
+                    needLaiziCount += 1;
+                }else if(allPai[i][j] == 1){
+                    needLaiziCount += 1;
+                }
+            }
+        }
+
+
+        if(needLaiziCount == 0 && laiziCount == 4){
+            isHaoqi += 1;
+        }
+
+        if(isThree <= needLaiziCount){
+            isHaoqi += isThree;
+            laiziCount -= isThree;
+            needLaiziCount -= isThree
+        }
+
+        if(laiziCount == 2){
+            isHaoqi += 1;
+        }
+
         if(isHaoqi == 0){
             return 9;
         }
-        if(isHaoqi == 0){
+        if(isHaoqi == 1){
             return 10;
         }
-        if(isHaoqi == 0){
+        if(isHaoqi == 2){
             return 11
         }
-        if(isHaoqi == 0){
+        if(isHaoqi == 3){
             return 12;
         }
     }
@@ -952,7 +990,7 @@ pro.checkBrightMahjong = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check(16);
+var checks = new Check(1);
 
 
 module.exports = Check;
@@ -960,21 +998,16 @@ module.exports = Check;
 
 
 var member = {
-    mahjong: [11 ],
+    mahjong:  [ 1,1,1,7,7,7,11,11,11,15,15,15,17,17 ] ,
     peng:
-        [ { uid: '59472fb2eccf6136bfb188a0',
-            pai: [Object],
-            ts: 1499839823702 },
-            { uid: '59472f7aeccf6136bfb1889d',
-                pai: [Object],
-                ts: 1499839833132 } ],
+        [  ],
     gang: [],
     chi: [],
 }
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 //console.log(checks.canHu(member));
-console.log(checks.checkHu(member,11),'====>>>>>>>>>>>>>>');
+console.log(checks.qidui(member),'====>>>>>>>>>>>>>>');
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))

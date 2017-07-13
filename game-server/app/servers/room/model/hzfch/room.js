@@ -695,7 +695,6 @@ roomPro.playMahjong = async function(uid,pai){
         user.unHu = [];
         this.roomChannel.sendMsgToRoomExceptUid('onMahjong',{code : 200,data : {mahjong : -1, uid : user.uid,isGang : true , huUserIdArr : []}},uArr);
         this.currUserInaugurated = mahjong;
-        user.addMahjongToUser([mahjong]);
         let huUserIdArr = [];
         try{
             let isHu = await this.handlerHu(user.uid,false,true);
@@ -707,7 +706,7 @@ roomPro.playMahjong = async function(uid,pai){
         }catch(e){
             console.error(e);
         }
-
+        user.addMahjongToUser([mahjong]);
         this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong, uid : user.uid,isGang : true,huUserIdArr : huUserIdArr}},user);
         this.gameRecord.addRecord(this.round,3,user,mahjong);
     }else{
@@ -816,7 +815,6 @@ roomPro.isLicensing = async function(uid,pai,isCannel){
         user.userAction = false;
 
         nextUser.unHu = [];
-        nextUser.addMahjongToUser([mahjong]);
 
         try{
             let isHu = await this.handlerHu(nextUser.uid,false,true);
@@ -828,7 +826,7 @@ roomPro.isLicensing = async function(uid,pai,isCannel){
         }catch(e){
             console.error(e);
         }
-
+        nextUser.addMahjongToUser([mahjong]);
         this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong , uid : nextUser.uid , huUserIdArr : huUserIdArr}},nextUser);
         this.gameRecord.addRecord(this.round,3,nextUser,mahjong);
     }
@@ -1072,7 +1070,6 @@ roomPro.handlerGang = async function(uid,pai){
         user.unHu = [];
         this.roomChannel.sendMsgToRoomExceptUid('onMahjong',{code : 200,data : {mahjong : -1, uid : user.uid,isGang : true,huUserIdArr : []}},uArr);
         this.currUserInaugurated = mahjong;
-        user.addMahjongToUser([mahjong]);
         if(gangObj.type == 1){
             user.addResultRecord(5);
         }else{
@@ -1095,7 +1092,7 @@ roomPro.handlerGang = async function(uid,pai){
         }catch(e){
             console.error(e);
         }
-
+        user.addMahjongToUser([mahjong]);
         this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong, uid : user.uid,isGang : true,huUserIdArr : huUserIdArr}},user);
         this.gameRecord.addRecord(this.round,3,user,mahjong);
     }
