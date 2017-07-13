@@ -21,6 +21,11 @@ Record.prototype.addRecord = function(round,type,user,mahjong,dice,laizi){
     this.records[round] = this.records[round] || {
             actions : []
         };
+
+    if(laizi){
+        this.records[round].laizi = laizi;
+        return;
+    }
     let obj = {
         type : type,
         timestamp : Date.now(),
@@ -40,10 +45,6 @@ Record.prototype.addRecord = function(round,type,user,mahjong,dice,laizi){
         this.records[round].users.push(obj);
     }
 
-    if(laizi){
-        this.records[round].laizi = laizi;
-        return;
-    }
 
     if(type == 1){ // 一局初始化
         obj.des = '发牌';
