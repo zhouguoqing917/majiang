@@ -601,7 +601,7 @@ roomPro.leaveRoom = async function(uid,isOffLine,isKick){
         });
 
         for(let i = 0; i < this.users.length; i++){
-            if(this.users[i] == uid){
+            if(this.users[i].uid == uid){
                 this.users.splice(i,1);
             }
         }
