@@ -591,12 +591,12 @@ roomPro.leaveRoom = async function(uid,isOffLine,isKick){
                 this.users[i].status = 3;
                 this.roomChannel.sendMsgToRoom('onUserOffLine',{code : 200 , data : {uid : uid}});
             }else{
-                this.users.splice(i,1);
                 this.sendToRoomOwner();
                 let data = { uid : uid};
                 if(isKick){
                     data.msg = '玩家 ' + this.users[i].nickname + ' 被房主提出';
                 }
+                this.users.splice(i,1);
                 this.roomChannel.sendMsgToRoom('onUserLeave',{code : 200 , data : data});
                 await gameUserModel.update({_id : uid}, {currRoomNo : null,roomId : null});
                 if(uid != this.ownerUid){
