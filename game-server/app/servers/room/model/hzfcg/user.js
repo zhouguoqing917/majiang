@@ -163,6 +163,7 @@ pro.getFanNum = function(){
     //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞
     this.funNum = 1;
     let kaikouFan = true;
+    let dahuCount = 0;
     for(let i = 0 ;i < this.funRecord.length; i++){
         let type = this.funRecord[i].type;
         if(kaikouFan && type == 1){
@@ -177,9 +178,14 @@ pro.getFanNum = function(){
         }
 
         if(type == 11 || type == 12 || type == 13 || type == 14 || type == 15 || type == 16 || type == 17 || type == 18){
-            this.funNum = this.funNum * 20;
+            dahuCount += 1;
         }
     }
+
+    if(dahuCount > 0){
+        this.funNum = this.funNum * dahuCount * 10;
+    }
+
     return this.funNum;
 };
 
@@ -203,7 +209,7 @@ pro.getFunRecord = function(){
         }
 
         if(type == 11 || type == 12 || type == 13 || type == 14 || type == 15 || type == 16 || type == 17 || type == 18){
-            obj[type] = 20 ;
+            obj[type] = 10 ;
         }
 
         if(obj[type]){

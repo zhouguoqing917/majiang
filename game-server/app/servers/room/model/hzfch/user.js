@@ -214,6 +214,7 @@ pro.getFanNum = function(hhType,laizi,isWin){
             this.funNum = this.funNum * 2;
         }
     }
+
     return this.funNum;
 };
 
