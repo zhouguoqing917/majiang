@@ -160,7 +160,7 @@ pro.addResultRecord = function(type){
     }
 };
 
-pro.getFanNum = function(hhType,laizi){
+pro.getFanNum = function(hhType,laizi,isWin){
     //1 开口 2,发财杠 3,红中杠 4 癞子杠 5 暗杠 6 明杠 7 放冲 8 自摸 9,庄家
     //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞
     this.funNum = 1;
@@ -181,8 +181,8 @@ pro.getFanNum = function(hhType,laizi){
         //if(type == 11 || type == 12 || type == 13 || type == 14 || type == 15 || type == 16 || type == 17 || type == 18){
         //    this.funNum = this.funNum * 20;
         //}
-        if(type == 25){
-            this.funNum = this.funNum * 3;
+        if(type == 25 && isWin){
+            this.funNum = this.funNum * 2;
         }
 
         if(type == 23 || type == 11 || type == 12 || type == 13 || type == 14 || type == 15 || type == 16 || type == 17 || type == 18 || type == 19){

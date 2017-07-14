@@ -1342,7 +1342,12 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         let topCount = 0;
         for(let i = 0; i < this.users.length; i ++){
             let user = this.users[i];
-            user.funNum = user.getFanNum(this.hhType,this.laizi);
+            if(user == uid){
+                user.funNum = user.getFanNum(this.hhType,this.laizi,true);
+            }else{
+                user.funNum = user.getFanNum(this.hhType,this.laizi,false);
+            }
+
             if(user.uid != uid){
                 if(( winUserFun * user.funNum ) < 300){
                     isTop = true;
