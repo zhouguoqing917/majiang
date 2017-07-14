@@ -310,27 +310,41 @@ pro.pengpenghu = function(user,pais,laiziCount,pai){
 pro.qingyise = function(user,pai,pais){
     var type;
     var temp = false;
-    for(var i = 0; i < pais.length ; i++){
-        for(var j = 0; j < pais[i].length; j++){
-            if(pais[i][j] > 0 && !temp){
-                temp = true;
-                type = i ;
-            }
-            if(temp && i != type && pais[i][j] > 0){
-                return false;
-            }
-        }
-    }
-
-    if(type == 3){
-        return false
-    }
     var mahjongs = user.mahjong;
     if(pai){
         mahjongs = mahjongs.concat(pai)
     }
 
+    for(var i = 0; i < mahjongs.length ; i++){
+        if(mahjongs[i] == this.laizi){
+            continue;
+        }
+        if(mahjongs[i] > 0 && mahjongs[i] < 10  ){
+            temp = 0;
+        }
+
+        if(mahjongs[i] > 10 && mahjongs[i] < 20 ){
+            temp = 1;
+        }
+
+        if(mahjongs[i] > 20 && mahjongs[i] < 30  ){
+            temp = 2;
+        }
+        if(mahjongs[i] > 30 && mahjongs[i] < 40 ){
+            temp = 3;
+        }
+
+        if(!type){
+            type  = temp;
+        }
+        if(type != temp){
+            return false;
+        }
+    }
+
+
     var laiziCount = this.getLaiziCount(mahjongs);
+    console.log(type,'======>>>>>>type');
     for(var i = 0; i < user.gang.length ; i ++){
 
         if(type != getType(user.gang[i].pai[0])){

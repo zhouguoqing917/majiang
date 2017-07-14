@@ -402,21 +402,38 @@ pro.pengpenghu = function(user,pais,laiziCount,pai){
 pro.qingyise = function(user,pai,pais){
     var type;
     var temp = false;
-    for(var i = 0; i < pais.length ; i++){
-        for(var j = 0; j < pais[i].length; j++){
-            if(pais[i][j] > 0 && !temp){
-                temp = true;
-                type = i ;
-            }
-            if(temp && i != type && pais[i][j] > 0){
-                return false;
-            }
-        }
-    }
     var mahjongs = user.mahjong;
     if(pai){
         mahjongs = mahjongs.concat(pai)
     }
+
+    for(var i = 0; i < mahjongs.length ; i++){
+        if(mahjongs[i] == this.laizi){
+            continue;
+        }
+        if(mahjongs[i] > 0 && mahjongs[i] < 10  ){
+            temp = 0;
+        }
+
+        if(mahjongs[i] > 10 && mahjongs[i] < 20 ){
+            temp = 1;
+        }
+
+        if(mahjongs[i] > 20 && mahjongs[i] < 30  ){
+            temp = 2;
+        }
+        if(mahjongs[i] > 30 && mahjongs[i] < 40 ){
+            temp = 3;
+        }
+
+        if(!type){
+            type  = temp;
+        }
+        if(type != temp){
+            return false;
+        }
+    }
+
 
     var laiziCount = this.getLaiziCount(mahjongs);
     console.log(type,'======>>>>>>type');
@@ -1000,7 +1017,7 @@ module.exports = Check;
 
 
 var member = {
-    mahjong:  [ 21, 24, 25, 8, 9, 6, 7, 22, 6, 6, 23, 26, 1 ] ,
+    mahjong:  [ 1,11,11,11,11,12,12,12,12,13,13,13,13 ] ,
     peng:
         [  ],
     gang: [],
@@ -1009,7 +1026,7 @@ var member = {
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 //console.log(checks.canHu(member));
-console.log(checks.checkHu(member,1),'====>>>>>>>>>>>>>>');
+console.log(checks.checkHu(member,26),'====>>>>>>>>>>>>>>');
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))
