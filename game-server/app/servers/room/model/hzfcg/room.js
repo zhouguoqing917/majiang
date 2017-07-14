@@ -597,7 +597,8 @@ roomPro.leaveRoom = async function(uid,isOffLine,isKick){
                     data.msg = '玩家 ' + this.users[i].nickname + ' 被房主提出';
                 }
                 this.users.splice(i,1);
-                this.roomChannel.sendMsgToRoom('onUserLeave',{code : 200 , data : data});
+                await this.roomChannel.sendMsgToRoom('onUserLeave',{code : 200 , data : data});
+                await this.roomChannel.leaveChannel(this.users[i]);
                 await gameUserModel.update({_id : uid}, {currRoomNo : null,roomId : null});
                 if(uid != this.ownerUid){
                     await xfyunModel.quitGroup(this.gid,uid);

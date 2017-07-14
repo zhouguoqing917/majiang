@@ -614,31 +614,26 @@ roomPro.destoryRoom = function(){
 roomPro.leaveRoom = async function(uid,isOffLine,isKick){
     for(let i = 0 ; i < this.users.length; i ++){
         if(this.users[i].uid == uid){
-            //if(this.status == 1){
-            this.roomChannel.leaveChannel(this.users[i]);
+
             //如果
             if(isOffLine){
+                this.roomChannel.leaveChannel(this.users[i]);
                 this.users[i].status = 3;
                 this.roomChannel.sendMsgToRoom('onUserOffLine',{code : 200 , data : {uid : uid}});
             }else{
-                this.users.splice(i,1);
                 this.sendToRoomOwner();
                 let data = { uid : uid};
                 if(isKick){
                     data.msg = '玩家 ' + this.users[i].nickname + ' 被房主提出';
                 }
-                this.roomChannel.sendMsgToRoom('onUserLeave',{code : 200 , data : data});
+                this.users.splice(i,1);
+                await this.roomChannel.sendMsgToRoom('onUserLeave',{code : 200 , data : data});
+                await this.roomChannel.leaveChannel(this.users[i]);
                 await gameUserModel.update({_id : uid}, {currRoomNo : null,roomId : null});
                 if(uid != this.ownerUid){
                     await xfyunModel.quitGroup(this.gid,uid);
                 }
             }
-            //}else{
-            //    this.roomChannel.leaveChannel(this.users[i]);
-            //    this.users[i].status = 3;
-            //    await gameUserModel.update({_id : this.users[i].uid}, {currRoomNo : this.roomNo});
-            //    this.roomChannel.sendMsgToRoom('onUserOffLine',{code : 200 , uid : uid});
-            //}
         }
     }
 };
