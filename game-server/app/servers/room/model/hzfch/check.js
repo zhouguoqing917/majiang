@@ -524,7 +524,9 @@ pro.checkGang = function(user,pai){
     var allPai = this.transform(arr);
     var obj = {};
     var type = 1 ; // 1 内杠 2 外杠
-
+    if(pai == this.laizi || pai > 30){
+        return  false;
+    }
     if(pai){
         var count = 0;
         for(var i = 0; i < arr.length; i ++){

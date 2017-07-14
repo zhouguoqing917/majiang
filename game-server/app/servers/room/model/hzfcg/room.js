@@ -582,28 +582,30 @@ roomPro.destoryRoom = function(){
  * 离开房间
  */
 roomPro.leaveRoom = async function(uid,isOffLine,isKick){
-    for(let i = 0 ; i < this.users.length; i ++){
-        if(this.users[i].uid == uid){
-            //if(this.status == 1){
-            this.roomChannel.leaveChannel(this.users[i]);
-            //如果
-            if(isOffLine){
-                this.users[i].status = 3;
-                this.roomChannel.sendMsgToRoom('onUserOffLine',{code : 200 , data : {uid : uid}});
-            }else{
-                this.sendToRoomOwner();
-                let data = { uid : uid};
-                if(isKick){
-                    data.msg = '玩家 ' + this.users[i].nickname + ' 被房主提出';
-                }
-                await this.roomChannel.sendMsgToRoom('onUserLeave',{code : 200 , data : data});
-                await this.roomChannel.leaveChannel(this.users[i]);
+    let user = this.getUserByUid(uid);
+    if(isOffLine){
+        this.roomChannel.leaveChannel(this.users[i]);
+        user.status = 3;
+        this.roomChannel.sendMsgToRoom('onUserOffLine',{code : 200 , data : {uid : uid}});
+    }else{
+        this.sendToRoomOwner();
+        let data = { uid : uid};
+        if(isKick){
+            data.msg = '玩家 ' + this.users[i].nickname + ' 被房主提出';
+        }
+        let self = this;
+        this.roomChannel.sendMsgToRoom('onUserLeave',{code : 200 , data : data},function(){
+            self.roomChannel.leaveChannel(user);
+        });
+
+        for(let i = 0; i < this.users.length; i++){
+            if(this.users[i] == uid){
                 this.users.splice(i,1);
-                await gameUserModel.update({_id : uid}, {currRoomNo : null,roomId : null});
-                if(uid != this.ownerUid){
-                    await xfyunModel.quitGroup(this.gid,uid);
-                }
             }
+        }
+        await gameUserModel.update({_id : uid}, {currRoomNo : null,roomId : null});
+        if(uid != this.ownerUid){
+            await xfyunModel.quitGroup(this.gid,uid);
         }
     }
 };
@@ -1022,6 +1024,11 @@ roomPro.handlerGang = async function(uid,pai){
     if(user.isAction & 4 != 4){
         throw '不能杠或者已经取消';
     }
+
+    if(pai > 40 || this.laizi == pai){
+        return false;
+    }
+
     //判断是否可以杠
     let mahjong ,gangObj;
     let beUid ;
@@ -1789,7 +1796,6 @@ roomPro.initiateDissolveRoom = async function(uid){
         let  cardNum = this.roundCount == 8 ? 1 : 2;
         await this.addGameResult();
         await roomModel.update({_id : this.roomId},{status : 5});
-        await roomManager.returnRoomCard(this.ownerUid,this.roomId,cardNum);
         roomManager.destroyRoom(this.roomNo);
     }else{
         //发起解散

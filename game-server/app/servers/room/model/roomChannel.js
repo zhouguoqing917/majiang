@@ -13,14 +13,14 @@ let RoomChannel = function(roomNo){
 let pro = RoomChannel.prototype;
 
 
-pro.sendMsgToRoom = function(route,msg){
+pro.sendMsgToRoom = function(route,msg,cb){
     if(typeof(msg) == 'object'){
         msg.ts = Date.now()
     }
     //if(route == 'onPlayMahjong'){
     //    msg.ts -= 5000;
     //}
-    this.channel.pushMessage(route,msg);
+    this.channel.pushMessage(route,msg,cb);
 };
 
 pro.destroy = function(){
