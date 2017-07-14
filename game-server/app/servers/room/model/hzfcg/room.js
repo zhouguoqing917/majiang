@@ -581,7 +581,7 @@ roomPro.destoryRoom = function(){
 /**
  * 离开房间
  */
-roomPro.leaveRoom = async function(uid,isOffLine){
+roomPro.leaveRoom = async function(uid,isOffLine,isKick){
     for(let i = 0 ; i < this.users.length; i ++){
         if(this.users[i].uid == uid){
             //if(this.status == 1){
@@ -593,8 +593,6 @@ roomPro.leaveRoom = async function(uid,isOffLine){
             }else{
                 this.users.splice(i,1);
                 this.sendToRoomOwner();
-
-
                 let data = { uid : uid};
                 if(isKick){
                     data.msg = '玩家 ' + this.users[i].nickname + ' 被房主提出';
@@ -605,12 +603,6 @@ roomPro.leaveRoom = async function(uid,isOffLine){
                     await xfyunModel.quitGroup(this.gid,uid);
                 }
             }
-            //}else{
-            //    this.roomChannel.leaveChannel(this.users[i]);
-            //    this.users[i].status = 3;
-            //    await gameUserModel.update({_id : this.users[i].uid}, {currRoomNo : this.roomNo});
-            //    this.roomChannel.sendMsgToRoom('onUserOffLine',{code : 200 , uid : uid});
-            //}
         }
     }
 };

@@ -68,7 +68,7 @@ handler.getUserRoomList = async function (msg, session, next) {
 //离开房间
 handler.leaveRoom = async function(msg, session, next){
     try {
-        let roomNo = session.get('roomNo') || msg.roomNo;
+        let roomNo = msg.roomNo || session.get('roomNo');
         if (!roomNo) {
             return next(null, {code: 500, msg: '参数错误!'});
         }
@@ -551,24 +551,30 @@ handler.getGameOverRoom = async function(msg, session, next){
 };
 
 handler.roomOwnerKickUserByUid = async function(msg, session, next){
-    let uid = session.uid;
-    let roomNo = msg.roomNo;
-    let kickUid = msg.kickUid;
-    if (!roomNo || !kickUid) {
-        return next(null, {code: 500, msg: '参数错误!'});
-    }
-    let room = await roomManager.getRoomByRoomNo(roomNo);
-    if(!room){
-        return next(null, {code: 500, msg: '房间不存在!'});
-    }
-    if(!room.getUserByUid(uid)){
-        return next(null, {code: 400, msg: '不在此房间!'});
+    try {
+        let uid = session.uid;
+        let roomNo = msg.roomNo;
+        let kickUid = msg.kickUid;
+        if (!roomNo || !kickUid) {
+            return next(null, {code: 500, msg: '参数错误!'});
+        }
+        let room = await roomManager.getRoomByRoomNo(roomNo);
+        if(!room){
+            return next(null, {code: 500, msg: '房间不存在!'});
+        }
+        if(!room.getUserByUid(uid)){
+            return next(null, {code: 400, msg: '不在此房间!'});
+        }
+
+        if(room.ownerUid != uid){
+            return next(null, {code: 400, msg: '不是房主!'});
+        }
+        await room.leaveRoom(kickUid,false,true);
+        next(null,{code : 200});
+    }catch(e){
+        console.error(e,'=======>>>>>e');
+        next(null, {code: 500, msg: e});
     }
 
-    if(room.ownerUid != uid){
-        return next(null, {code: 400, msg: '不是房主!'});
-    }
-    await room.leaveRoom(kickUid,false,true);
-    next(null,{code : 200});
 }
 
