@@ -20,8 +20,8 @@
       var roomNo ;
       window.onload=function(){
           var pomelo = window.pomelo;
-          var host = "47.94.45.41";
-//          var host = "127.0.0.1";
+//          var host = "47.94.45.41";
+          var host = "127.0.0.1";
 //          var host = "112.74.44.138";
           var port = "8102";
           pomelo.init({
@@ -34,7 +34,7 @@
       };
 
       function createRoom(){
-          pomelo.request("room.roomHandler.createRoom", {}, function(data) {
+          pomelo.request("room.roomHandler.createRoom",{"roomCount":"16","roomType":"1","huCount":"4","gameType":"1","hhType":"1","underScore":"0.5","areaLimit":false,"maxHuCount":"300"}, function(data) {
               console.log(`${data.msg}:${JSON.stringify(data.data)}`);
               roomNo = data.data.roomNo;
           });

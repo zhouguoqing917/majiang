@@ -88,6 +88,7 @@ roomPro.createRoom = async function (session, roomData) {
     this.underScore = roomData.underScore || 1;
     this.areaLimit = roomData.areaLimit || false;
     this.ownerNickname = gameuser.wxuserinfo.nickname;
+    this.roundCount = roomData.roundCount;
     if(this.roomType == 3){
         useCardNumber = useCardNumber / 4 ;
     }
