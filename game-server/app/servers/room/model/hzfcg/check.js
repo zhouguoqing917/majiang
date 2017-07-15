@@ -44,7 +44,7 @@ pro.checkHu = function(user,pai){
     if(isHu){
         //判断大胡
         var dahuArr = this.checkDaHu(user,pai,laziCount);
-        isHu = this.quanqiuren(user);
+        isHu = this.quanqiuren(user,pai);
         if(isHu){
             dahuArr.concat(isHu);
         }
@@ -400,12 +400,13 @@ pro.fengyise = function(user,pai){
 pro.quanqiuren = function(user,pai){
     var allMahjong = user.mahjong;
     if(pai){
-        allMahjong = mahjong.concat(pai);
+        allMahjong = allMahjong.concat(pai);
     }
-
     if(allMahjong.length != 2){
         return false;
     }
+
+
     var laiziCount = this.getLaiziCount(allMahjong);
     if(laiziCount == 2){
         return false;
@@ -417,8 +418,8 @@ pro.quanqiuren = function(user,pai){
         if(allMahjong[i] == this.laizi){
             continue;
         }
-
-        if(allMahjong[i] % 10 != 1 || allMahjong[i] % 10 != 4 || allMahjong[i] % 10 != 7){
+        console.log(11111);
+        if(allMahjong[i] % 10 != 2 && allMahjong[i] % 10 != 5 && allMahjong[i] % 10 != 8){
             return false;
         }
     }
@@ -1051,17 +1052,16 @@ var test = function(){
 };
 
 var member = {
-    "mahjong":[31,31,31,15,15,15,35],
-    "peng":[{pai : [31,31,31]},{pai : [33,33,33]}],
-    "pai":[],
+    "mahjong":[25],
+    "peng":[{pai : [1,1,1]},{pai : [11,11,11]}],
     "gang":[],
-    "chi" : [],
+    "chi" : [{pai : [4,5,6]} , {pai : [6,7,8]} ],
     "funNum" : 1
 }
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 ////console.log(checks.canHu(member));
-console.log(checks.getLaiziCount(member,35),'===>>');
+console.log(checks.quanqiuren(member,21),'===>>');
 //console.log(member)
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);

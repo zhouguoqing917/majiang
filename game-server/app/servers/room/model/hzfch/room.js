@@ -252,7 +252,7 @@ roomPro.entryRoom = async function(roomNo,session){
 
 roomPro.deductRoomCard = async function(){
     let useCardNumber = this.roundCount === 8 ? 4 : 8;
-    console.error(this.roomType ,'======this.roomType ');
+    console.error(this.roomType ,'======this.roomType ',this.roundCount,useCardNumber);
     if(this.roomType == 1){//房主开房
         let uid = this.ownerUid ;
         console.error(uid ,'======uid ');
