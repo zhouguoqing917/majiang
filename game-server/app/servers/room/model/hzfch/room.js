@@ -466,7 +466,9 @@ roomPro.getRoomUserInfoByUid = function(uid){
                 uid : user.uid,
                 status : user.status,
                 latitude : user.latitude,
-                longitude : user.longitude
+                longitude : user.longitude,
+                roomCard : user.roomCard,
+                id : user.id
             };
         }
     }

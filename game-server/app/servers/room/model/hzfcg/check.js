@@ -36,7 +36,7 @@ pro.checkHu = function(user,pai){
     }
 
     var isHu = this.checkHasJiang(user,pai);
-    console.log(isHu);
+    console.log(isHu,'====1111');
     mahjongs = [].concat(mahjongs);
 
     var laziCount = this.getLaiziCount(mahjongs);
@@ -46,7 +46,7 @@ pro.checkHu = function(user,pai){
         var dahuArr = this.checkDaHu(user,pai,laziCount);
         isHu = this.quanqiuren(user,pai);
         if(isHu){
-            dahuArr.concat(isHu);
+            dahuArr.push(isHu);
         }
         if(dahuArr && dahuArr.length){
             huType = dahuArr.concat(huType);
@@ -106,6 +106,7 @@ pro.checkDaHu = function(user,pai,laiziCount){
     if(isHu){
         huType.push(isHu);
     }
+
     return huType;
 };
 
@@ -940,16 +941,28 @@ module.exports = Check;
 
 
 var member = {
-    "mahjong":[2,21,21,25,27],
-    "peng":[{pai : [28,28,28]},{pai : [26,26,26]}],
-    "gang":[],
-    "chi" : [{pai : [23,24,25]}  ],
+    mahjong: [ 5 ],
+    peng:
+        [ { uid: '59472f3aeccf6136bfb1889a',
+            pai: [Object],
+            ts: 1500183795481 },
+            { uid: '59472f12eccf6136bfb18898',
+                pai: [Object],
+                ts: 1500183908473 } ],
+    gang: [],
+    chi:
+        [ { uid: '59472f12eccf6136bfb18898',
+            pai: [Object],
+            ts: 1500183834824 },
+            { uid: '59472f12eccf6136bfb18898',
+                pai: [Object],
+                ts: 1500183884780 } ],
     "funNum" : 1
 }
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 ////console.log(checks.canHu(member));
-console.log(checks.qingyise(member),'===>>');
+//console.log(checks.checkHu(member,5),'===>>');
 //console.log(member)
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
