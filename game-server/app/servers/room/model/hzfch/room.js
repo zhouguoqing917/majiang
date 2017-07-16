@@ -623,6 +623,7 @@ roomPro.leaveRoom = async function(uid,isOffLine,isKick){
     }else{
         this.sendToRoomOwner();
         let data = { uid : uid};
+        console.error(uid,user,'========>>>user');
         if(isKick){
             data.msg = '玩家 ' + user.nickname + ' 被房主提出';
         }
