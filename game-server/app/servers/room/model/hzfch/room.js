@@ -278,7 +278,9 @@ roomPro.deductRoomCard = async function(){
         for(var i = 0; i < this.users.length; i ++){
             var uid = this.users[i];
             let gameUser = await gameUserModel.findOne({_id : uid});
+            console.error(useCardNumber,'========??????');
             gameUser.roomCard -= useCardNumber;
+            console.error(useCardNumber,'========??????after');
             await gameUserModel.update({_id : uid}, {$set: gameUser});
             //写入房卡消耗记录
             await roomCardRecordModel.create({

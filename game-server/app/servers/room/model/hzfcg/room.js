@@ -74,7 +74,7 @@ roomPro.createRoom = async function (session, roomData) {
     //判断房卡数量是否可以扣除，如果可以，直接扣除
     const gameuser = await gameUserModel.findOne({_id: uid});
     roomData.roundCount = roomData.roomCount || 8;
-    let useCardNumber = roomData.roomCount === 8 ? 4 : 8;
+    let useCardNumber = roomData.roomCount == 8 ? 4 : 8;
     this.roomType = roomData.roomType || 1;
     this.huCount = roomData.huCount || 0;
     this.maxHuCount = roomData.maxHuCount || 300;
