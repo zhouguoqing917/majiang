@@ -251,7 +251,7 @@ roomPro.entryRoom = async function(roomNo,session){
 };
 
 roomPro.deductRoomCard = async function(){
-    let useCardNumber = this.roundCount === 8 ? 4 : 8;
+    let useCardNumber = this.roundCount == 8 ? 4 : 8;
     console.error(this.roomType ,'======this.roomType ',this.roundCount,useCardNumber);
     if(this.roomType == 1){//房主开房
         let uid = this.ownerUid ;
@@ -1574,7 +1574,6 @@ roomPro.userReady = async function(uid){
             isAllReady = false;
         }
     }
-    console.error(this.users.length,'1111');
     if(isAllReady && this.users.length == 4){
         console.error(this.users.length,'22222');
         this.result = {};

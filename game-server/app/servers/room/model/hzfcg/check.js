@@ -933,135 +933,23 @@ pro.playToTing = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check(15);
-
-var getMahjong = function(){
-    var arr = [];
-    for(var i = 0 ; i < 5 ; i++){
-        var random = parseInt(Math.random() * testmahjongs.length);
-        var mahjong = testmahjongs[random];
-        if(i == 4){
-            arr.push(mahjong);
-            arr.push(mahjong);
-            break;
-        }
-
-        //if(mahjong == 99){
-        //    arr.push(mahjong);
-        //    arr.push(mahjong);
-        //    arr.push(mahjong);
-        //    continue;
-        //}
-
-        var type = parseInt(Math.random() * 2);
-        if(type == 0){
-            arr.push(mahjong);
-            arr.push(mahjong);
-            var random = parseInt(Math.random() * 2);
-            if(random == 1){
-                arr.push(mahjong);
-            }else{
-                arr.push(99);
-            }
-
-        }else{
-            if(mahjong % 10 == 1){
-                arr.push(mahjong);
-                var random = parseInt(Math.random() * 3);
-                if(random == 1){
-                    arr.push(mahjong + 2);
-                    arr.push(99);
-                }else if(random == 0){
-                    arr.push(99);
-                    arr.push(mahjong + 1);
-                }else{
-                    arr.push(mahjong + 1);
-                    arr.push(mahjong + 2);
-                }
-
-
-            }else if(mahjong % 10 == 9){
-                arr.push(mahjong);
-                var random = parseInt(Math.random() * 3);
-                if(random == 1){
-                    arr.push(mahjong - 1);
-                    arr.push(99);
-                }else if(random == 0){
-                    arr.push(99);
-                    arr.push(mahjong - 2);
-                }else{
-                    arr.push(mahjong - 1);
-                    arr.push(mahjong - 2);
-                }
-            }else{
-                var random = parseInt(Math.random() * 3);
-                arr.push(mahjong);
-                if(random == 1){
-                    arr.push(mahjong - 1);
-                    arr.push(99);
-                }else if(random == 0){
-                    arr.push(99);
-                    arr.push(mahjong + 1);
-                }else{
-                    arr.push(mahjong - 1);
-                    arr.push(mahjong + 1);
-                }
-            }
-        }
-
-    }
-    return arr;
-};
-var isvail = function(mahjongs){
-    var allPai = this.transform(mahjongs);
-    //console.log(allPai,'=====>>>');
-    for(var i = 0 ; i < allPai.length ; i ++){
-        for(var j = 0; j < allPai[i].length; j ++){
-            if(allPai[i][j] > 4){
-                return false;
-            }
-        }
-    }
-    return true;
-}
+var checks = new Check(2);
 
 module.exports = Check;
 
 
-var test = function(){
-    console.log = function(){}
-    for(var i = 0 ; i < 1000000000;i++){
-        var mahjongs = getMahjong();
-        if(!isvail(mahjongs)){
-            continue;
-        }
-        var member = {
-            mahjong :mahjongs
-        };
-
-        if(i % 1000000 == 0){
-            console.error(i);
-        }
-        console.error(i);
-        //console.error('???????',i,member.mahjong);
-        if(!checks.checkHu(member)){
-            console.error(i,member.mahjong,checks.checkHu(member));
-            break;
-        }
-    }
-};
 
 var member = {
-    "mahjong":[25],
-    "peng":[{pai : [1,1,1]},{pai : [11,11,11]}],
+    "mahjong":[2,21,21,25,27],
+    "peng":[{pai : [28,28,28]},{pai : [26,26,26]}],
     "gang":[],
-    "chi" : [{pai : [4,5,6]} , {pai : [6,7,8]} ],
+    "chi" : [{pai : [23,24,25]}  ],
     "funNum" : 1
 }
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 ////console.log(checks.canHu(member));
-console.log(checks.quanqiuren(member,21),'===>>');
+console.log(checks.qingyise(member),'===>>');
 //console.log(member)
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);

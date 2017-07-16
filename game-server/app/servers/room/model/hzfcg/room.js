@@ -244,7 +244,7 @@ roomPro.checkAreaLimit = function(user){
 };
 
 roomPro.deductRoomCard = async function(){
-    let useCardNumber = this.roundCount === 8 ? 4 : 8;
+    let useCardNumber = this.roundCount == 8 ? 4 : 8;
     console.error(this.roomType ,'======this.roomType ');
     if(this.roomType == 1){//房主开房
         let uid = this.ownerUid ;
