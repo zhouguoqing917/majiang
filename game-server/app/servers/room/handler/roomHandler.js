@@ -16,15 +16,16 @@ var handler = Handler.prototype;
 
 //创建房间
 handler.createRoom = async function (msg, session, next) {
+    let self = g;
     queue.push(async function(task){
         try {
             let gameType = msg.gameType || 1;
             let room ;
             if(gameType == 1){
-                room = new Room1(this.app);
+                room = new Room1(self.app);
             }
             if(gameType == 2){
-                room = new Room2(this.app);
+                room = new Room2(self.app);
             }
 
             const data = await room.createRoom(session,msg);
