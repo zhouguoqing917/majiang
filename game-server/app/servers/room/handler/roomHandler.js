@@ -16,7 +16,7 @@ var handler = Handler.prototype;
 
 //创建房间
 handler.createRoom = async function (msg, session, next) {
-    let self = g;
+    let self = this;
     queue.push(async function(task){
         try {
             let gameType = msg.gameType || 1;
