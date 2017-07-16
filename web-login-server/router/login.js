@@ -68,7 +68,7 @@ router.get('/getGameUserbyId', async function(req, res, next) {
     // code 换取 access_token
     try{
         let uid = req.query.uid;
-        let user = gameUser.findOne({uid : uid});
+        let user = await gameUser.findOne({uid : uid});
         if(!user){
             res.json({code:500,msg:'获取失败'});
         }
@@ -121,7 +121,7 @@ router.get('/addCard', async function(req, res, next) {
         if(!uid || !cardNum || !parseInt(cardNum)){
             throw 'params error';
         }
-        let gameuser = gameUserModel.findOne({uid : uid});
+        let gameuser = await gameUserModel.findOne({uid : uid});
         if(!gameuser){
             throw 'user not exeit';
         }
