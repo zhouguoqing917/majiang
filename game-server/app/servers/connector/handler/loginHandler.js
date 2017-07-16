@@ -1,7 +1,7 @@
 const gameUserModel = require('mongoose').models['GameUser'];
 const roomModel = require('mongoose').models['Room'];
 const xfyunModel = require('../../../xfyun/xfyunModel.js');
-let autoNumber = mongoose.models['AutoNumber'];
+let autoNumber = require('mongoose').models['AutoNumber'];
 
 module.exports = function(app) {
     return new Handler(app);
