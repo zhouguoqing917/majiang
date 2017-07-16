@@ -68,23 +68,23 @@ router.get('/getGameUserbyId', async function(req, res, next) {
     // code 换取 access_token
     try{
         let uid = req.query.uid;
-        let gameuser = gameUser.findOne({uid : uid});
-        if(!gameuser){
+        let user = gameUser.findOne({uid : uid});
+        if(!user){
             res.json({code:500,msg:'获取失败'});
         }
         let  data = {
-            openid : gameuser.openid,
-            token : gameUser.token,
-            _id : gameuser._id,
-            wxuserinfo : gameuser.wxuserinfo,
-            id : gameuser.id,
-            created_at : gameuser.created_at,
-            roomCard : gameuser.roomCard,
-            ipaddress : gameuser.ipaddress,
-            IDNo : gameuser.IDNo,
-            realName : gameuser.realName
+            openid : user.openid,
+            token : user.token,
+            _id : user._id,
+            wxuserinfo : user.wxuserinfo,
+            id : user.id,
+            created_at : user.created_at,
+            roomCard : user.roomCard,
+            ipaddress : user.ipaddress,
+            IDNo : user.IDNo,
+            realName : user.realName
         }
-        console.log(gameuser);
+        console.log(user);
 
         res.json({code:200,gameUser:data});
     }catch(ex){
@@ -97,7 +97,7 @@ router.get('/addCard', async function(req, res, next) {
     console.log(`获取到query: ${JSON.stringify(req.query)}`);
     console.log(`获取到uid: ${JSON.stringify(req.query.uid)}`);
 
-    const gameUser = mongoose.models['GameUser'];
+    const gameUserModel = mongoose.models['GameUser'];
     // 加解密，预留
     // let encrypt_text = cryptUtil.des.encrypt(JSON.stringify(req.body),0);
     // let decrypt_text = cryptUtil.des.decrypt(encrypt_text,0);
@@ -121,7 +121,7 @@ router.get('/addCard', async function(req, res, next) {
         if(!uid || !cardNum || !parseInt(cardNum)){
             throw 'params error';
         }
-        let gameuser = gameUser.findOne({uid : uid});
+        let gameuser = gameUserModel.findOne({uid : uid});
         if(!gameuser){
             throw 'user not exeit';
         }
