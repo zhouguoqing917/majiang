@@ -67,11 +67,12 @@ router.get('/getGameUserbyId', async function(req, res, next) {
 
     // code 换取 access_token
     try{
-        let uid = JSON.stringify(req.query.uid);
+        let uid = req.query.uid;
         let gameuser = gameUser.findOne({uid : uid});
         res.json({code:200,gameUser:gameuser});
     }catch(ex){
-        res.json({code:500,msg:'请重新授权登录'});
+        console.log('======>>>>error',ex)
+        res.json({code:500,msg:'获取失败'});
     }
 });
 
@@ -86,10 +87,10 @@ router.get('/addCard', async function(req, res, next) {
 
     // code 换取 access_token
     try{
-        let uid = JSON.stringify(req.query.uid);
-        let cardNum = JSON.stringify(req.query.uid);
-        let randomNum = JSON.stringify(req.query.randomNum);
-        let token = JSON.stringify(req.query.token);
+        let uid = req.query.uid;
+        let cardNum = req.query.uid;
+        let randomNum = req.query.randomNum);
+        let token = req.query.token;
 
         let str = my_token + randomNum;
         const hash = crypto.createHash('md5');

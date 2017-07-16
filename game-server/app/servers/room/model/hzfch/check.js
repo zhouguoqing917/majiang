@@ -1009,24 +1009,24 @@ pro.checkBrightMahjong = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check(1);
+var checks = new Check(2);
 
 
 module.exports = Check;
 
 
-
-var member = {
-    mahjong:  [ 1,11,11,11,11,12,12,12,12,13,13,13,13 ] ,
-    peng:
-        [  ],
-    gang: [],
-    chi: [],
-}
-//console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
-//var start = Date.now();
-//console.log(checks.canHu(member));
-console.log(checks.checkHu(member,26),'====>>>>>>>>>>>>>>');
+//
+//var member = {
+//    mahjong:  [ 21,25,27,2,21] ,
+//    peng:
+//        [ {pai : [26,26,26]} ,{pai : [28,28,28] }],
+//    gang: [],
+//    chi: [{pai : [23,24,25]}],
+//}
+////console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
+////var start = Date.now();
+////console.log(checks.canHu(member));
+//console.log(checks.checkHu(member),'====>>>>>>>>>>>>>>');
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))
