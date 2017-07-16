@@ -624,7 +624,7 @@ roomPro.leaveRoom = async function(uid,isOffLine,isKick){
         this.sendToRoomOwner();
         let data = { uid : uid};
         if(isKick){
-            data.msg = '玩家 ' + this.users[i].nickname + ' 被房主提出';
+            data.msg = '玩家 ' + user.nickname + ' 被房主提出';
         }
         let self = this;
         this.roomChannel.sendMsgToRoom('onUserLeave',{code : 200 , data : data},function(){
