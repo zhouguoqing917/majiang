@@ -105,7 +105,7 @@ router.get('/addCard', async function(req, res, next) {
     // code 换取 access_token
     try{
         let uid = req.query.uid;
-        let cardNum = req.query.uid;
+        let cardNum = req.query.cardNum;
         let randomNum = req.query.randomNum;
         let token = req.query.token;
 

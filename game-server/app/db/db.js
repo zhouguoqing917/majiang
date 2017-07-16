@@ -5,12 +5,6 @@ let port = 27017;
 let dbname    = "hsmajiang";
 let connectionString = '';
 if(env.indexOf('production') != -1){
-    host  = "dds-uf69ede233697a542.mongodb.rds.aliyuncs.com";
-    port  = 3717;
-    let username = 'hongzhong';
-    let pwd = 'Yaojing1818';
-    connectionString = `mongodb://${username}:${pwd}@${host}:${port}/${dbname}`;
-    console.log('数据库连接线上环境');
 }else if(env.indexOf('stage') != -1){
     //let username = 'hongzhong';
     //let pwd = 'Yaojing1818';

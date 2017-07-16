@@ -3,6 +3,8 @@ const Room2 = require('../model/hzfch/room.js');
 const roomManager = require('../model/roomManager.js');
 const gameUserModel = require('mongoose').models['GameUser'];
 const roomConfig = require('../../../../config/roomConfig.json');
+var seqqueue = require('seq-queue');
+var queue = seqqueue.createQueue(1000);
 module.exports = function (app) {
     return new Handler(app);
 };
@@ -14,22 +16,25 @@ var handler = Handler.prototype;
 
 //创建房间
 handler.createRoom = async function (msg, session, next) {
-    try {
-        let gameType = msg.gameType || 1;
-        let room ;
-        if(gameType == 1){
-            room = new Room1(this.app);
-        }
-        if(gameType == 2){
-            room = new Room2(this.app);
-        }
+    queue.push(async function(task){
+        try {
+            let gameType = msg.gameType || 1;
+            let room ;
+            if(gameType == 1){
+                room = new Room1(this.app);
+            }
+            if(gameType == 2){
+                room = new Room2(this.app);
+            }
 
-        const data = await room.createRoom(session,msg);
-        next(null, {code: 200, msg: '创建房间成功', data: data});
-    } catch (ex) {
-        console.error(ex);
-        next(null, {code: 500, msg: ex});
-    }
+            const data = await room.createRoom(session,msg);
+            next(null, {code: 200, msg: '创建房间成功', data: data});
+        } catch (ex) {
+            console.error(ex);
+            next(null, {code: 500, msg: ex});
+        }
+        task.done();
+    },1000);
 };
 
 //进入房间
@@ -98,121 +103,140 @@ handler.leaveRoom = async function(msg, session, next){
 
 //出牌
 handler.playMahjong = async function(msg, session, next){
-    let roomNo = msg.roomNo;
-    if (!roomNo || !msg.mahjong) {
-        return next(null, {code: 500, msg: '参数错误!'});
-    }
-    let room = roomManager.getRoomByRoomNo(roomNo);
-    if(!room){
-        return next(null, {code: 500, msg: '房间不存在!'});
-    }
-    let uid = session.uid;
-    if(!room.getUserByUid(uid)){
-        return next(null, {code: 400, msg: '不在此房间!'});
-    }
-    try {
-        let data = await room.playMahjong(uid,msg.mahjong);
-        next(null, {code: 200, msg: '出牌'});
-    } catch (ex) {
-        console.error(ex,'=====>>>');
-        next(null, {code: 500, msg: ex});
-    }
+    queue.push(async function(task){
+        let roomNo = msg.roomNo;
+        if (!roomNo || !msg.mahjong) {
+            return next(null, {code: 500, msg: '参数错误!'});
+        }
+        let room = roomManager.getRoomByRoomNo(roomNo);
+        if(!room){
+            return next(null, {code: 500, msg: '房间不存在!'});
+        }
+        let uid = session.uid;
+        if(!room.getUserByUid(uid)){
+            return next(null, {code: 400, msg: '不在此房间!'});
+        }
+        try {
+            let data = await room.playMahjong(uid,msg.mahjong);
+            next(null, {code: 200, msg: '出牌'});
+        } catch (ex) {
+            console.error(ex,'=====>>>');
+            next(null, {code: 500, msg: ex});
+        }
+        task.done();
+    },1000)
+
 };
 
 
 handler.handlerChi = async function(msg, session, next){
-    let roomNo = msg.roomNo;
-    if (!roomNo || !msg.mahjongs || !msg.mahjongs.length || msg.mahjongs.length != 2) {
-        return next(null, {code: 500, msg: '参数错误!'});
-    }
-    let room = roomManager.getRoomByRoomNo(roomNo);
-    if(!room){
-        return next(null, {code: 500, msg: '房间不存在!'});
-    }
-    let uid = session.uid;
-    if(!room.getUserByUid(uid)){
-        return next(null, {code: 400, msg: '不在此房间!'});
-    }
 
-    try {
-        let data = await room.handlerChi(uid,msg.mahjongs);
-        next(null, {code: 200, msg: '吃'});
-    } catch (ex) {
-        console.error(ex,'=====>>>');
-        next(null, {code: 500, msg: ex});
-    }
+    queue.push(async function(task){
+        let roomNo = msg.roomNo;
+        if (!roomNo || !msg.mahjongs || !msg.mahjongs.length || msg.mahjongs.length != 2) {
+            return next(null, {code: 500, msg: '参数错误!'});
+        }
+        let room = roomManager.getRoomByRoomNo(roomNo);
+        if(!room){
+            return next(null, {code: 500, msg: '房间不存在!'});
+        }
+        let uid = session.uid;
+        if(!room.getUserByUid(uid)){
+            return next(null, {code: 400, msg: '不在此房间!'});
+        }
+
+        try {
+            let data = await room.handlerChi(uid,msg.mahjongs);
+            next(null, {code: 200, msg: '吃'});
+        } catch (ex) {
+            console.error(ex,'=====>>>');
+            next(null, {code: 500, msg: ex});
+        }
+        task.done();
+    },1000)
+
+
 };
 
 /**
  * 取消操作
  */
 handler.cannelAction = function(msg, session, next){
-    let roomNo = msg.roomNo;
-    if (!roomNo ) {
-        return next(null, {code: 500, msg: '参数错误!'});
-    }
-    let room = roomManager.getRoomByRoomNo(roomNo);
-    if(!room){
-        return next(null, {code: 500, msg: '房间不存在!'});
-    }
-    let uid = session.uid;
-    if(!room.getUserByUid(uid)){
-        return next(null, {code: 400, msg: '不在此房间!'});
-    }
-    try {
-        let reuslt = room.cannelAction(uid);
-        next(null, {code: 200, msg: '取消操作',unhu : reuslt});
-    } catch (ex) {
-        next(null, {code: 500, msg: ex});
-    }
+    queue.push(async function(task){
+        let roomNo = msg.roomNo;
+        if (!roomNo ) {
+            return next(null, {code: 500, msg: '参数错误!'});
+        }
+        let room = roomManager.getRoomByRoomNo(roomNo);
+        if(!room){
+            return next(null, {code: 500, msg: '房间不存在!'});
+        }
+        let uid = session.uid;
+        if(!room.getUserByUid(uid)){
+            return next(null, {code: 400, msg: '不在此房间!'});
+        }
+        try {
+            let reuslt = room.cannelAction(uid);
+            next(null, {code: 200, msg: '取消操作',unhu : reuslt});
+        } catch (ex) {
+            next(null, {code: 500, msg: ex});
+        }
+        task.done();
+    },1000)
 };
 
 
 //杠
 handler.handlerGang = function(msg, session, next){
-    let roomNo = msg.roomNo;
-    if (!roomNo || !msg.mahjong ) {
-        return next(null, {code: 500, msg: '参数错误!'});
-    }
-    let room = roomManager.getRoomByRoomNo(roomNo);
-    if(!room){
-        return next(null, {code: 500, msg: '房间不存在!'});
-    }
-    let uid = session.uid;
-    if(!room.getUserByUid(uid)){
-        return next(null, {code: 400, msg: '不在此房间!'});
-    }
-    try {
-        room.handlerGang(uid,msg.mahjong);
-        next(null, {code: 200, msg: '杠'});
-    } catch (ex) {
-        console.error(ex,'========>>>>>>');
-        next(null, {code: 500, msg: ex});
-    }
+    queue.push(async function(task){
+        let roomNo = msg.roomNo;
+        if (!roomNo || !msg.mahjong ) {
+            return next(null, {code: 500, msg: '参数错误!'});
+        }
+        let room = roomManager.getRoomByRoomNo(roomNo);
+        if(!room){
+            return next(null, {code: 500, msg: '房间不存在!'});
+        }
+        let uid = session.uid;
+        if(!room.getUserByUid(uid)){
+            return next(null, {code: 400, msg: '不在此房间!'});
+        }
+        try {
+            room.handlerGang(uid,msg.mahjong);
+            next(null, {code: 200, msg: '杠'});
+        } catch (ex) {
+            console.error(ex,'========>>>>>>');
+            next(null, {code: 500, msg: ex});
+        }
+        task.done();
+    },1000)
 };
 
 //碰
 handler.handlerPeng = function(msg, session, next){
-    let roomNo = msg.roomNo;
-    if (!roomNo) {
-        return next(null, {code: 500, msg: '参数错误!'});
-    }
-    let room = roomManager.getRoomByRoomNo(roomNo);
-    if(!room){
-        return next(null, {code: 500, msg: '房间不存在!'});
-    }
+    queue.push(async function(task){
+        let roomNo = msg.roomNo;
+        if (!roomNo) {
+            return next(null, {code: 500, msg: '参数错误!'});
+        }
+        let room = roomManager.getRoomByRoomNo(roomNo);
+        if(!room){
+            return next(null, {code: 500, msg: '房间不存在!'});
+        }
 
-    let uid = session.uid;
-    if(!room.getUserByUid(uid)){
-        return next(null, {code: 400, msg: '不在此房间!'});
-    }
-    try {
-        room.handlerPeng(uid);
-        next(null, {code: 200, msg: '碰'});
-    } catch (ex) {
-        console.error(ex,'=======>>>>');
-        next(null, {code: 500, msg: ex});
-    }
+        let uid = session.uid;
+        if(!room.getUserByUid(uid)){
+            return next(null, {code: 400, msg: '不在此房间!'});
+        }
+        try {
+            room.handlerPeng(uid);
+            next(null, {code: 200, msg: '碰'});
+        } catch (ex) {
+            console.error(ex,'=======>>>>');
+            next(null, {code: 500, msg: ex});
+        }
+        task.done();
+    },1000)
 };
 
 handler.getRoomMessage = function(msg, session, next){
@@ -237,25 +261,28 @@ handler.getRoomMessage = function(msg, session, next){
 };
 
 handler.handlerHu = async function(msg, session, next){
-    let roomNo = msg.roomNo;
-    if (!roomNo) {
-        return next(null, {code: 500, msg: '参数错误!'});
-    }
-    let room = roomManager.getRoomByRoomNo(roomNo);
-    if(!room){
-        return next(null, {code: 500, msg: '房间不存在!'});
-    }
-    let uid = session.uid;
-    if(!room.getUserByUid(uid)){
-        return next(null, {code: 400, msg: '不在此房间!'});
-    }
-    try {
-        await room.handlerHu(uid);
-        next(null, {code: 200, msg: '获取房间信息'});
-    } catch (ex) {
-        console.error(ex,'========>>>>');
-        next(null, {code: 500, msg: ex});
-    }
+    queue.push(async function(task){
+        let roomNo = msg.roomNo;
+        if (!roomNo) {
+            return next(null, {code: 500, msg: '参数错误!'});
+        }
+        let room = roomManager.getRoomByRoomNo(roomNo);
+        if(!room){
+            return next(null, {code: 500, msg: '房间不存在!'});
+        }
+        let uid = session.uid;
+        if(!room.getUserByUid(uid)){
+            return next(null, {code: 400, msg: '不在此房间!'});
+        }
+        try {
+            await room.handlerHu(uid);
+            next(null, {code: 200, msg: '获取房间信息'});
+        } catch (ex) {
+            console.error(ex,'========>>>>');
+            next(null, {code: 500, msg: ex});
+        }
+        task.done();
+    },1000)
 };
 
 handler.dissolveRoom = async function(msg, session, next){
@@ -281,6 +308,30 @@ handler.dissolveRoom = async function(msg, session, next){
 };
 
 handler.userReady = async function(msg, session, next){
+    queue.push(async function(task){
+        let roomNo = msg.roomNo;
+        if (!roomNo) {
+            return next(null, {code: 500, msg: '参数错误!'});
+        }
+        let room = roomManager.getRoomByRoomNo(roomNo);
+        if(!room){
+            return next(null, {code: 500, msg: '房间不存在!'});
+        }
+        let uid = session.uid;
+        if(!room.getUserByUid(uid)){
+            return next(null, {code: 400, msg: '不在此房间!'});
+        }
+        try {
+            await room.handlerHu(uid);
+            next(null, {code: 200, msg: '获取房间信息'});
+        } catch (ex) {
+            console.error(ex,'========>>>>');
+            next(null, {code: 500, msg: ex});
+        }
+        task.done();
+    },1000)
+
+
     try {
         let uid = session.uid;
         let roomNo = msg.roomNo;
