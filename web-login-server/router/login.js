@@ -84,7 +84,7 @@ router.get('/getGameUserbyId', async function(req, res, next) {
             IDNo : user.IDNo,
             realName : user.realName
         }
-        console.log(user);
+        console.log('======>>>>',user);
 
         res.json({code:200,gameUser:data});
     }catch(ex){
