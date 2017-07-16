@@ -1303,7 +1303,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         }else{
             isHu = this.check.checkHu(user,pai);
         }
-
+        console.error('======>>>has user hu' , isHu,user, pai);
         if(!isHu || isHu.length == 0){
             throw '没有可以胡的玩家';
         }
@@ -1499,15 +1499,17 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                 if(preUid ){
                     if(preUid == user.uid){
                         maxFunNum = user.funNum;
+                        console.error(maxFunNum,'======>>>>>maxFunNum')
                         break;
                     }else if(user.uid != uid && user.funNum > maxFunNum){
                         maxFunNum = user.funNum;
-                    }else {
-                        if(uid == user.uid){
-                            maxFunNum = user.funNum;
-                            console.error(maxFunNum,'======>>>>>maxFunNum44')
-                            break;
-                        }
+                        console.error(maxFunNum,'======>>>>>maxFunNum222')
+                    }
+                }else {
+                    if(uid == user.uid){
+                        maxFunNum = user.funNum;
+                        console.error(maxFunNum,'======>>>>>maxFunNum44')
+                        break;
                     }
                 }
             }
