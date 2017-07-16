@@ -1465,6 +1465,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             if(isHu && isHu.length == 1 && isHu[0] == 3 && !this.check.canHu(preUser).length){
                 //包牌
                 isBaoPai = true;
+                baoPaiuser = preUser;
             }else if(isHu.indexOf(4) != -1 || isHu.indexOf(5) != -1){ //大胡 第三铺 玩家 包牌
                 //第三铺
                 let arr = [];
