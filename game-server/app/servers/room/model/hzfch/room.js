@@ -276,7 +276,7 @@ roomPro.deductRoomCard = async function(){
     if(this.roomType == 3){ //AA开放
         useCardNumber = useCardNumber / 4;
         for(var i = 0; i < this.users.length; i ++){
-            var uid = this.users[i];
+            var uid = this.users[i].uid;
             let gameUser = await gameUserModel.findOne({_id : uid});
             console.error(useCardNumber,'========??????');
             gameUser.roomCard -= useCardNumber;
