@@ -89,7 +89,7 @@ router.get('/addCard', async function(req, res, next) {
     try{
         let uid = req.query.uid;
         let cardNum = req.query.uid;
-        let randomNum = req.query.randomNum);
+        let randomNum = req.query.randomNum;
         let token = req.query.token;
 
         let str = my_token + randomNum;
