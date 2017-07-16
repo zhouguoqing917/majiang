@@ -192,7 +192,7 @@ handler.visitorLogin = async function(msg, session, next){
                 loginTimes : 0,
                 sex : 1,
                 wxuserinfo : {
-                    nickname : '游客'
+                    nickname : '游客' + n
                 }
             };
         }
