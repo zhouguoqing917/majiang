@@ -69,7 +69,23 @@ router.get('/getGameUserbyId', async function(req, res, next) {
     try{
         let uid = req.query.uid;
         let gameuser = gameUser.findOne({uid : uid});
-        res.json({code:200,gameUser:gameuser});
+        if(!gameuser){
+            res.json({code:500,msg:'获取失败'});
+        }
+        let  data = {
+            openid : gameuser.openid,
+            token : gameUser.token,
+            _id : gameuser._id,
+            wxuserinfo : gameuser.wxuserinfo,
+            id : gameuser.id,
+            created_at : gameuser.created_at,
+            roomCard : gameuser.roomCard,
+            ipaddress : gameuser.ipaddress,
+            IDNo : gameuser.IDNo,
+            realName : gameuser.realName
+        }
+
+        res.json({code:200,gameUser:data});
     }catch(ex){
         console.log('======>>>>error',ex)
         res.json({code:500,msg:'获取失败'});
@@ -111,7 +127,20 @@ router.get('/addCard', async function(req, res, next) {
 
         gameuser.roomCard += parseInt(cardNum) || 0;
         await gameuser.save();
-        res.json({code:200,gameUser:gameuser});
+        let  data = {
+            openid : gameuser.openid,
+            token : gameUser.token,
+            _id : gameuser._id,
+            wxuserinfo : gameuser.wxuserinfo,
+            id : gameuser.id,
+            created_at : gameuser.created_at,
+            roomCard : gameuser.roomCard,
+            ipaddress : gameuser.ipaddress,
+            IDNo : gameuser.IDNo,
+            realName : gameuser.realName
+        }
+
+        res.json({code:200,gameUser:data});
     }catch(ex){
         res.json({code:500,msg:ex});
     }
