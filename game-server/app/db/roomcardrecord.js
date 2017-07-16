@@ -12,6 +12,7 @@ const schema=new mongoose.Schema({
     afterNumber:Number, //修改后数量
     description:String, //备注
     roomId : String,//房间_id
+    roomType : Number,
     createTime: {
         type: Date,
         "default": Date.now
