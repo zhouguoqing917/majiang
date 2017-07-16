@@ -1,6 +1,7 @@
 const gameUserModel = require('mongoose').models['GameUser'];
 const roomModel = require('mongoose').models['Room'];
 const xfyunModel = require('../../../xfyun/xfyunModel.js');
+let autoNumber = mongoose.models['AutoNumber'];
 
 module.exports = function(app) {
     return new Handler(app);
@@ -168,13 +169,65 @@ handler.checkLogin = async function(msg, session, next) {
 
 };
 
+handler.visitorLogin = async function(msg, session, next){
+    let deviceId = msg.deviceId;
+    if(!deviceId){
+        return next(null ,{code : 500, msg : '参数错误'});
+    }
+
+    try {
+        let gameUser = await gameUserModel.findOne({deviceId: deviceId});
+        let n = await autoNumber.getNewNumber(modelName);
+        let ipaddress = session.__session__.__socket__.remoteAddress.ip;
+        ipaddress = gameUser.ipaddress.substring(gameUser.ipaddress.lastIndexOf(':') + 1);
+        let temp = true;
+        if(!gameUser){
+            temp = false;
+            gameUser = {
+                deviceId : deviceId,
+                id : n,
+                roomCard : 0,
+                ipaddress : ipaddress,
+                created_at : new Date(),
+                loginTimes : 0,
+                sex : 1,
+                wxuserinfo : {
+                    nickname : '游客
+                }
+            };
+        }
+        gameUser.loginTime = new Date();
+        gameUser.loginTimes += 1;
+
+        if(!gameUser.xfToken){
+            let result = await xfyunModel.userImport(gameUser._id,gameUser.wxuserinfo.nickname,gameUser.wxuserinfo.headimgurl);
+            if(!result){
+                console.error(result,'========>>>>result');
+                //导入用户失败
+                throw '讯科云导入用户失败!'
+            }
+            let xfToken = await xfyunModel.getUserToken(gameUser._id);
+            gameUser.xfToken = xfToken;
+        }
+        if(temp){
+            await gameUserModel.update({_id : gameUser._id}, {$set : gameUser});
+        }else{
+            await gameUserModel.create(gameUser);
+        }
+        next(null,{code:200,msg:'登录成功',data: data});
+    }catch(e){
+        console.error(e);
+        next(null,{code:200,msg:'登录失败'});
+    }
+};
+
 handler.realNameVerify = async function(msg, session, next){
     let realName = msg.realName;
     let IDNo = msg.IDNo;
     let uid = session.uid;
     await gameUserModel.update({_id : uid},{realName : realName, IDNo : IDNo});
     next(null,{code:200,msg:'认证成功'});
-}
+};
 
 //获取用户微信信息
 handler.getWXUserInfo=async function(msg, session, next) {

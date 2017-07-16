@@ -27,7 +27,6 @@ handler.createRoom = async function (msg, session, next) {
             if(gameType == 2){
                 room = new Room2(self.app);
             }
-
             const data = await room.createRoom(session,msg);
             next(null, {code: 200, msg: '创建房间成功', data: data});
         } catch (ex) {
