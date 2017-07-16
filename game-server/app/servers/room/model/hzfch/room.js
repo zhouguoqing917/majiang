@@ -84,11 +84,11 @@ roomPro.createRoom = async function (session, roomData) {
     this.maxHuCount = roomData.maxHuCount || 300;
     this.gameType = roomData.gameType;
     this.hhType = roomData.hhType;
-    this.theTop = roomData.theTop || 300;
+    this.theTop = parseInt(roomData.theTop) || 300;
     this.underScore = roomData.underScore || 1;
     this.areaLimit = roomData.areaLimit || false;
     this.ownerNickname = gameuser.wxuserinfo.nickname;
-    this.roundCount = roomData.roundCount;
+    this.roundCount = parseInt(roomData.roundCount);
     if(this.roomType == 3){
         useCardNumber = useCardNumber / 4 ;
     }
@@ -616,7 +616,6 @@ roomPro.destoryRoom = function(){
  */
 roomPro.leaveRoom = async function(uid,isOffLine,isKick){
     let user = this.getUserByUid(uid);
-    console.error('========>>11111>',user);
     if(isOffLine){
         this.roomChannel.leaveChannel(this.users[i]);
         user.status = 3;
@@ -624,7 +623,6 @@ roomPro.leaveRoom = async function(uid,isOffLine,isKick){
     }else{
         this.sendToRoomOwner();
         let data = { uid : uid};
-        console.error(uid,user,'========>>>user');
         if(isKick){
             data.msg = '玩家 ' + user.nickname + ' 被房主提出';
         }
@@ -1078,11 +1076,6 @@ roomPro.handlerGang = async function(uid,pai){
         }else{
             user.addResultRecord(6);
         }
-        //三铺倒
-        let allLen = user.chi.length + user.peng.length + user.gang.length;
-        if(allLen == 3){
-            user.addResultRecord(25);
-        }
 
         let huUserIdArr = [];
         user.addMahjongToUser([mahjong]);
@@ -1144,11 +1137,6 @@ roomPro.handlerPeng = function(uid){
     this.gameRecord.addRecord(this.round,4,user,mahjong);
     this.previousOut = null;
 
-    //三铺倒
-    let allLen = user.chi.length + user.peng.length + user.gang.length;
-    if(allLen == 3){
-        user.addResultRecord(25);
-    }
     //pengUid 碰牌玩家  bePengUid被碰牌玩家
     this.roomChannel.sendMsgToRoom('onPeng',{code : 200 ,data : {pengUid : uid , bePengUid : previousUid,mahjongs : mahjongs ,funNum: user.getFanNum(this.hhType,this.laizi)}})
 };
@@ -1235,10 +1223,8 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             let users = this.getMeBetweenBankerUsers(uid,preUid);
             console.error(users,'=======>>>>>users');
             for(let i = 0 ; i < users.length ; i ++){
-                let isHu = this.check.checkHu(users[i],pai);
-                console.error(isHu,'======>>>isHu???');
-                if(isHu && isHu.length > 0 && !isCheck){
-                    console.error(isHu,isCheck,'======>>>>???')
+                if(users[i].isAction == 8 && !isCheck){
+                    console.error(isHu,isCheck,'======>>>>???');
                     return;
                 }
             }
@@ -1287,6 +1273,12 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
 
         if(isZimo == 1){
             user.addResultRecord(8);
+        }
+
+        //三铺倒
+        let allLen = user.chi.length + user.peng.length + user.gang.length;
+        if(allLen >= 3){
+            user.addResultRecord(25);
         }
 
         //计算大胡番
@@ -1855,12 +1847,6 @@ roomPro.handlerChi = function(uid,mahjongs){
     //吃癞子
     if(mahjongs.indexOf(this.laizi) != -1){
         user.addResultRecord(24);
-    }
-
-    //三铺倒
-    let allLen = user.chi.length + user.peng.length + user.gang.length;
-    if(allLen == 3){
-        user.addResultRecord(25);
     }
 
     this.roomChannel.sendMsgToRoom('onChi',{code : 200 ,data : {chiUid : uid , beChiUid : previousUid,mahjong : mahjongs.join(','),funNum: user.getFanNum(this.hhType,this.laizi)}})

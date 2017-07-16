@@ -64,6 +64,7 @@ let Room = function (app) {
     this.underScore = 1;
     this.areaLimit = false;
     this.ownerNickname ;
+    this.theTop = 300;
 };
 roomPro = Room.prototype;
 
@@ -84,6 +85,7 @@ roomPro.createRoom = async function (session, roomData) {
     this.areaLimit = roomData.areaLimit || false;
     this.ownerNickname = gameuser.wxuserinfo.nickname;
     this.roundCount = roomData.roundCount;
+    this.theTop = parseInt(roomData.theTop) || 300;
 
     if(this.roomType == 3){
         useCardNumber = useCardNumber / 4 ;
@@ -1285,7 +1287,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             for(let i = 0 ; i < users.length ; i ++){
                 let isHu = this.check.checkHu(users[i],pai);
                 console.error(isHu,'======>>>isHu');
-                if(isHu && isHu.length && !isCheck){
+                if(users[i].isAction == 8 && !isCheck){
                     return;
                 }
             }
@@ -1402,7 +1404,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             let user = this.users[i];
             user.funNum = user.getFanNum();
             if(user.uid != uid){
-                if(( winUserFun * user.funNum ) < 300){
+                if(( winUserFun * user.funNum ) < this.theTop){
                     isTop = true;
                 }else{
                     topCount += 1;
@@ -1414,7 +1416,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             for(let i = 0; i < this.users.length; i ++) {
                 let user = this.users[i];
                 if(user.uid != uid){
-                    let num = winUserFun * user.funNum > 300 ? 300 : winUserFun * user.funNum ;
+                    let num = winUserFun * user.funNum > this.theTop ? this.theTop : winUserFun * user.funNum ;
                     user.funNum = num;
                 }
             }
@@ -1443,11 +1445,11 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                 let user = this.users[i];
                 if(user.uid != uid){
                     if(kaikouCount == 0){
-                        user.funNum = 600;
+                        user.funNum = this.theTop + 300;
                     }else if (kaikouCount > 0 && kaikouCount < 3){
-                        user.funNum = 500;
+                        user.funNum = this.theTop + 200;
                     }else{
-                        user.funNum = 400;
+                        user.funNum = this.theTop + 100;
                     }
                 }
             }
