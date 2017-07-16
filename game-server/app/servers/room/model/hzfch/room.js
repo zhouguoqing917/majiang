@@ -616,6 +616,7 @@ roomPro.destoryRoom = function(){
  */
 roomPro.leaveRoom = async function(uid,isOffLine,isKick){
     let user = this.getUserByUid(uid);
+    console.error('========>>11111>',user);
     if(isOffLine){
         this.roomChannel.leaveChannel(this.users[i]);
         user.status = 3;
