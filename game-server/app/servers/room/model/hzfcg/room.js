@@ -596,9 +596,9 @@ roomPro.leaveRoom = async function(uid,isOffLine,isKick){
         let data = { uid : uid};
         if(isKick){
             data.msg = '玩家 ' + user.nickname + ' 被房主提出';
-        }else{
-            this.changeUserStatus(0);
         }
+
+        this.changeUserStatus(0);
         let self = this;
         this.roomChannel.sendMsgToRoom('onUserLeave',{code : 200 , data : data},function(){
             self.roomChannel.leaveChannel(user);
@@ -1287,8 +1287,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             let users = this.getMeBetweenBankerUsers(uid,preUid);
             console.error(users,'=======>>>>>users');
             for(let i = 0 ; i < users.length ; i ++){
-                let isHu = this.check.checkHu(users[i],pai);
-                console.error(isHu,'======>>>isHu');
+                console.error(users[i].isAction,'======>>>isHu',!isCheck);
                 if(users[i].isAction == 8 && !isCheck){
                     return;
                 }
@@ -1492,7 +1491,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                 }
             }
         }
-
+        console.error('=======>>>>>>');
         let maxFunNum = 0;
         if(isCheck){
             for(let i = 0; i < this.users.length; i ++) {
