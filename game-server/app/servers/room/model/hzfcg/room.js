@@ -1446,12 +1446,18 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
 
             for(let i = 0; i < this.users.length; i ++) {
                 let user = this.users[i];
+                let temp = true;
+                for(let j = 0; j < user.funRecord.length;j++){
+                    if(user.funRecord[j]['type'] == 1){
+                        temp = false;
+                    }
+                }
                 if(user.uid != uid){
-                    if(kaikouCount == 0){
+                    if(kaikouCount == 0 && !temp){
                         user.funNum = this.theTop + 300;
-                    }else if (kaikouCount > 0 && kaikouCount < 3){
+                    }else if (kaikouCount > 0 && kaikouCount < 3 && !temp){
                         user.funNum = this.theTop + 200;
-                    }else{
+                    }else if(!temp){
                         user.funNum = this.theTop + 100;
                     }
                 }
