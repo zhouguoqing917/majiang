@@ -121,7 +121,7 @@ router.get('/addCard', async function(req, res, next) {
         if(!uid || !cardNum || !parseInt(cardNum)){
             throw 'params error';
         }
-        let gameuser = await gameUserModel.findOne({_id : uid});
+        let gameuser = await gameUserModel.findOne({id : uid});
         if(!gameuser){
             throw 'user not exeit';
         }

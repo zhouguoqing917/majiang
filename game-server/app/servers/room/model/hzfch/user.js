@@ -184,22 +184,27 @@ pro.getFanNum = function(hhType,laizi,isWin){
         if(type == 25 && isWin){
             this.funNum = this.funNum * 2;
         }
-
+        let daHuFan = 0;
         if(type == 23 || type == 11 || type == 12 || type == 13 || type == 14 || type == 15 || type == 16 || type == 17 || type == 18 || type == 19){
-            this.funNum = this.funNum * 5;
+            daHuFan += 5;
         }
 
         if(type == 20 ){
-            this.funNum = this.funNum * 10;
+            daHuFan += 10;
         }
 
         if(type == 21){
-            this.funNum = this.funNum * 20;
+            daHuFan += 20;
         }
 
         if(type == 22){
-            this.funNum = this.funNum * 30;
+            daHuFan += 30;
         }
+
+        if(daHuFan){
+            this.funNum = this.funNum * daHuFan;
+        }
+
         if(type == 26){
             if(hhType == 1){
                 this.funNum = this.funNum * 2;
