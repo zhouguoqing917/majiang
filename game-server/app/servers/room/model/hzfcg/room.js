@@ -1453,11 +1453,11 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                     }
                 }
                 if(user.uid != uid){
-                    if(kaikouCount == 0 && !temp){
+                    if(kaikouCount == 0 && temp){
                         user.funNum = this.theTop + 300;
-                    }else if (kaikouCount > 0 && kaikouCount < 3 && !temp){
+                    }else if (kaikouCount > 0 && kaikouCount < 3 && temp){
                         user.funNum = this.theTop + 200;
-                    }else if(!temp){
+                    }else if(temp){
                         user.funNum = this.theTop + 100;
                     }
                 }
