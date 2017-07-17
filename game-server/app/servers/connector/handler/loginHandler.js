@@ -186,7 +186,6 @@ handler.visitorLogin = async function(msg, session, next){
                 deviceId : deviceId,
                 id : n,
                 roomCard : 0,
-                ipaddress : ipaddress,
                 created_at : new Date(),
                 loginTimes : 0,
                 wxuserinfo : {
