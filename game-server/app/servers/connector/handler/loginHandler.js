@@ -193,7 +193,8 @@ handler.visitorLogin = async function(msg, session, next){
                     sex : 1
                 },
                 latitude : latitude,
-                longitude : longitude
+                longitude : longitude,
+                openid : 'youke'
             };
         }
         let ipaddress = session.__session__.__socket__.remoteAddress.ip;
