@@ -212,7 +212,7 @@ handler.visitorLogin = async function(msg, session, next){
             sex:1,
             id : gameUser.id,
             latitude : latitude,
-            longitude : longitude
+            longitude : longitude,
         });
 
 

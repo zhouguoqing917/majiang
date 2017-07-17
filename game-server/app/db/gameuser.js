@@ -64,11 +64,15 @@ let schema=new mongoose.Schema({
     },
     IDNo : {
         type: String
+    },
+    deviceId : {
+        type: String,
     }
 
 });
 schema.index( {id : 1} , { unique : true });
 schema.index( {openid : 1} , { unique : true });
+schema.index( {deviceId : 1} , { unique : true });
 
 schema.statics={
     /**
