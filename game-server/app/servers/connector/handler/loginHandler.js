@@ -203,19 +203,6 @@ handler.visitorLogin = async function(msg, session, next){
         gameUser.loginTime = new Date();
         gameUser.loginTimes += 1;
 
-        if(!session.uid){
-            await  new Promise(function(resolve,reject){
-                session.bind(deviceId,function(err,data){
-                    if(err){
-                        reject(err);
-                    }else{
-                        resolve();
-                    }
-                });
-            });
-        }
-
-
         session.set('sid',this.app.curServer.id);
         const {nickname}=gameUser.wxuserinfo;
         session.set('userinfo',{
@@ -250,7 +237,6 @@ handler.visitorLogin = async function(msg, session, next){
             else
                 console.log(`新用户加入，绑定session到服务器${this.app.curServer.id}`);
         });
-        session.on('closed', onUserLeave.bind(this, session));
         if(!gameUser.xfToken){
             let xfToken = await xfyunModel.getUserToken(gameUser._id);
             let result = await xfyunModel.userImport(gameUser.deviceId,gameUser.wxuserinfo.nickname,'..');
@@ -266,6 +252,18 @@ handler.visitorLogin = async function(msg, session, next){
             let user = await gameUserModel.create(gameUser);
         }
         await gameUserModel.update({_id : gameUser._id}, {$set : gameUser});
+        if(!session.uid){
+            await  new Promise(function(resolve,reject){
+                session.bind(gameUser._id,function(err,data){
+                    if(err){
+                        reject(err);
+                    }else{
+                        resolve();
+                    }
+                });
+            });
+        }
+        session.on('closed', onUserLeave.bind(this, session));
         var data = {
             _id : gameUser._id,
             openid : gameUser.openid,
