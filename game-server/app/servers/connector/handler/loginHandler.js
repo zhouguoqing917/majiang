@@ -214,17 +214,6 @@ handler.visitorLogin = async function(msg, session, next){
             longitude : longitude
         });
 
-        if(!gameUser.xfToken){
-            let result = await xfyunModel.userImport(gameUser._id,gameUser.wxuserinfo.nickname,gameUser.wxuserinfo.headimgurl);
-            if(!result){
-                console.error(result,'========>>>>result');
-                //导入用户失败
-                throw '讯科云导入用户失败!'
-            }
-            let xfToken = await xfyunModel.getUserToken(gameUser._id);
-            gameUser.xfToken = xfToken;
-        }
-
 
         if(gameUser.roomId){
             let roomData = await roomModel.findOne({_id : gameUser.roomId});
@@ -252,7 +241,18 @@ handler.visitorLogin = async function(msg, session, next){
         if(temp){
             await gameUserModel.update({_id : gameUser._id}, {$set : gameUser});
         }else{
-            await gameUserModel.create(gameUser);
+            let user = await gameUserModel.create(gameUser);
+            console.error(user,'========>>>')
+            if(!gameUser.xfToken){
+                let result = await xfyunModel.userImport(user._id,gameUser.wxuserinfo.nickname,'..');
+                if(!result){
+                    console.error(result,'========>>>>result');
+                    //导入用户失败
+                    throw '讯科云导入用户失败!'
+                }
+                let xfToken = await xfyunModel.getUserToken(gameUser._id);
+                gameUser.xfToken = xfToken;
+            }
         }
         next(null,{code:200,msg:'登录成功',data: data});
     }catch(e){
