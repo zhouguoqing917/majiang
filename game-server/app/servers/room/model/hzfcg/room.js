@@ -1457,7 +1457,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                         user.funNum = this.theTop + 300;
                     }else if (kaikouCount > 0 && kaikouCount < 3 && temp){
                         user.funNum = this.theTop + 200;
-                    }else if(temp){
+                    }else {
                         user.funNum = this.theTop + 100;
                     }
                 }
