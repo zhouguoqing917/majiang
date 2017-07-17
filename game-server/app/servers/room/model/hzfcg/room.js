@@ -1594,7 +1594,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         }else{
             this.huanZhuangCount += 1;
             let index = this.huanZhuangCount % 4;
-            this.banker = this.users[index].id;
+            this.banker = this.users[index].uid;
         }
 
         this.roundInit();
