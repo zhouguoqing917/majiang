@@ -106,8 +106,10 @@ roomPro.createRoom = async function (session, roomData) {
     let roomNo = this.getRoomNo();//roomNo
 
     //创建讯飞云语音 房间
-
+    let t1 = Date.now();
+    console.error('==========>>>>t1',t1);
     let gid = await xfyunModel.createGroup(this.ownerUid,roomNo);
+    console.error('==========>>>>t2',Date.now() - t1);
     if(!gid){
         throw '创建语音房间失败';
     }
