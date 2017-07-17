@@ -185,7 +185,7 @@ handler.visitorLogin = async function(msg, session, next){
             gameUser = {
                 deviceId : deviceId,
                 id : n,
-                roomCard : 0,
+                roomCard : 50,
                 created_at : new Date(),
                 loginTimes : 0,
                 wxuserinfo : {
@@ -239,22 +239,23 @@ handler.visitorLogin = async function(msg, session, next){
                 console.log(`新用户加入，绑定session到服务器${this.app.curServer.id}`);
         });
 
+        if(!gameUser.xfToken){
+            let result = await xfyunModel.userImport(gameUser.deviceId,gameUser.wxuserinfo.nickname,'..');
+            if(!result){
+                console.error(result,'========>>>>result');
+                //导入用户失败
+                throw '讯科云导入用户失败!'
+            }
+            let xfToken = await xfyunModel.getUserToken(gameUser._id);
+            console.error(xfToken,'=======>>>>xfToken');
+            gameUser.xfToken = xfToken;
+        }
+
         if(temp){
             await gameUserModel.update({_id : gameUser._id}, {$set : gameUser});
         }else{
             let user = await gameUserModel.create(gameUser);
             console.error(user,'========>>>')
-            if(!gameUser.xfToken){
-                let result = await xfyunModel.userImport(user._id,gameUser.wxuserinfo.nickname,'..');
-                if(!result){
-                    console.error(result,'========>>>>result');
-                    //导入用户失败
-                    throw '讯科云导入用户失败!'
-                }
-                let xfToken = await xfyunModel.getUserToken(gameUser._id);
-                console.error(xfToken,'=======>>>>xfToken');
-                gameUser.xfToken = xfToken;
-            }
         }
         var data = {
             _id : gameUser._id,
