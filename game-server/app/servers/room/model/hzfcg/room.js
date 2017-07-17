@@ -661,11 +661,6 @@ roomPro.playMahjong = async function(uid,pai){
         this.roomChannel.sendMsgToRoom('onLaiziGang',{code : 200 ,data : { gangUid : uid , beGangUid : uid,mahjong : pai ,funNum: user.getFanNum()}});
         //给玩家一张牌
         if(this.isRoundOver()){
-            //todo  房间内信息 初始化 当前玩家坐庄
-            // this.roundInit();
-            let preUid = Object.keys(this.previousOut)[0];
-            this.banker = preUid;
-            this.getUserByUid(preUid).isBanker = 1;
             return this.handlerHu(uid,true);
             // return this.roomChannel.sendMsgToMem('onFlow',{code : 200});
         }
@@ -764,10 +759,6 @@ roomPro.isLicensing = async function(uid,pai,isCannel){
     }
 
     if(this.isRoundOver()){
-        let keys = Object.keys(this.previousOut);
-        let preUid =  keys[0];
-        this.banker = preUid;
-        this.getUserByUid(preUid).isBanker = 1;
         return this.handlerHu(uid,true);
     }
 
@@ -903,10 +894,6 @@ roomPro.cannelAction = async function(uid){
         this.gangUid = null;
         //发牌给杠的玩家
         if(this.isRoundOver()){
-            let keys = Object.keys(this.previousOut);
-            let preUid =  keys[0];
-            this.banker = preUid;
-            this.getUserByUid(preUid).isBanker = 1;
             return this.handlerHu(uid,true);
         }
 
@@ -1106,9 +1093,6 @@ roomPro.handlerGang = async function(uid,pai){
         if(this.isRoundOver()){
             //todo  房间内信息 初始化 当前玩家坐庄
             // this.roundInit();
-            let preUid = Object.keys(this.previousOut)[0];
-            this.banker = preUid;
-            this.getUserByUid(preUid).isBanker = 1;
             return this.handlerHu(uid,true);
             // return this.roomChannel.sendMsgToMem('onFlow',{code : 200});
         }
