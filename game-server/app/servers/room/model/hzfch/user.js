@@ -174,7 +174,7 @@ pro.getFanNum = function(hhType,laizi,isWin){
         if(type == 2 || type == 3 || type == 6 || type == 7 || type == 8 || type == 9 || type == 10){
             this.funNum = this.funNum * 2;
         }
-        if(type == 5 || type == 4 || type == 2){
+        if(type == 5 || type == 4){
             this.funNum = this.funNum * 4;
         }
 

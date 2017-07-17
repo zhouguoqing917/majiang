@@ -66,9 +66,21 @@ router.get('/getGameUserbyId', async function(req, res, next) {
     // let decrypt_text = cryptUtil.des.decrypt(encrypt_text,0);
 
     // code 换取 access_token
+
+    let randomNum = req.query.randomNum;
+    let token = req.query.token;
+
+    let str = my_token + randomNum;
+    const hash = crypto.createHash('md5');
+    hash.update(str);
+    let checkNum = hash.digest('hex');
+
+    if(checkNum != token){
+        throw 'verify fail';
+    }
     try{
         let uid = req.query.uid;
-        let user = await gameUser.findOne({_id : uid});
+        let user = await gameUser.findOne({id : uid});
         if(!user){
             res.json({code:500,msg:'获取失败'});
         }
@@ -98,11 +110,7 @@ router.get('/addCard', async function(req, res, next) {
     console.log(`获取到uid: ${JSON.stringify(req.query.uid)}`);
 
     const gameUserModel = mongoose.models['GameUser'];
-    // 加解密，预留
-    // let encrypt_text = cryptUtil.des.encrypt(JSON.stringify(req.body),0);
-    // let decrypt_text = cryptUtil.des.decrypt(encrypt_text,0);
 
-    // code 换取 access_token
     try{
         let uid = req.query.uid;
         let cardNum = req.query.cardNum;
