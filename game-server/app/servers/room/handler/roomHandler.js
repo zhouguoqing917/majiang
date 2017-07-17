@@ -4,7 +4,7 @@ const roomManager = require('../model/roomManager.js');
 const gameUserModel = require('mongoose').models['GameUser'];
 const roomConfig = require('../../../../config/roomConfig.json');
 var seqqueue = require('seq-queue');
-var queue = seqqueue.createQueue(1000);
+//var creatRoomQueue = seqqueue.createQueue(1000);
 module.exports = function (app) {
     return new Handler(app);
 };
@@ -17,7 +17,7 @@ var handler = Handler.prototype;
 //创建房间
 handler.createRoom = async function (msg, session, next) {
     let self = this;
-    queue.push(async function(task){
+    //queue.push(async function(task){
         try {
             let gameType = msg.gameType || 1;
             let room ;
@@ -33,8 +33,8 @@ handler.createRoom = async function (msg, session, next) {
             console.error(ex);
             next(null, {code: 500, msg: ex});
         }
-        task.done();
-    },1000);
+    //    task.done();
+    //},1000);
 };
 
 //进入房间
@@ -103,7 +103,7 @@ handler.leaveRoom = async function(msg, session, next){
 
 //出牌
 handler.playMahjong = async function(msg, session, next){
-    queue.push(async function(task){
+    //queue.push(async function(task){
         let roomNo = msg.roomNo;
         if (!roomNo || !msg.mahjong) {
             return next(null, {code: 500, msg: '参数错误!'});
@@ -123,14 +123,13 @@ handler.playMahjong = async function(msg, session, next){
             console.error(ex,'=====>>>');
             next(null, {code: 500, msg: ex});
         }
-        task.done();
-    },1000)
+        //task.done();
+    //},1000)
 
 };
 
 
 handler.handlerChi = async function(msg, session, next){
-
     queue.push(async function(task){
         let roomNo = msg.roomNo;
         if (!roomNo || !msg.mahjongs || !msg.mahjongs.length || msg.mahjongs.length != 2) {
@@ -162,7 +161,7 @@ handler.handlerChi = async function(msg, session, next){
  * 取消操作
  */
 handler.cannelAction = function(msg, session, next){
-    queue.push(async function(task){
+    //queue.push(async function(task){
         let roomNo = msg.roomNo;
         if (!roomNo ) {
             return next(null, {code: 500, msg: '参数错误!'});
@@ -181,14 +180,14 @@ handler.cannelAction = function(msg, session, next){
         } catch (ex) {
             next(null, {code: 500, msg: ex});
         }
-        task.done();
-    },1000)
+    //    task.done();
+    //},1000)
 };
 
 
 //杠
 handler.handlerGang = function(msg, session, next){
-    queue.push(async function(task){
+    //queue.push(async function(task){
         let roomNo = msg.roomNo;
         if (!roomNo || !msg.mahjong ) {
             return next(null, {code: 500, msg: '参数错误!'});
@@ -208,13 +207,13 @@ handler.handlerGang = function(msg, session, next){
             console.error(ex,'========>>>>>>');
             next(null, {code: 500, msg: ex});
         }
-        task.done();
-    },1000)
+    //    task.done();
+    //},1000)
 };
 
 //碰
 handler.handlerPeng = function(msg, session, next){
-    queue.push(async function(task){
+    //queue.push(async function(task){
         let roomNo = msg.roomNo;
         if (!roomNo) {
             return next(null, {code: 500, msg: '参数错误!'});
@@ -235,8 +234,8 @@ handler.handlerPeng = function(msg, session, next){
             console.error(ex,'=======>>>>');
             next(null, {code: 500, msg: ex});
         }
-        task.done();
-    },1000)
+    //    task.done();
+    //},1000)
 };
 
 handler.getRoomMessage = function(msg, session, next){
@@ -261,7 +260,7 @@ handler.getRoomMessage = function(msg, session, next){
 };
 
 handler.handlerHu = async function(msg, session, next){
-    queue.push(async function(task){
+    //queue.push(async function(task){
         let roomNo = msg.roomNo;
         if (!roomNo) {
             return next(null, {code: 500, msg: '参数错误!'});
@@ -281,8 +280,8 @@ handler.handlerHu = async function(msg, session, next){
             console.error(ex,'========>>>>');
             next(null, {code: 500, msg: ex});
         }
-        task.done();
-    },1000)
+    //    task.done();
+    //},1000)
 };
 
 handler.dissolveRoom = async function(msg, session, next){
@@ -308,7 +307,7 @@ handler.dissolveRoom = async function(msg, session, next){
 };
 
 handler.userReady = async function(msg, session, next){
-    queue.push(async function(task){
+    //queue.push(async function(task){
         let roomNo = msg.roomNo;
         if (!roomNo) {
             return next(null, {code: 500, msg: '参数错误!'});
@@ -328,8 +327,8 @@ handler.userReady = async function(msg, session, next){
             console.error(ex,'========>>>>');
             next(null, {code: 500, msg: ex});
         }
-        task.done();
-    },1000)
+    //    task.done();
+    //},1000)
 
 
     try {

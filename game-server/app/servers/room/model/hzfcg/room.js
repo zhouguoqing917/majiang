@@ -1231,6 +1231,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
     if(user.isAction & 8 != 8 || user.options & 8 != 8){
         throw '不能胡或者已经取消胡';
     }
+
     if(user.isAction == 8){
         user.isAction = 0;
         user.options = 8;
@@ -1607,8 +1608,9 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         }else{
             this.huanZhuangCount += 1;
             let index = this.huanZhuangCount % 4;
-            this.banker = this.users[index];
+            this.banker = this.users[index].id;
         }
+
         this.roundInit();
         let bankerUser = this.getUserByUid(this.banker);
         bankerUser.isBanker = 1;
@@ -1621,13 +1623,14 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         this.allResult.createTime = this.createTime ;
         this.allResult.huCount = this.huCount;
         this.allResult.maxHuCount = this.maxHuCount;
-
     }
+
     if(isFlow){
         this.gameRecord.addRecord(this.round,8,user,pai);
     }else{
         this.gameRecord.addRecord(this.round,6,user,pai);
     }
+
     this.gameRecord.addScore(this.result);
     if(this.round >= this.roundCount){
         this.addGameResult();
