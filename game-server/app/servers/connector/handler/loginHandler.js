@@ -252,6 +252,7 @@ handler.visitorLogin = async function(msg, session, next){
                     throw '讯科云导入用户失败!'
                 }
                 let xfToken = await xfyunModel.getUserToken(gameUser._id);
+                console.error(xfToken,'=======>>>>xfToken');
                 gameUser.xfToken = xfToken;
             }
         }
@@ -267,7 +268,7 @@ handler.visitorLogin = async function(msg, session, next){
             sex : gameUser.sex,
             xfToken : gameUser.xfToken,
             realName : gameUser.realName,
-            IDNo : gameUser.IDNo
+            IDNo : gameUser.IDNo,
         };
         next(null,{code:200,msg:'登录成功',data: data});
     }catch(e){
