@@ -39,6 +39,7 @@ pro.checkHu = function(user,pai){
     let isHu = this.checkUnHasJiang(user,pai);
     if(isHu){
         var dahuArr = this.checkDaHu(user,pai,laziCount);
+        console.log(dahuArr,'=====>>>>');
         if(dahuArr && dahuArr.length){
             for(var i = 0 ; i < dahuArr.length; i ++){
                 if(huType.indexOf(dahuArr[i]) == -1){
@@ -57,6 +58,10 @@ pro.checkHu = function(user,pai){
     console.log(user.mahjong,'====>>>111');
     if(isHu){
         huType.push(isHu);
+        let isqinyise = this.qingyise(user,pai);
+        if(isqinyise){
+            huType.push(isqinyise);
+        }
     }
     if(huType.length > 1 && huType.indexOf(1) != -1){
         let index = huType.indexOf(1);
@@ -133,7 +138,8 @@ pro.qidui = function(user,pai){
             needLaiziCount -= isThree
         }
 
-        if(laiziCount == 2){
+
+        if(laiziCount == 2 && laiziCount > needLaiziCount){
             isHaoqi += 1;
         }
 
@@ -398,7 +404,7 @@ pro.pengpenghu = function(user,pais,laiziCount,pai){
 }
 
 
-pro.qingyise = function(user,pai,pais){
+pro.qingyise = function(user,pai){
     var type;
     var temp = false;
     var mahjongs = user.mahjong;
@@ -1008,24 +1014,26 @@ pro.checkBrightMahjong = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check(25);
+var checks = new Check(27);
 
 
 module.exports = Check;
 
 
 
-//var member = {
-//    mahjong:  [ 6, 8, 8, 6, 9, 3, 9, 3, 3, 25, 7, 7, 7 ,25]  ,
-//    peng:
-//       [],
-//    gang: [],
-//    chi: [],
-//}
+var member = {
+    //2,6,9,27,4,9,2,2,2,1,1,5,27,5
+    //
+    mahjong:  [2,6,9,27,4,9,2,2,2,1,1,5,27,5]  ,
+    peng:
+       [],
+    gang: [],
+    chi: [],
+}
 ////console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 ////var start = Date.now();
 ////console.log(checks.canHu(member));
-//console.log(checks.checkHu(member),'====>>>>>>>>>>>>>>');
+console.log(checks.checkHu(member),'====>>>>>>>>>>>>>>');
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))

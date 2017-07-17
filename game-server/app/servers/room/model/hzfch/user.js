@@ -238,7 +238,7 @@ pro.getFunRecord = function(hhType,laizi){
             obj[type] = 2 ;
         }
 
-        if(type == 5 || type == 4 || type == 2){
+        if(type == 5 || type == 4 ){
             obj[type] = 4 ;
         }
 

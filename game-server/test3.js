@@ -1,30 +1,29 @@
-var users = [
-    {id : 1,
-        chi : [{pai : [1,2,3]}],
-        peng
+cardRecordModel.aggregate([
+    {
+        $match: {
+            $or :[{agentName: 'admin'}],
+            "createTime": {$gte: new Date('2017/06/04'), $lt: new Date('2017/07/04')},
+        }
     },
-    {id : 2},
-    {id : 3},
-    {id : 4},
-]
-//var getMeBetweenBankerUsers = function(uid,beUid){
-//    let usersArr = [];
-//    let temp = false;
-//    for(let i = users.length - 1; i >= 0; i--){
-//        let user = users[i];
-//        if(uid == user.id){
-//            temp = true;
-//            continue;
-//        }
-//
-//        if(temp){
-//            if(beUid == user.uid){
-//                break;
-//            }
-//            usersArr.push(user);
-//        }
-//    }
-//    return usersArr;
-//}
-//
-//console.log(getMeBetweenBankerUsers(2,3))
+    {
+        $project : {
+            day : {$substr: [{"$add":["$createTime", 28800000]}, 0, 10] },//时区数据校准，8小时换算成毫秒数为8*60*60*1000=288000后分割成YYYY-MM-DD日期格式便于分组
+            "cardNum1": 1,
+            "cardNum2": 1,
+            "cardNum3" : 1
+        }
+    },
+    {
+        $group : {
+            _id : "$day",
+            "cardNum1" : {$sum : "$cardNum1"},
+            "cardNum2" : {$sum : "$cardNum2"},
+            "cardNum3" : {$sum : "$cardNum3"}
+        }
+    },
+    {
+        $sort: {
+            "_id": -1
+        }
+    }
+]);

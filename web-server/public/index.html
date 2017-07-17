@@ -20,8 +20,8 @@
       var roomNo ;
       window.onload=function(){
           var pomelo = window.pomelo;
-//          var host = "47.94.45.41";
-          var host = "127.0.0.1";
+          var host = "47.94.45.41";
+//          var host = "127.0.0.1";
 //          var host = "112.74.44.138";
           var port = "8102";
           pomelo.init({
@@ -60,6 +60,11 @@
 
       function checkLogin() {
           pomelo.request("connector.loginHandler.checkLogin", {openid:'11111111',token:'11111111'}, function(data) {
+              console.log(`${data.msg}`);
+          });
+      };
+      function visitorLogin() {
+          pomelo.request("connector.loginHandler.visitorLogin", {deviceId:'11111111',token:'11111111'}, function(data) {
               console.log(`${data.msg}`);
           });
       };
@@ -111,6 +116,7 @@
     <input type="button" value="创建房间" onclick="createRoom()"/><br/>
     <input type="button" value="获取四个测试用户信息" onclick="show()"/><br/>
     <input type="button" value="验证登录" onclick="checkLogin()"/><br/>
+      <input type="button" value="游客登录" onclick="visitorLogin()"/><br/>
       <input type="button" value="test" onclick="getGameResultList()"/><br/>
     <input type="button" value="拉取用户微信头像等" onclick="getWXUserInfo()"/><br />
   </div>
