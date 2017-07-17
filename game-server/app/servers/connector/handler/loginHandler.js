@@ -197,6 +197,7 @@ handler.visitorLogin = async function(msg, session, next){
             };
         }
         let ipaddress = session.__session__.__socket__.remoteAddress.ip;
+        gameUser.ipaddress = ipaddress;
         ipaddress = gameUser.ipaddress.substring(gameUser.ipaddress.lastIndexOf(':') + 1);
         gameUser.loginTime = new Date();
         gameUser.loginTimes += 1;
