@@ -255,6 +255,20 @@ handler.visitorLogin = async function(msg, session, next){
                 gameUser.xfToken = xfToken;
             }
         }
+        var data = {
+            _id : gameUser._id,
+            openid : gameUser.openid,
+            token : gameUser.token,
+            nickname : nickname,
+            id : gameUser.id,
+            roomCard : gameUser.roomCard,
+            ipaddress : gameUser.ipaddress,
+            currRoomNo : gameUser.currRoomNo,
+            sex : gameUser.sex,
+            xfToken : gameUser.xfToken,
+            realName : gameUser.realName,
+            IDNo : gameUser.IDNo
+        };
         next(null,{code:200,msg:'登录成功',data: data});
     }catch(e){
         console.error(e,'=====>>>>e');
