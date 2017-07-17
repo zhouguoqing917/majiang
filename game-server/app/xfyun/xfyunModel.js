@@ -83,7 +83,7 @@ pro.userImport = async function(uid,userName,headimgurl){
     };
     let result = await request.post(options);
     result = JSON.parse(result);
-    console.log(result,'=====>>>');
+    console.error(result,'=====>>>',arguments);
     if(result.ret == 0 ){
         return true;
     }
