@@ -174,7 +174,8 @@ handler.visitorLogin = async function(msg, session, next){
     if(!deviceId){
         return next(null ,{code : 500, msg : '参数错误'});
     }
-
+    var latitude = msg.latitude || 0;
+    var longitude = msg.longitude || 0;
     try {
         let gameUser = await gameUserModel.findOne({deviceId: deviceId});
         let n = await autoNumber.getNewNumber(modelName);
@@ -190,14 +191,28 @@ handler.visitorLogin = async function(msg, session, next){
                 ipaddress : ipaddress,
                 created_at : new Date(),
                 loginTimes : 0,
-                sex : 1,
                 wxuserinfo : {
-                    nickname : '游客' + n
-                }
+                    nickname : '游客' + n,
+                    sex : 1
+                },
+                latitude : latitude,
+                longitude : longitude
             };
         }
         gameUser.loginTime = new Date();
         gameUser.loginTimes += 1;
+
+
+        session.set('sid',this.app.curServer.id);
+        const {nickname}=gameUser.wxuserinfo;
+        session.set('userinfo',{
+            ipaddress:gameUser.ipaddress,
+            nickname:nickname,
+            sex:1,
+            id : gameUser.id,
+            latitude : latitude,
+            longitude : longitude
+        });
 
         if(!gameUser.xfToken){
             let result = await xfyunModel.userImport(gameUser._id,gameUser.wxuserinfo.nickname,gameUser.wxuserinfo.headimgurl);
@@ -209,6 +224,31 @@ handler.visitorLogin = async function(msg, session, next){
             let xfToken = await xfyunModel.getUserToken(gameUser._id);
             gameUser.xfToken = xfToken;
         }
+
+
+        if(gameUser.roomId){
+            let roomData = await roomModel.findOne({_id : gameUser.roomId});
+            let now = Date.now();
+            if(roomData && roomData.status > 3){
+                gameUser.currRoomNo = null;
+                gameUser.roomId = null;
+            }else if(roomData && roomData.status <= 3){
+                session.set('roomNo',gameUser.currRoomNo);
+            }else{
+                gameUser.currRoomNo = null;
+                gameUser.roomId = null;
+            }
+        }else{
+            gameUser.currRoomNo = null;
+            gameUser.roomId = null;
+        }
+        session.pushAll((err)=>{
+            if(err)
+                console.log(`绑定session失败 ! 错误信息 : ${err.message}`);
+            else
+                console.log(`新用户加入，绑定session到服务器${this.app.curServer.id}`);
+        });
+
         if(temp){
             await gameUserModel.update({_id : gameUser._id}, {$set : gameUser});
         }else{
@@ -216,7 +256,7 @@ handler.visitorLogin = async function(msg, session, next){
         }
         next(null,{code:200,msg:'登录成功',data: data});
     }catch(e){
-        console.error(e);
+        console.error(e,'=====>>>>e');
         next(null,{code:200,msg:'登录失败'});
     }
 };

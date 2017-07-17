@@ -1227,7 +1227,6 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             console.error(users,'=======>>>>>users');
             for(let i = 0 ; i < users.length ; i ++){
                 if(users[i].isAction == 8 && !isCheck){
-                    console.error(isHu,isCheck,'======>>>>???');
                     return;
                 }
             }

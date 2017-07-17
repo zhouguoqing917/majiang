@@ -37,7 +37,6 @@ pro.checkHu = function(user,pai){
     var laziCount = this.getLaiziCount(mahjongs);
     var huType = [];
     let isHu = this.checkUnHasJiang(user,pai);
-    console.log(isHu,'=====>>>>>>');
     if(isHu){
         var dahuArr = this.checkDaHu(user,pai,laziCount);
         if(dahuArr && dahuArr.length){
@@ -55,6 +54,7 @@ pro.checkHu = function(user,pai){
         huType.push(isHu);
     }
     isHu = this.qidui(user,pai);
+    console.log(user.mahjong,'====>>>111');
     if(isHu){
         huType.push(isHu);
     }
@@ -76,11 +76,10 @@ pro.getLaiziCount = function(mahjongs){
 };
 
 pro.qidui = function(user,pai){
-    var mahjongs = user.mahjong ;
+    var mahjongs = [].concat(user.mahjong );
     if(pai){
         mahjongs = mahjongs.concat(pai);
     }
-    console.log(mahjongs,'=====>>>>');
     if(mahjongs.length != 14){
         return false;
     }
@@ -1009,19 +1008,19 @@ pro.checkBrightMahjong = function(user){
 var testmahjongs = [
     1,2,3,4,5,6,7,8,9
 ];
-var checks = new Check(2);
+var checks = new Check(25);
 
 
 module.exports = Check;
 
 
-//
+
 //var member = {
-//    mahjong:  [ 21,25,27,2,21] ,
+//    mahjong:  [ 6, 8, 8, 6, 9, 3, 9, 3, 3, 25, 7, 7, 7 ,25]  ,
 //    peng:
-//        [ {pai : [26,26,26]} ,{pai : [28,28,28] }],
+//       [],
 //    gang: [],
-//    chi: [{pai : [23,24,25]}],
+//    chi: [],
 //}
 ////console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 ////var start = Date.now();
