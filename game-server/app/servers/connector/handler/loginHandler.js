@@ -240,13 +240,13 @@ handler.visitorLogin = async function(msg, session, next){
         });
 
         if(!gameUser.xfToken){
+            let xfToken = await xfyunModel.getUserToken(gameUser._id);
             let result = await xfyunModel.userImport(gameUser.deviceId,gameUser.wxuserinfo.nickname,'..');
-            if(!result){
+            if(!result && !xfToken){
                 console.error(result,'========>>>>result');
                 //导入用户失败
                 throw '讯科云导入用户失败!'
             }
-            let xfToken = await xfyunModel.getUserToken(gameUser._id);
             gameUser.xfToken = xfToken;
         }
 
