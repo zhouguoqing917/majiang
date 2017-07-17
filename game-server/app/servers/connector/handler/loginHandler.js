@@ -251,12 +251,10 @@ handler.visitorLogin = async function(msg, session, next){
             gameUser.xfToken = xfToken;
         }
 
-        if(temp){
-            await gameUserModel.update({_id : gameUser._id}, {$set : gameUser});
-        }else{
+        if(!temp){
             let user = await gameUserModel.create(gameUser);
-            console.error(user,'========>>>')
         }
+        await gameUserModel.update({_id : gameUser._id}, {$set : gameUser});
         var data = {
             _id : gameUser._id,
             openid : gameUser.openid,
@@ -269,7 +267,7 @@ handler.visitorLogin = async function(msg, session, next){
             sex : gameUser.sex,
             xfToken : gameUser.xfToken,
             realName : gameUser.realName,
-            IDNo : gameUser.IDNo,
+            IDNo : gameUser.IDNo
         };
         next(null,{code:200,msg:'登录成功',data: data});
     }catch(e){
