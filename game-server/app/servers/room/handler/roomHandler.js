@@ -4,7 +4,7 @@ const roomManager = require('../model/roomManager.js');
 const gameUserModel = require('mongoose').models['GameUser'];
 const roomConfig = require('../../../../config/roomConfig.json');
 var seqqueue = require('seq-queue');
-//var creatRoomQueue = seqqueue.createQueue(1000);
+var queue = seqqueue.createQueue(1000);
 module.exports = function (app) {
     return new Handler(app);
 };
@@ -153,8 +153,6 @@ handler.handlerChi = async function(msg, session, next){
         }
         task.done();
     },1000)
-
-
 };
 
 /**
