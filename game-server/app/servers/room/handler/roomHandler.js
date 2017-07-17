@@ -307,30 +307,6 @@ handler.dissolveRoom = async function(msg, session, next){
 };
 
 handler.userReady = async function(msg, session, next){
-    //queue.push(async function(task){
-        let roomNo = msg.roomNo;
-        if (!roomNo) {
-            return next(null, {code: 500, msg: '参数错误!'});
-        }
-        let room = roomManager.getRoomByRoomNo(roomNo);
-        if(!room){
-            return next(null, {code: 500, msg: '房间不存在!'});
-        }
-        let uid = session.uid;
-        if(!room.getUserByUid(uid)){
-            return next(null, {code: 400, msg: '不在此房间!'});
-        }
-        try {
-            await room.handlerHu(uid);
-            next(null, {code: 200, msg: '获取房间信息'});
-        } catch (ex) {
-            console.error(ex,'========>>>>');
-            next(null, {code: 500, msg: ex});
-        }
-    //    task.done();
-    //},1000)
-
-
     try {
         let uid = session.uid;
         let roomNo = msg.roomNo;
