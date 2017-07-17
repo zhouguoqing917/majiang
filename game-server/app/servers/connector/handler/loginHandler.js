@@ -179,8 +179,6 @@ handler.visitorLogin = async function(msg, session, next){
     try {
         let gameUser = await gameUserModel.findOne({deviceId: deviceId});
         let n = await autoNumber.getNewNumber('GameUser');
-        let ipaddress = session.__session__.__socket__.remoteAddress.ip;
-        ipaddress = gameUser.ipaddress.substring(gameUser.ipaddress.lastIndexOf(':') + 1);
         let temp = true;
         if(!gameUser){
             temp = false;
@@ -199,6 +197,8 @@ handler.visitorLogin = async function(msg, session, next){
                 longitude : longitude
             };
         }
+        let ipaddress = session.__session__.__socket__.remoteAddress.ip;
+        ipaddress = gameUser.ipaddress.substring(gameUser.ipaddress.lastIndexOf(':') + 1);
         gameUser.loginTime = new Date();
         gameUser.loginTimes += 1;
 
