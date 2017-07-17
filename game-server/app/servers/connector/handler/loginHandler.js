@@ -247,7 +247,6 @@ handler.visitorLogin = async function(msg, session, next){
                 throw '讯科云导入用户失败!'
             }
             let xfToken = await xfyunModel.getUserToken(gameUser._id);
-            console.error(xfToken,'=======>>>>xfToken');
             gameUser.xfToken = xfToken;
         }
 
