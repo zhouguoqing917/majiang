@@ -127,10 +127,11 @@ router.get('/addCard', async function(req, res, next) {
         }
 
         gameuser.roomCard += parseInt(cardNum) || 0;
+        console.log(gameuser,'=====>>>>>>');
         await gameuser.save();
         let  data = {
             openid : gameuser.openid,
-            token : gameUser.token,
+            token : gameuser.token,
             _id : gameuser._id,
             wxuserinfo : gameuser.wxuserinfo,
             id : gameuser.id,
@@ -140,7 +141,7 @@ router.get('/addCard', async function(req, res, next) {
             IDNo : gameuser.IDNo,
             realName : gameuser.realName
         }
-
+        console.log(data,'=====>>>data');
         res.json({code:200,gameUser:data});
     }catch(ex){
         res.json({code:500,msg:ex});
