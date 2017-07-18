@@ -1802,6 +1802,9 @@ roomPro.handlerChi = function(uid,mahjongs){
         }
     }
 
+    if(this.currPlayUid == uid){
+        throw '请出牌'
+    }
     let obj = this.previousOut;
     if(!obj || user.isAction & 1 != 1){
         throw '不能吃';

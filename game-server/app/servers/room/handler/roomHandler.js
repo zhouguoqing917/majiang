@@ -130,7 +130,6 @@ handler.playMahjong = async function(msg, session, next){
 
 
 handler.handlerChi = async function(msg, session, next){
-    queue.push(async function(task){
         let roomNo = msg.roomNo;
         if (!roomNo || !msg.mahjongs || !msg.mahjongs.length || msg.mahjongs.length != 2) {
             return next(null, {code: 500, msg: '参数错误!'});
@@ -151,8 +150,6 @@ handler.handlerChi = async function(msg, session, next){
             console.error(ex,'=====>>>');
             next(null, {code: 500, msg: ex});
         }
-        task.done();
-    },1000)
 };
 
 /**
