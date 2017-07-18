@@ -243,7 +243,7 @@ pro.getFunRecord = function(hhType,laizi){
         }
 
         if(type == 25){
-            obj[type] = 3 ;
+            obj[type] = 2 ;
         }
 
         if(type == 23 || type == 11 || type == 12 || type == 13 || type == 14 || type == 15 || type == 16 || type == 17 || type == 18 || type == 19){
