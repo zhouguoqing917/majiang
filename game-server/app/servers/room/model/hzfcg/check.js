@@ -66,10 +66,6 @@ pro.checkHu = function(user,pai){
             }
         }
     }
-    isHu = this.jianjianghu(user,pai);
-    if(isHu){
-        huType.push(isHu);
-    }
     return huType;
 };
 
@@ -100,7 +96,12 @@ pro.checkDaHu = function(user,pai,laiziCount){
 
     isHu = this.pengpenghu(user,allPai,laiziCount,pai);
     if(isHu){
-        huType.push(isHu);
+        let isJiangyise = this.jianjianghu(user,pai);
+        if(isJiangyise){
+            huType.push(isJiangyise);
+        }else{
+            huType.push(isHu);
+        }
     }
     isHu = this.fengyise(user,pai);
     if(isHu){
