@@ -8,5 +8,8 @@ module.exports={
         require('./gameRecord').load();
         require('./record').load();
         require('./shareRecord').load();
+        require('./gameMessages').load();
+        require('./gameAnnouncements').load();
     }
 }
+

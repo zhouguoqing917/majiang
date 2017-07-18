@@ -162,7 +162,7 @@ pro.addResultRecord = function(type){
 
 pro.getFanNum = function(hhType,laizi,isWin){
     //1 开口 2,发财杠 3,红中杠 4 癞子杠 5 暗杠 6 明杠 7 放冲 8 自摸 9,庄家
-    //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞
+    //10 硬胡 11,清一色 12,风一色 13,碰碰胡 14,将一色 15,杠上开花 16,抢杠 17,全球人 18 海底捞 ,19 7对,20 豪华7对 ,21 ,双豪七 22,三豪七  23 门清 24 吃癞子 25 三铺倒 26 亮牌 27
     this.funNum = 1;
     let kaikouFan = true;
     for(let i = 0 ;i < this.funRecord.length; i++){

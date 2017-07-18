@@ -5,38 +5,22 @@
 
 const mongoose = require('mongoose');
 const db=require('./db');
-const modelName='GameAnnouncements';
+const modelName='GameMessages';
 
 const schema=new mongoose.Schema({
     gameId : {
         type: Number,
         default: 0
     },
-    type : {
+    message : {
+        type: String
+    },
+    source:{
+        type: String
+    },
+    status: {
         type: Number,
         default: 0
-    },
-    platform:{
-        type: Number,
-        "default": 0
-    },
-    startAt: {
-        type: Date
-    },
-    endAt : {
-        type: Date
-    },
-    interval : {
-        type: Number
-    },
-    loop : {
-        type: Number
-    },
-    content : {
-        type : String
-    },
-    operateUserId : {
-        type : Number
     },
     createdAt : {
         type : Date
@@ -47,7 +31,6 @@ const schema=new mongoose.Schema({
 
 });
 
-schema.index( {gameId : 1} );
 
 schema.statics={
 };

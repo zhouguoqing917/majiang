@@ -686,7 +686,7 @@ roomPro.playMahjong = async function(uid,pai){
             console.error(e);
         }
 
-        this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong, uid : user.uid,isGang : true,huUserIdArr : huUserIdArr}},user);
+        this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong, uid : user.uid,isGang : true,huUserIdArr : huUserIdArr,funNum: user.getFanNum()}},user);
         this.gameRecord.addRecord(this.round,3,user,mahjong);
     }else{
         //广播
@@ -804,7 +804,7 @@ roomPro.isLicensing = async function(uid,pai,isCannel){
         }catch(e){
             console.error(e);
         }
-        this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong , uid : nextUser.uid , huUserIdArr : huUserIdArr}},nextUser);
+        this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong , uid : nextUser.uid , huUserIdArr : huUserIdArr , funNum: user.getFanNum()}},nextUser);
         this.gameRecord.addRecord(this.round,3,nextUser,mahjong);
     }
 };
@@ -937,7 +937,7 @@ roomPro.cannelAction = async function(uid){
             }catch(e){
                 console.error(e);
             }
-            this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong , uid : nextUser.uid ,huUserIdArr : huUserIdArr}},nextUser);
+            this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong , uid : nextUser.uid ,huUserIdArr : huUserIdArr , funNum: user.getFanNum()}},nextUser);
             this.gameRecord.addRecord(this.round,3,nextUser,mahjong);
         }
         return;
@@ -1126,7 +1126,7 @@ roomPro.handlerGang = async function(uid,pai){
             console.error(e);
         }
 
-        this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong, uid : user.uid,isGang : true,huUserIdArr : huUserIdArr}},user);
+        this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong, uid : user.uid,isGang : true,huUserIdArr : huUserIdArr ,funNum: user.getFanNum()}},user);
         this.gameRecord.addRecord(this.round,3,user,mahjong);
     }
 };
@@ -1590,11 +1590,13 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
 
     if(this.round <= this.roundCount ){
         if(!isFlow){
-            this.banker = uid;
+            if(this.banker != user.uid){
+                this.huanZhuangCount += 1;
+                let index = this.huanZhuangCount % 4;
+                this.banker = this.users[index].uid;
+            }
         }else{
-            this.huanZhuangCount += 1;
-            let index = this.huanZhuangCount % 4;
-            this.banker = this.users[index].uid;
+            this.banker = uid;
         }
 
         this.roundInit();

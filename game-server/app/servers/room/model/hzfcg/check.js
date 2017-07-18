@@ -886,12 +886,16 @@ pro.canHu = function(user){
         let isHu = this.checkHu(user,mahjongs[i]);
         if(isHu && isHu.length ){
             let funNum = user.funNum ;
+            let daHuFan = 0;
             for(let j = 0; j < isHu.length; j ++){
                 if(isHu[j] == 1){
                     funNum = funNum * 2;
                 }else{
-                    funNum = funNum * 20;
+                    daHuFan += 10;
                 }
+            }
+            if(daHuFan > 0){
+                funNum = funNum * daHuFan;
             }
             let yinghu = new Check().checkHu(user,mahjongs[i]);
             if(yinghu && yinghu.length){
@@ -942,7 +946,7 @@ module.exports = Check;
 
 
 var member = {
-    mahjong: [ 5 ],
+    mahjong: [ 41 ],
     peng:
         [ { uid: '59472f3aeccf6136bfb1889a',
             pai: [Object],
@@ -963,7 +967,7 @@ var member = {
 //console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 //var start = Date.now();
 ////console.log(checks.canHu(member));
-//console.log(checks.checkHu(member,5),'===>>');
+console.log(checks.checkHu(member,41),'===>>');
 //console.log(member)
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);

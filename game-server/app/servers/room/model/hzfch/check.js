@@ -994,8 +994,32 @@ pro.canHu = function(user){
     var arr = [];
     for(var i = 0 ; i < mahjongs.length;i++){
         let isHu = this.checkHu(user,mahjongs[i]);
-        if( isHu && isHu.length > 0 ){
-            arr.push(mahjongs[i]);
+        if(isHu && isHu.length ){
+            let funNum = user.funNum ;
+            let dahuFan = 0;
+            for(let j = 0; j < isHu.length; j ++){
+                if(isHu[j] == 1){
+                    funNum = funNum * 2;
+                }else if(isHu[j] == 11){
+                    dahuFan += 10;
+                }else if(isHu[j] == 12){
+                    dahuFan += 20;
+                }else if(isHu[j] == 13){
+                    dahuFan += 30;
+                }else{
+                    dahuFan += 5;
+                }
+            }
+            if(dahuFan > 0){
+                funNum = funNum * dahuFan
+            }
+            let yinghu = new Check().checkHu(user,mahjongs[i]);
+            if(yinghu && yinghu.length){
+                funNum = funNum * 2;
+            }
+            let obj = {};
+            obj[mahjongs[i]] = funNum;
+            arr.push(obj);
         }
     }
     return arr;

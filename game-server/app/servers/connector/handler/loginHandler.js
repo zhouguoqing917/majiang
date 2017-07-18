@@ -2,7 +2,8 @@ const gameUserModel = require('mongoose').models['GameUser'];
 const roomModel = require('mongoose').models['Room'];
 const xfyunModel = require('../../../xfyun/xfyunModel.js');
 let autoNumber = require('mongoose').models['AutoNumber'];
-
+let gameAnnouncements = require('mongoose').models['GameAnnouncements'];
+let gameMessages = require('mongoose').models['GameMessages'];
 module.exports = function(app) {
     return new Handler(app);
 };
@@ -10,6 +11,12 @@ const Handler = function(app) {
     this.app = app;
 };
 const handler = Handler.prototype;
+
+let getGameAnnouncements = async function(){
+    let date = new Date();
+    let notices = gameAnnouncements.find({startAt : {$lte : date} , endAt : {$gt : date}});
+    return notices || [];
+}
 
 //验证微信登录
 handler.checkLogin = async function(msg, session, next) {
@@ -156,7 +163,8 @@ handler.checkLogin = async function(msg, session, next) {
                 sex : sex,
                 xfToken : gameUser.xfToken,
                 realName : gameUser.realName,
-                IDNo : gameUser.IDNo
+                IDNo : gameUser.IDNo,
+                notice : getGameAnnouncements()
             };
 
             next(null,{code:200,msg:'登录成功',data: data});
@@ -276,7 +284,8 @@ handler.visitorLogin = async function(msg, session, next){
             sex : gameUser.sex,
             xfToken : gameUser.xfToken,
             realName : gameUser.realName,
-            IDNo : gameUser.IDNo
+            IDNo : gameUser.IDNo,
+            notice : getGameAnnouncements()
         };
         next(null,{code:200,msg:'登录成功',data: data});
     }catch(e){
@@ -291,6 +300,13 @@ handler.realNameVerify = async function(msg, session, next){
     let uid = session.uid;
     await gameUserModel.update({_id : uid},{realName : realName, IDNo : IDNo});
     next(null,{code:200,msg:'认证成功'});
+};
+
+handler.getMail = function(){
+    let t = Date.now();
+    t -= 30 * 60 * 60 * 1000;
+    let mails = gameMessages.find({createdAt : {$gte : new Date(t)}});
+    next(null,{code:200,mails : mails});
 };
 
 //获取用户微信信息
