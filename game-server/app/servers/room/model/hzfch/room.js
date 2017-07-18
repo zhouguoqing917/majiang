@@ -1627,6 +1627,8 @@ roomPro.roundInit = function(){
         this.users[i].unHu = [];
         this.users[i].funNum = 1;
         this.users[i].funRecord = [];
+        this.users[i].brightMahjong = [];
+        this.users[i].hasBrightMahjong = false;
     }
 };
 
