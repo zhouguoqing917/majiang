@@ -78,14 +78,14 @@ roomPro.createRoom = async function (session, roomData) {
     let useCardNumber = roomData.roomCount == 8 ? 4 : 8;
     this.roomType = roomData.roomType || 1;
     this.huCount = roomData.huCount || 0;
-    this.maxHuCount = parseInt(roomData.maxHuCount) || 300;
+    this.maxHuCount = parseInt(roomData.maxHuCount) || parseInt(roomData.theTop) || 300;
     this.gameType = roomData.gameType;
     this.hhType = roomData.hhType;
     this.underScore = roomData.underScore;
     this.areaLimit = roomData.areaLimit || false;
     this.ownerNickname = gameuser.wxuserinfo.nickname;
     this.roundCount = roomData.roundCount;
-    this.theTop = parseInt(roomData.maxHuCount) || 300;
+    this.theTop = parseInt(roomData.maxHuCount) || parseInt(roomData.theTop) || 300;
 
     if(this.roomType == 3){
         useCardNumber = useCardNumber / 4 ;
@@ -1216,7 +1216,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
     let pai , preUid, isZimo = 1 ,preUser;//1为 自摸  2, 抢杠 3,别人放炮 ,4 自己杠到的
     let preBanker = this.banker;
     let isBaoPai = false;
-    if(user.isAction & 8 != 8 || user.options & 8 != 8){
+    if((user.isAction & 8 != 8 || user.options & 8 != 8 ) && !isCheck){
         throw '不能胡或者已经取消胡';
     }
 
