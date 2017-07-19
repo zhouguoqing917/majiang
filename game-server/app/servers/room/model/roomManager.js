@@ -237,13 +237,14 @@ RoomManager.prototype.destroyRoom = async function(roomNo){
     }
 };
 
-RoomManager.prototype.getGameResultList = async function(uid){
+RoomManager.prototype.getGameResultList = async function(uid,page){
     let now = Date.now();
     let key = 'result.' + uid;
     let obj = {};
     obj[key] = {$ne:null};
     let t = Date.now() - 24 * 60 * 60 * 1000;
-    let results = await gameResult.find({$or : [obj , {ownerUid : uid}],'result.createTime' : { $gte : t} }).sort({'result.createTime' : -1});
+    let count = 10;
+    let results = await gameResult.find({$or : [obj , {ownerUid : uid}],'result.createTime' : { $gte : t} }).sort({'result.createTime' : -1}).limit(10).skip(page * count);
     let arr = [];
     for(let i = 0; i < results.length;i ++){
         results[i].result._id = results[i]._id;

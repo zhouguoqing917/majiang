@@ -435,7 +435,9 @@ handler.sendMessage = async function(msg, session, next){
 handler.getGameResultList = async function(msg, session, next){
     try {
         let uid = session.uid;
-        let results = await roomManager.getGameResultList(uid);
+        let page = msg.page || 0;
+        let results = await roomManager.getGameResultList(uid,page);
+
         next(null, {code: 200, data : {result : results, uid : uid}});
     }catch(ex){
         next(null, {code: 500, msg: '查询失败'});
