@@ -153,7 +153,7 @@ roomPro.createRoom = async function (session, roomData) {
     if(this.roomType != 2){
         return this.entryRoom(roomNo,session);
     }else{
-        return {roomNo};
+        return {roomNo : roomNo , roomData : roomData};
     }
 
 };
@@ -382,7 +382,8 @@ roomPro.getRoomMessage = function(uid,isAll){
         gameType : this.gameType,
         hhType : this.hhType,
         ownerNickname : this.ownerNickname,
-        underScore : this.underScore
+        underScore : this.underScore,
+        theTop : this.theTop
     };
     return obj;
 };
@@ -583,7 +584,7 @@ roomPro.confirmLaizi = function(){
         }
     }
 
-    if(this.hhType == 2 && mahjong == 41 || mahjong == 42){
+    if(this.hhType == 2 && (mahjong == 41 || mahjong == 42)){
         laizi = 35;
     }
 
@@ -1410,8 +1411,8 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         for(let i = 0; i < this.users.length; i ++) {
             let otherUser = this.users[i];
             if(otherUser.uid != uid){
-                otherUser.score -= parseInt(otherUser.funNum * this.underScore * 100) / 100;
-                user.score += parseInt(otherUser.funNum * this.underScore * 100) / 100;
+                otherUser.score -= Math.round(otherUser.funNum * this.underScore * 10) / 10;
+                user.score += Math.round(otherUser.funNum * this.underScore * 10) / 10;
             }
         }
 
@@ -1485,7 +1486,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         roomManager.destroyRoom(this.roomNo);
         await roomModel.update({_id : this.roomId},{status : 4});
     }
-    this.roomChannel.sendMsgToRoom('onRoundOver',{code : 200 , data : {allResult : this.allResult,result : this.result , banker : preBanker,isFlow : isFlow || false }});
+    this.roomChannel.sendMsgToRoom('onRoundOver',{code : 200 , data : {allResult : this.allResult,result : this.result , banker : preBanker,isFlow : isFlow || false ,theTop : this.theTop ,maxHuCount : this.maxHuCount }});
 };
 
 
@@ -1582,7 +1583,7 @@ roomPro.userReady = async function(uid){
         this.confirmLaizi();
         this.gameRecord.addRecord(this.round,null,null,null,null,this.laizi);
         this.deductRoomCard();//扣除房卡
-        this.check = new Check(this.laizi);
+        this.check = new Check(this.laizi,this.hhType);
         this.licensing();
         this.status = 2;
         let self = this;

@@ -322,11 +322,15 @@ handler.getMails = async function  (msg, session, next) {
 };
 
 //获取用户微信信息
-handler.getWXUserInfo = async function (msg, session, next) {
-    let wxuserinfo = await gameUserModel.getWXUserInfo(msg.openid);
+handler.getRoomCardInfo = async function (msg, session, next) {
+    let uid = session.uid;
+    if(!uid){
+       return next(null, {code: 500, msg: '玩家未登陆'});
+    }
+    let roomCard = await gameUserModel.getWXUserInfo(uid);
     //返回值给客户端
-    if (wxuserinfo) {
-        next(null, {code: 200, msg: '获取用户微信信息成功', data: wxuserinfo});
+    if (roomCard) {
+        next(null, {code: 200, msg: '获取用户微信信息成功', data: {roomCard : roomCard}});
     } else {
         next(null, {code: 500, msg: '用户名信息不存在'});
     }

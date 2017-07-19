@@ -64,7 +64,7 @@ let Room = function (app) {
     this.underScore = 1;
     this.areaLimit = false;
     this.ownerNickname ;
-    this.theTop = 300;
+    this.theTop = 500;
 };
 roomPro = Room.prototype;
 
@@ -150,7 +150,7 @@ roomPro.createRoom = async function (session, roomData) {
     if(this.roomType != 2){
         return this.entryRoom(roomNo,session);
     }else{
-        return {roomNo};
+        return {roomNo : roomNo , roomData : roomData};
     }
 
 };
@@ -375,7 +375,8 @@ roomPro.getRoomMessage = function(uid,isAll){
         gid : this.gid,
         gameType : this.gameType,
         ownerNickname : this.ownerNickname,
-        underScore : this.underScore
+        underScore : this.underScore,
+        theTop : this.theTop
     };
     return obj;
 };
@@ -1408,7 +1409,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
             for(let i = 0; i < this.users.length; i ++) {
                 let user = this.users[i];
                 if(user.uid != uid){
-                    let num = winUserFun * user.funNum > this.theTop ? this.theTop : winUserFun * user.funNum ;
+                    let num = winUserFun * user.funNum > this.maxHuCount ? this.maxHuCount : winUserFun * user.funNum ;
                     user.funNum = num;
                 }
             }
@@ -1544,8 +1545,8 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         for(let i = 0; i < this.users.length; i ++) {
             let otherUser = this.users[i];
             if(otherUser.uid != uid){
-                otherUser.score -= otherUser.funNum * this.underScore;
-                user.score += otherUser.funNum * this.underScore;
+                otherUser.score -= Math.round(otherUser.funNum * this.underScore * 10) / 10;
+                user.score += Math.round(otherUser.funNum * this.underScore * 10) / 10;
             }
         }
 
@@ -1627,7 +1628,7 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         roomManager.destroyRoom(this.roomNo);
         await roomModel.update({_id : this.roomId},{status : 4});
     }
-    this.roomChannel.sendMsgToRoom('onRoundOver',{code : 200 , data : {allResult : this.allResult,result : this.result , banker : preBanker,isFlow : isFlow || false }});
+    this.roomChannel.sendMsgToRoom('onRoundOver',{code : 200 , data : {allResult : this.allResult,result : this.result , banker : preBanker,isFlow : isFlow || false ,theTop : this.theTop ,maxHuCount : this.maxHuCount}});
 };
 
 

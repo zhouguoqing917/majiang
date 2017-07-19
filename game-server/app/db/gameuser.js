@@ -111,9 +111,9 @@ schema.statics={
     /**
      * 根据openid获取用户微信信息
      * */
-    getWXUserInfo:async function(openid) {
-        const gameUser = await this.findOne({openid: openid});
-        return gameUser ? Object.assign(gameUser.wxuserinfo,{id:gameUser.id,roomCard:gameUser.roomCard}): null;
+    getWXUserInfo:async function(uid) {
+        const gameUser = await this.findOne({_id: uid});
+        return gameUser.roomCard;
     },
 
     /**
