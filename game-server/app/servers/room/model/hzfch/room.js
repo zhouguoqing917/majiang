@@ -832,7 +832,7 @@ roomPro.isLicensing = async function(uid,pai,isCannel){
             console.error(e);
         }
 
-        this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong , uid : nextUser.uid , huUserIdArr : huUserIdArr,funNum: user.getFanNum()}},nextUser);
+        this.roomChannel.sendMsgToMem('onMahjong',{code : 200,data : {mahjong : mahjong , uid : nextUser.uid , huUserIdArr : huUserIdArr,funNum: nextUser.getFanNum()}},nextUser);
         this.gameRecord.addRecord(this.round,3,nextUser,mahjong);
     }
 };
