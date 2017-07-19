@@ -78,14 +78,14 @@ roomPro.createRoom = async function (session, roomData) {
     let useCardNumber = roomData.roomCount == 8 ? 4 : 8;
     this.roomType = roomData.roomType || 1;
     this.huCount = roomData.huCount || 0;
-    this.maxHuCount = parseInt(roomData.theTop) || 300;
+    this.maxHuCount = parseInt(roomData.maxHuCount) || 300;
     this.gameType = roomData.gameType;
     this.hhType = roomData.hhType;
     this.underScore = roomData.underScore;
     this.areaLimit = roomData.areaLimit || false;
     this.ownerNickname = gameuser.wxuserinfo.nickname;
     this.roundCount = roomData.roundCount;
-    this.theTop = parseInt(roomData.theTop) || 300;
+    this.theTop = parseInt(roomData.maxHuCount) || 300;
 
     if(this.roomType == 3){
         useCardNumber = useCardNumber / 4 ;
