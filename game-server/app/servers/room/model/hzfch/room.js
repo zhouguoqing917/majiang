@@ -1855,7 +1855,6 @@ roomPro.handlerChi = function(uid,mahjongs){
     if(mahjongs.indexOf(this.laizi) != -1){
         user.addResultRecord(24);
     }
-
     this.roomChannel.sendMsgToRoom('onChi',{code : 200 ,data : {chiUid : uid , beChiUid : previousUid,mahjong : mahjongs.join(','),funNum: user.getFanNum(this.hhType,this.laizi)}})
 };
 
