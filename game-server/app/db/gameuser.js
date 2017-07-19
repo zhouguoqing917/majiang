@@ -72,7 +72,6 @@ let schema=new mongoose.Schema({
 });
 schema.index( {id : 1} , { unique : true });
 schema.index( {openid : 1} , { unique : true });
-schema.index( {deviceId : 1} , { unique : true });
 
 schema.statics={
     /**
