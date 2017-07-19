@@ -171,7 +171,7 @@ pro.getFanNum = function(hhType,laizi,isWin){
             this.funNum = this.funNum * 2;
             kaikouFan = false;
         }
-        if(type == 2 || type == 3 || type == 6 || type == 7 || type == 8 || type == 9 || type == 10){
+        if(type == 2 || type == 3 || type == 6 || type == 7 || type == 8 || type == 9 || type == 10 || type == 24){
             this.funNum = this.funNum * 2;
         }
         if(type == 5 || type == 4){
@@ -234,7 +234,7 @@ pro.getFunRecord = function(hhType,laizi){
             obj[type] = 2 ;
         }
 
-        if(type == 2 || type == 3 || type == 6 || type == 7 || type == 8 || type == 9 || type == 10){
+        if(type == 2 || type == 3 || type == 6 || type == 7 || type == 8 || type == 9 || type == 10 || type == 24){
             obj[type] = 2 ;
         }
 
