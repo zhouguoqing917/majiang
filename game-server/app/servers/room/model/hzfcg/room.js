@@ -78,7 +78,7 @@ roomPro.createRoom = async function (session, roomData) {
     let useCardNumber = roomData.roomCount == 8 ? 4 : 8;
     this.roomType = roomData.roomType || 1;
     this.huCount = roomData.huCount || 0;
-    this.maxHuCount = roomData.maxHuCount || 300;
+    this.maxHuCount = parseInt(roomData.theTop) || 300;
     this.gameType = roomData.gameType;
     this.hhType = roomData.hhType;
     this.underScore = roomData.underScore;
@@ -1156,13 +1156,15 @@ roomPro.handlerPeng = function(uid){
     }
 
     //判断有没有胡的 玩家为操作
-    for(let i = 0 ; i < this.users[i].length; i++){
-        if(this.users[i].uid != uid && (this.users[i].isAction & 8) == 8){
+    for(let i = 0 ; i < this.users.length; i++){
+        console.error(this.users[i].isAction , user.isAction,'=====>>>');
+        if(this.users[i].isAction > user.isAction){
             user.options = 2;
             user.isAction = 0;
             return;
         }
     }
+
     this.clearOptions();
     user.userAction = true;
 

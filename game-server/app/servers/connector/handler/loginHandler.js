@@ -314,10 +314,10 @@ handler.realNameVerify = async function (msg, session, next) {
     next(null, {code: 200, msg: '认证成功'});
 };
 
-handler.getMails = function (msg, session, next) {
+handler.getMails = async function  (msg, session, next) {
     let t = Date.now();
     t -= 30 * 60 * 60 * 1000;
-    let mails = gameMessages.find({createdAt: {$gte: new Date(t)}});
+    let mails = await gameMessages.find({createdAt: {$gte: new Date(t)}});
     next(null, {code: 200, mails: mails});
 };
 
