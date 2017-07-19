@@ -1123,7 +1123,8 @@ roomPro.handlerPeng = function(uid){
 
     //判断有没有胡的 玩家为操作
     for(let i = 0 ; i < this.users[i].length; i++){
-        if(this.users[i].uid != uid && (this.users[i].isAction & 8) == 8){
+        console.error(this.users[i].isAction , user.isAction,'=====>>>');
+        if(this.users[i].isAction > user.isAction){
             user.options = 2;
             user.isAction = 0;
             return;
@@ -1409,8 +1410,8 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         for(let i = 0; i < this.users.length; i ++) {
             let otherUser = this.users[i];
             if(otherUser.uid != uid){
-                otherUser.score -= otherUser.funNum * this.underScore;
-                user.score += otherUser.funNum * this.underScore;
+                otherUser.score -= parseInt(otherUser.funNum * this.underScore * 100) / 100;
+                user.score += parseInt(otherUser.funNum * this.underScore * 100) / 100;
             }
         }
 
