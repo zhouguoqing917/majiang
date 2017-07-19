@@ -302,7 +302,7 @@ handler.realNameVerify = async function(msg, session, next){
     next(null,{code:200,msg:'认证成功'});
 };
 
-handler.getMail = function(){
+handler.getMails = function(){
     let t = Date.now();
     t -= 30 * 60 * 60 * 1000;
     let mails = gameMessages.find({createdAt : {$gte : new Date(t)}});

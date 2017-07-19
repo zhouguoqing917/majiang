@@ -8,10 +8,6 @@ const db=require('./db');
 const modelName='GameAnnouncements';
 
 const schema=new mongoose.Schema({
-    gameId : {
-        type: Number,
-        default: 0
-    },
     type : {
         type: Number,
         default: 0
@@ -47,7 +43,6 @@ const schema=new mongoose.Schema({
 
 });
 
-schema.index( {gameId : 1} );
 
 schema.statics={
 };
