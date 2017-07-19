@@ -438,7 +438,7 @@ handler.getGameResultList = async function(msg, session, next){
         let page = msg.page || 0;
         let results = await roomManager.getGameResultList(uid,page);
 
-        next(null, {code: 200, data : {result : results, uid : uid}});
+        next(null, {code: 200, data : {result : results, uid : uid , page : page}});
     }catch(ex){
         next(null, {code: 500, msg: '查询失败'});
     }
