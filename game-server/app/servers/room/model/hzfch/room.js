@@ -1023,7 +1023,7 @@ roomPro.handlerGang = async function(uid,pai){
         throw '不能杠或者参数错误';
     }
 
-    for(let i = 0 ; i < this.users[i].length; i++){
+    for(let i = 0 ; i < this.users.length; i++){
         if(this.users[i].uid != uid && (this.users[i].isAction & 8) == 8){
             user.options = 4;
             user.isAction = 0;
@@ -1740,6 +1740,10 @@ roomPro.dissolveRoom = async function(isTime){
         this.allResult.endTime = this.allResult.endTime || Date.now();
         this.roomChannel.sendMsgToRoom('onRoomDissolve',{code : 200,allResult : this.allResult});
         await this.addGameResult();
+        if(this.status <= 1 && this.roomType == 2){
+            let useCardNumber = this.roundCount == 8 ? 4 : 8;
+            await roomManager.returnRoomCard(this.ownerUid,this.roomNo,useCardNumber);
+        }
         roomManager.destroyRoom(this.roomNo);
         this.ressolveTimer && clearTimeout(this.ressolveTimer);
         await roomModel.update({_id : this.roomId},{status : 5});
