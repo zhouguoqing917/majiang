@@ -244,7 +244,7 @@ RoomManager.prototype.getGameResultList = async function(uid,page){
     obj[key] = {$ne:null};
     let t = Date.now() - 24 * 60 * 60 * 1000;
     let count = 10;
-    let results = await gameResult.find({$or : [obj , {ownerUid : uid}],'result.createTime' : { $gte : t} }).sort({'result.createTime' : -1}).limit(10).skip(page * count);
+    let results = await gameResult.find({$or : [obj , { 'result.ownerUid' : uid}],'result.createTime' : { $gte : t} }).sort({'result.createTime' : -1}).limit(10).skip(page * count);
     let arr = [];
     for(let i = 0; i < results.length;i ++){
         results[i].result._id = results[i]._id;
@@ -254,7 +254,7 @@ RoomManager.prototype.getGameResultList = async function(uid,page){
         }
         arr.push(results[i].result);
     }
-    console.error(obj,'=====>>>>',results,arr);
+    console.error(obj,'=====>>>>',results,arr,{$or : [obj , { 'result.ownerUid' : uid}],'result.createTime' : { $gte : t} });
     return arr;
 };
 
