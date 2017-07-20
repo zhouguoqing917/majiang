@@ -555,7 +555,7 @@ roomPro.confirmLaizi = function(){
     let laizi = mahjong + 1;
 
     if(laizi % 10 == 0){
-        laizi = parseInt(mahjong / 10) * 10 + 1;
+        laizi = parseInt((laizi - 1) / 10) * 10 + 1;
     }
 
     if(mahjong == 35){
