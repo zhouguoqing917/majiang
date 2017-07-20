@@ -1907,6 +1907,10 @@ roomPro.dissolveRoom = async function(isTime){
         console.log(this.allResult,'=======>>>>this.allResult');
         this.roomChannel.sendMsgToRoom('onRoomDissolve',{code : 200,allResult : this.allResult});
         await this.addGameResult();
+        if(this.status <= 1 && this.roomType == 2){
+            let useCardNumber = this.roundCount == 8 ? 4 : 8;
+            await roomManager.returnRoomCard(this.ownerUid,this.roomNo,useCardNumber);
+        }
         roomManager.destroyRoom(this.roomNo);
         this.ressolveTimer && clearTimeout(this.ressolveTimer);
         await roomModel.update({_id : this.roomId},{status : 5});
