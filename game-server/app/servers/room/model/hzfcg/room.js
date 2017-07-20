@@ -1545,8 +1545,8 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         for(let i = 0; i < this.users.length; i ++) {
             let otherUser = this.users[i];
             if(otherUser.uid != uid){
-                otherUser.score -= Math.round(otherUser.funNum * this.underScore * 10) / 10;
-                user.score += Math.round(otherUser.funNum * this.underScore * 10) / 10;
+                otherUser.score -= util.getFloat(otherUser.funNum * this.underScore);
+                user.score += util.getFloat(otherUser.funNum * this.underScore);
             }
         }
 

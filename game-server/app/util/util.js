@@ -35,3 +35,16 @@ exports.getFlatternDistance = function (lat1, lng1, lat2, lng2) {
 
     return d * (1 + fl * (h1 * sf * (1 - sg) - h2 * (1 - sf) * sg));
 };
+
+exports.getFloat = function(x){
+    var f = parseFloat(x);
+    if (isNaN(f)) {
+        return;
+    }
+    f = Math.round(f * 10);
+    f += '';
+    let pre =  f.substring(0,f.length - 1);
+    let last = f.substring(f.length - 1);
+
+    return parseFloat(pre + '.' + last);
+}

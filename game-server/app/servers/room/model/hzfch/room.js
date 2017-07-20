@@ -153,7 +153,7 @@ roomPro.createRoom = async function (session, roomData) {
     if(this.roomType != 2){
         return this.entryRoom(roomNo,session);
     }else{
-        return {roomNo : roomNo , roomData : roomData};
+        return {roomNo};
     }
 
 };
@@ -382,8 +382,7 @@ roomPro.getRoomMessage = function(uid,isAll){
         gameType : this.gameType,
         hhType : this.hhType,
         ownerNickname : this.ownerNickname,
-        underScore : this.underScore,
-        theTop : this.theTop
+        underScore : this.underScore
     };
     return obj;
 };
@@ -584,7 +583,7 @@ roomPro.confirmLaizi = function(){
         }
     }
 
-    if(this.hhType == 2 && (mahjong == 41 || mahjong == 42)){
+    if(this.hhType == 2 && mahjong == 41 || mahjong == 42){
         laizi = 35;
     }
 
@@ -1411,8 +1410,8 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         for(let i = 0; i < this.users.length; i ++) {
             let otherUser = this.users[i];
             if(otherUser.uid != uid){
-                otherUser.score -= Math.round(otherUser.funNum * this.underScore * 10) / 10;
-                user.score += Math.round(otherUser.funNum * this.underScore * 10) / 10;
+                otherUser.score -= util.getFloat(otherUser.funNum * this.underScore);
+                user.score += util.getFloat(otherUser.funNum * this.underScore);
             }
         }
 
@@ -1583,7 +1582,7 @@ roomPro.userReady = async function(uid){
         this.confirmLaizi();
         this.gameRecord.addRecord(this.round,null,null,null,null,this.laizi);
         this.deductRoomCard();//扣除房卡
-        this.check = new Check(this.laizi,this.hhType);
+        this.check = new Check(this.laizi);
         this.licensing();
         this.status = 2;
         let self = this;
