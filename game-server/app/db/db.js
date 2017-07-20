@@ -19,7 +19,7 @@ const options = {
     },
     server: {
         auto_reconnect: true,
-        poolSize: 5
+        poolSize: 10
     }
 };
 
