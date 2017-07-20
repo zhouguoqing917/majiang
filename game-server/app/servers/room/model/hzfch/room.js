@@ -81,10 +81,9 @@ roomPro.createRoom = async function (session, roomData) {
     let useCardNumber = roomData.roundCount === 8 ? 4 : 8;
     this.roomType = roomData.roomType || 1;
     this.huCount = roomData.huCount || 0;
-    this.maxHuCount = parseInt(roomData.maxHuCount) || parseInt(roomData.theTop) || 300;
     this.gameType = roomData.gameType;
     this.hhType = roomData.hhType;
-    this.theTop = parseInt(roomData.maxHuCount) || parseInt(roomData.theTop) || 300;
+    this.theTop =  parseInt(roomData.theTop) ;
     this.underScore = roomData.underScore || 1;
     this.areaLimit = roomData.areaLimit || false;
     this.ownerNickname = gameuser.wxuserinfo.nickname;
@@ -382,7 +381,8 @@ roomPro.getRoomMessage = function(uid,isAll){
         gameType : this.gameType,
         hhType : this.hhType,
         ownerNickname : this.ownerNickname,
-        underScore : this.underScore
+        underScore : this.underScore,
+        theTop : this.theTop
     };
     return obj;
 };
@@ -569,9 +569,8 @@ roomPro.confirmLaizi = function(){
     let laizi = mahjong + 1;
 
     if(laizi % 10 == 0){
-        laizi = parseInt(laizi / 10) * 10 + 1;
+        laizi = parseInt((laizi - 1) / 10) * 10 + 1;
     }
-
 
     if(this.hhType == 1){
         if(mahjong == 42 || mahjong == 35){
@@ -590,6 +589,7 @@ roomPro.confirmLaizi = function(){
     if(this.hhType == 2 && mahjong == 35){
         laizi = 35;
     }
+
 
     this.laizi = laizi;
     this.laizipi = {};

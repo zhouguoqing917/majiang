@@ -437,6 +437,9 @@ pro.quanqiuren = function(user,pai){
  * @returns {boolean}
  */
 pro.checkWaiGang = function(user,pai){
+    if(pai == this.laizi || pai == 41 || pai == 42){
+        return  false;
+    }
     var arr = user.mahjong;
     var count = 0;
     for(var i = 0 ; i < arr.length ; i++){
@@ -464,7 +467,8 @@ pro.checkGang = function(user,pai){
     var obj = {};
     var type = 1 ; // 1 内杠 2 外杠
 
-    if(pai == this.laizi || pai > 30){
+
+    if(pai == this.laizi || pai == 41 || pai == 42){
         return  false;
     }
 

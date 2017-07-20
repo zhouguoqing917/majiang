@@ -513,6 +513,18 @@ pro.menqing = function(user,pai){
  * @returns {boolean}
  */
 pro.checkWaiGang = function(user,pai){
+    if(this.hhType == 1){
+        if(pai == 42){
+            return false;
+        }
+    }
+
+    if(this.hhType == 2){
+        if(pai == 41 || pai == 42){
+            return false;
+        }
+    }
+
     var arr = user.mahjong;
     var count = 0;
     for(var i = 0 ; i < arr.length ; i++){
@@ -539,7 +551,18 @@ pro.checkGang = function(user,pai){
     var allPai = this.transform(arr);
     var obj = {};
     var type = 1 ; // 1 内杠 2 外杠
-    if(pai == this.laizi || pai > 30){
+    if(this.hhType == 1){
+        if(pai == 42){
+            return false;
+        }
+    }
+
+    if(this.hhType == 2){
+        if(pai == 41 || pai == 42){
+            return false;
+        }
+    }
+    if(pai == this.laizi ){
         return  false;
     }
     if(pai){
