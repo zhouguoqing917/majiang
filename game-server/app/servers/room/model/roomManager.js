@@ -249,9 +249,6 @@ RoomManager.prototype.getGameResultList = async function(uid,page){
     for(let i = 0; i < results.length;i ++){
         results[i].result._id = results[i]._id;
         let ownerUid = results[i].result.ownerUid;
-        if(results[i].result[ownerUid]){
-            continue;
-        }
         arr.push(results[i].result);
     }
     console.error(obj,'=====>>>>',results,arr,{$or : [obj , { 'result.ownerUid' : uid}],'result.createTime' : { $gte : t} });
