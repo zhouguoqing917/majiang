@@ -222,6 +222,21 @@ handler.visitorLogin = async function (msg, session, next) {
         ipaddress = gameUser.ipaddress.substring(gameUser.ipaddress.lastIndexOf(':') + 1);
         gameUser.loginTime = new Date();
         gameUser.loginTimes += 1;
+        if (session.uid) {
+            try {
+                await new Promise(function (resolve, reject) {
+                    session.unbind(session.uid, function (err, data) {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve();
+                        }
+                    });
+                })
+            } catch (e) {
+                console.error('========>>>checkLogin', e.stack);
+            }
+        }
 
         session.set('sid', this.app.curServer.id);
         const {nickname}=gameUser.wxuserinfo;
