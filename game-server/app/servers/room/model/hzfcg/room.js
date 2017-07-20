@@ -1204,7 +1204,6 @@ roomPro.getMeBetweenBankerUsers = function(beUid,uid,usersArr){
     return this.getMeBetweenBankerUsers(beUid,uid,usersArr);
 }
 
-
 /**
  * 胡牌
  * @param uid
@@ -1445,11 +1444,11 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                 }
                 if(user.uid != uid){
                     if(kaikouCount == 0 && temp){
-                        user.funNum = this.theTop + 200;
+                        user.funNum = this.maxHuCount + 300;
                     }else if (kaikouCount > 0 && kaikouCount < 3 && temp){
-                        user.funNum = this.theTop + 100;
+                        user.funNum = this.maxHuCount + 200;
                     }else {
-                        user.funNum = this.theTop ;
+                        user.funNum = this.maxHuCount + 100;
                     }
                 }
             }
