@@ -39,7 +39,6 @@ pro.checkHu = function(user,pai){
     let isHu = this.checkUnHasJiang(user,pai);
     if(isHu){
         var dahuArr = this.checkDaHu(user,pai,laziCount);
-        console.log(dahuArr,'=====>>>>');
         if(dahuArr && dahuArr.length){
             for(var i = 0 ; i < dahuArr.length; i ++){
                 if(huType.indexOf(dahuArr[i]) == -1){
@@ -49,10 +48,6 @@ pro.checkHu = function(user,pai){
         }else{
             huType.push(1);
         }
-    }
-    isHu = this.jianjianghu(user,pai);
-    if(isHu){
-        huType.push(isHu);
     }
     isHu = this.qidui(user,pai);
     console.log(user.mahjong,'====>>>111');
@@ -192,7 +187,12 @@ pro.checkDaHu = function(user,pai,laiziCount){
 
     isHu = this.pengpenghu(user,allPai,laiziCount,pai);
     if(isHu){
-        huType.push(isHu);
+        let isJiangyise = this.jianjianghu(user,pai);
+        if(isJiangyise){
+            huType.push(isJiangyise);
+        }else{
+            huType.push(isHu);
+        }
     }
 
     isHu = this.menqing(user);

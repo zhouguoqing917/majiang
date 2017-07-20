@@ -6,8 +6,6 @@ let dbname    = "hsmajiang";
 let connectionString = '';
 if(env.indexOf('production') != -1){
 }else if(env.indexOf('stage') != -1){
-    //let username = 'hongzhong';
-    //let pwd = 'Yaojing1818';
     connectionString = `mongodb://${host}:${port}/${dbname}`
 }else{
     connectionString = `mongodb://${host}:${port}/${dbname}`

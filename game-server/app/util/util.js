@@ -43,8 +43,12 @@ exports.getFloat = function(x){
     }
     f = Math.round(f * 10);
     f += '';
+    console.log(f);
     let pre =  f.substring(0,f.length - 1);
+    console.log(pre);
     let last = f.substring(f.length - 1);
 
     return parseFloat(pre + '.' + last);
 }
+
+console.log(exports.getFloat(0.40009));
