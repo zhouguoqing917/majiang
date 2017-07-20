@@ -13,6 +13,7 @@ const recordModel = require('mongoose').models['Record'];
 const RoomChannel = require('../roomChannel.js');
 const roomManager = require('../roomManager.js');
 const uuid = require('../../../../util/uuid.js');
+const util = require('../../../../util/util.js');
 const User = require('./user.js');
 const Mahjong = require('./mahjong.js');
 let mailModel = require('../../../../util/mail.js');

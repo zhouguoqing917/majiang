@@ -288,14 +288,11 @@ pro.checkUnHasJiang = function(user,pai){
         var may = getDoubleAndLaiziCount(allPai);
         laiziCount -= 1;
         for(var i = 0 ; i < may.length; i ++){
-            //console.log(may[i],'=============================>>>>>>>>>>',allPai);
             max = 4;
             var temp = cloneMahjong(allPai);
             temp[may[i][0]][may[i][1]] += 1;
             clearDouble(may[i],temp);
-            //console.log(temp,'=====>>temp');
             var needLaiziCount = clearAll(temp);
-            //console.log(max,'=====>>???',laiziCount);
             if(needLaiziCount == laiziCount){
                 result = true;
             }
