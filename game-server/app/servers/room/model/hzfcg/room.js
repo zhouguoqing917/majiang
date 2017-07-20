@@ -1445,11 +1445,11 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
                 }
                 if(user.uid != uid){
                     if(kaikouCount == 0 && temp){
-                        user.funNum = this.theTop + 300;
-                    }else if (kaikouCount > 0 && kaikouCount < 3 && temp){
                         user.funNum = this.theTop + 200;
-                    }else {
+                    }else if (kaikouCount > 0 && kaikouCount < 3 && temp){
                         user.funNum = this.theTop + 100;
+                    }else {
+                        user.funNum = this.theTop ;
                     }
                 }
             }
@@ -1458,39 +1458,39 @@ roomPro.handlerHu = async function(uid,isFlow,isCheck){
         // 计算包牌
         console.error(isZimo,'=====>>>>isZimo');
         let baoPaiuser ;
-        if(isZimo == 3 ){ //计算包牌情况
-            if(isHu && isHu.length == 1 && isHu[0] == 3 && !this.check.canHu(preUser).length){
-                //包牌
-                isBaoPai = true;
-                baoPaiuser = preUser;
-            }else if(isHu.indexOf(4) != -1 || isHu.indexOf(5) != -1){ //大胡 第三铺 玩家 包牌
-                //第三铺
-                let arr = [];
-                arr = arr.concat(user.chi);
-                arr = arr.concat(user.peng);
-                arr = arr.concat(user.gang);
-                console.error(arr,'=====>>>>>arr1111');
-                if(arr.length >= 3){
-                    //排序
-                    for(let i = 0; i < arr.length;i++){
-                        let temp;
-                        for(let j = 0; j < arr.length; j ++){
-                            if(arr[i].ts > arr[j].ts){
-                                temp = arr[i].ts;
-                                arr[i] = arr[j];
-                                arr[j] = temp;
-                            }
+        //if(isZimo == 3 ){ //计算包牌情况
+        if(isHu && isHu.length == 1 && isHu[0] == 3 && !this.check.canHu(preUser).length){
+            //包牌
+            isBaoPai = true;
+            baoPaiuser = preUser;
+        }else if(isHu.indexOf(4) != -1 || isHu.indexOf(5) != -1){ //大胡 第三铺 玩家 包牌
+            //第三铺
+            let arr = [];
+            arr = arr.concat(user.chi);
+            arr = arr.concat(user.peng);
+            arr = arr.concat(user.gang);
+            console.error(arr,'=====>>>>>arr1111');
+            if(arr.length >= 3){
+                //排序
+                for(let i = 0; i < arr.length;i++){
+                    let temp;
+                    for(let j = 0; j < arr.length; j ++){
+                        if(arr[i].ts > arr[j].ts){
+                            temp = arr[i].ts;
+                            arr[i] = arr[j];
+                            arr[j] = temp;
                         }
                     }
-                    console.error(arr,'=====>>>>>arr2222',arr[2].uid);
-                    if(arr[2].uid != uid){
-                        let uid = arr[2].uid;
-                        isBaoPai = true;
-                        baoPaiuser = this.getUserByUid(uid);
-                    }
+                }
+                console.error(arr,'=====>>>>>arr2222',arr[2].uid);
+                if(arr[2].uid != uid){
+                    let uid = arr[2].uid;
+                    isBaoPai = true;
+                    baoPaiuser = this.getUserByUid(uid);
                 }
             }
         }
+        //}
         console.error('=======>>>>>>');
         let maxFunNum = 0;
         if(isCheck){

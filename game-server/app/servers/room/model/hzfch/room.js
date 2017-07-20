@@ -583,7 +583,7 @@ roomPro.confirmLaizi = function(){
         }
     }
 
-    if(this.hhType == 2 && mahjong == 41 || mahjong == 42){
+    if(this.hhType == 2 && (mahjong == 41 || mahjong == 42)){
         laizi = 35;
     }
 
