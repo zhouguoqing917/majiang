@@ -50,7 +50,7 @@ pro.checkHu = function(user,pai){
         }
     }
     isHu = this.qidui(user,pai);
-    console.log(user.mahjong,'====>>>111');
+    console.log(user.mahjong,'====>>>111',huType);
     if(isHu){
         huType.push(isHu);
         let isqinyise = this.qingyise(user,pai);
@@ -180,10 +180,6 @@ pro.checkDaHu = function(user,pai,laiziCount){
     mahjongs = [].concat(mahjongs);
     var allPai = this.transform(mahjongs);
     var huType = [];
-    var isHu = this.qingyise(user,pai,allPai);
-    if(isHu){
-        huType.push(isHu);
-    }
 
     isHu = this.pengpenghu(user,allPai,laiziCount,pai);
     if(isHu){
@@ -1048,7 +1044,7 @@ module.exports = Check;
 var member = {
     //2,6,9,27,4,9,2,2,2,1,1,5,27,5
     //
-    mahjong:  [27]  ,
+    mahjong:  [13,13,14,14,14,14,15,15,17,18,18,19,19]  ,
     peng:
        [],
     gang: [],
@@ -1057,7 +1053,7 @@ var member = {
 ////console.log(isvail([ 2, 2, 2, 1, 99, 2, 2, 2, 2, 3, 2, 4, 8, 8 ]));
 ////var start = Date.now();
 ////console.log(checks.canHu(member));
-console.log(checks.checkHu(member,41),'====>>>>>>>>>>>>>>');
+console.log(checks.checkHu(member,17),'====>>>>>>>>>>>>>>');
 //console.log(Date.now() - start);
 ////clear([ 0, 0, 1, 1, 3, 2, 2, 0, 0 ] ,0);
 ////console.log(getFengNeedCount([ 2, 3, 3, 3, 3] ,0))
