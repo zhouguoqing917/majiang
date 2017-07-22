@@ -509,8 +509,15 @@ handler.getGameRecordByCode = async function(msg, session, next){
     if(!code){
         return next(null, {code: 500, msg: '参数错误!'});
     }
-    let result = await roomManager.getGameRecordByCode(code);
-    next(null, {code: 200, data : {result : result}});
+    let result = await roomManager.getGameRecordByCode(code,(err,res)=>{
+        if(err || !res){
+            next(null, {code:500, result:err || "参数错误"});
+        }else{
+            next(null, {code:200, data:{result:res}});
+        }
+    });
+    //next(null, {code: 200, data : {result : result}});
+
 };
 
 
@@ -590,7 +597,7 @@ handler.roomOwnerKickUserByUid = async function(msg, session, next){
         }
 
         if(room.ownerUid != uid){
-            return next(null, {code: 400, msg: '不是房主!'});
+            return next(null, {cde: 400, msg: '不是房主!'});
         }
         await room.leaveRoom(kickUid,false,true);
         next(null,{code : 200});

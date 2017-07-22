@@ -3,12 +3,12 @@
   "version": "0.0.1",
   "private": false,
   "dependencies": {
-    "body-parser": "*",
+    "body-parser": "^1.17.2",
     "bufferhelper": "*",
     "ejs": "*",
-    "express": "*",
-    "iconv-lite": "*",
-    "mongoose": "*",
+    "express": "^4.15.3",
+    "iconv-lite": "^0.4.18",
+    "mongoose": "^4.11.3",
     "xml2js": "^0.4.17"
   }
 }

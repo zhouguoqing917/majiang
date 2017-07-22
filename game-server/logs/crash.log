@@ -1,1 +1,7 @@
 [2017-06-21 13:47:05.133] [INFO] crash-log - [32m[/Users/li/Documents/work/BumperHu/game-server/node_modules/pomelo/lib/master/master.js] [39m[gate],[gate-server-1],[1498024025133],[disconnect]
+[2017-07-20 11:04:35.895] [INFO] crash-log - [32m[E:\work\BumperHu\game-server\node_modules\pomelo\lib\master\master.js] [39m[gate],[gate-server-1],[1500519875895],[disconnect]
+[2017-07-20 11:04:35.903] [INFO] crash-log - [32m[E:\work\BumperHu\game-server\node_modules\pomelo\lib\master\master.js] [39m[room],[room-server-11],[1500519875902],[disconnect]
+[2017-07-20 11:04:35.906] [INFO] crash-log - [32m[E:\work\BumperHu\game-server\node_modules\pomelo\lib\master\master.js] [39m[room],[room-server-10],[1500519875906],[disconnect]
+[2017-07-20 11:04:35.919] [INFO] crash-log - [32m[E:\work\BumperHu\game-server\node_modules\pomelo\lib\master\master.js] [39m[connector],[connector-server-1],[1500519875919],[disconnect]
+[2017-07-20 11:04:35.936] [INFO] crash-log - [32m[E:\work\BumperHu\game-server\node_modules\pomelo\lib\master\master.js] [39m[connector],[connector-server-2],[1500519875936],[disconnect]
+[2017-07-20 11:04:35.941] [INFO] crash-log - [32m[E:\work\BumperHu\game-server\node_modules\pomelo\lib\master\master.js] [39m[connector],[connector-server-3],[1500519875941],[disconnect]

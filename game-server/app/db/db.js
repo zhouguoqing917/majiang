@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const env = process.argv[2] || '';
-let host  = "127.0.0.1";
+//let host  = "47.94.45.41";
+let host = "127.0.0.1";
 let port = 27017;
 let dbname    = "hsmajiang";
 let connectionString = '';

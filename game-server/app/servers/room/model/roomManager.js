@@ -287,9 +287,10 @@ RoomManager.prototype.getRecordCode = async function(uid,recordId,round,max){
     return code;
 };
 
-RoomManager.prototype.getGameRecordByCode = async function(code){
-    let result = await shareRecordModel.findOne({ code :code});
-    return result;
+RoomManager.prototype.getGameRecordByCode = async function(code, cb){
+    let result = await shareRecordModel.findOne({ code :code},(err,res)=>{
+        cb(err,res);
+    });
 };
 
 module.exports = new RoomManager();

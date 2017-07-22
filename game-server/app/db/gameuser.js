@@ -9,16 +9,10 @@ let schema=new mongoose.Schema({
     id: {
         type: Number,
         required: true,
-        index: {
-            unique: true
-        }
     },
     openid: {
         type: String,
         required: true,
-        index: {
-            unique: true
-        }
     },
     roomCard:{
         type: Number,
@@ -70,8 +64,8 @@ let schema=new mongoose.Schema({
     }
 
 });
-schema.index( {id : 1} , { unique : true });
-schema.index( {openid : 1} , { unique : true });
+schema.index( {id : 1});
+schema.index( {openid : 1});
 
 schema.statics={
     /**

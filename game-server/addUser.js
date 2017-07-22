@@ -8,8 +8,8 @@ const gameUserModel = require('mongoose').models['GameUser'];
 
 let addUser = async function(){
     let obj = {
-        "openid" : "ol9tcwy79lKc7zf3nlLSpFNpGJu0",
-        "token" : "GySofASVojbx2SlL9ceYqQa5S9EAWZvL9b29PZjv-K_bGzn5-D-CXQOU8nahZW9P8mcsQ2BzI8zGge7Nn-R_1iQ_iCJcpStiDWGd2TjTcYQ",
+        openid : "ol9tcwy79lKc7zf3nlLSpFNpGJu0",
+        token : "GySofASVojbx2SlL9ceYqQa5S9EAWZvL9b29PZjv-K_bGzn5-D-CXQOU8nahZW9P8mcsQ2BzI8zGge7Nn-R_1iQ_iCJcpStiDWGd2TjTcYQ",
         "wxlogin" : {
             "access_token" : "GySofASVojbx2SlL9ceYqQa5S9EAWZvL9b29PZjv-K_bGzn5-D-CXQOU8nahZW9P8mcsQ2BzI8zGge7Nn-R_1iQ_iCJcpStiDWGd2TjTcYQ",
             "expires_in" : 7200,
@@ -42,15 +42,21 @@ let addUser = async function(){
             "latitude" : 28.212135,
             "longitude" : 112.907848
 }
-    for(let i = 1000 ; i < 1050 ; i++){
-        obj.openid = i;
+    for(let i = 2 ; i <= 8 ; i++){
+        obj.openid = i*11111111;
         //obj.wxuserinfo = i;
-        obj.wxuserinfo.openid = i;
+        obj.wxuserinfo.openid = i*11111111;
         obj.wxuserinfo.nickname = "玩家" + i;
         obj.wxuserinfo.headimgurl = "http://wx.qlogo.cn/mmopen/xgghTUGdCxUJiaJIKVYf5BRCl5qkrvFSZkicVZmAOYPEGfqiblKAtsS9JhOUTJibVKlXr9Uy0EGQVlzmFa5QUkTAQXhTVic6oxrMq/0";
-        obj.token = i;
-        obj.id = 100000 + i;
-        await gameUserModel.create(obj)
+        obj.token = i*11111111;
+        obj.id = 100000 + i*11111111;
+        await gameUserModel.create(obj,(err,res)=>{
+            if(err){
+                console.log(err);
+            }else{
+                console.log(res);
+            }
+        })
     }
 
 }

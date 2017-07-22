@@ -20,10 +20,10 @@
       var roomNo ;
       window.onload=function(){
           var pomelo = window.pomelo;
-          var host = "47.94.45.41";
-//          var host = "127.0.0.1";
+          //var host = "47.94.45.41";
+          var host = "192.168.1.123";
 //          var host = "112.74.44.138";
-          var port = "8102";
+          var port = "5100";
           pomelo.init({
               host: host,
               port: port,
@@ -59,7 +59,7 @@
       //        };
 
       function checkLogin() {
-          pomelo.request("connector.loginHandler.checkLogin", {openid:'1000',token:'1000'}, function(data) {
+          pomelo.request("connector.loginHandler.checkLogin", {openid:'11111111',token:'11111111'}, function(data) {
               console.log(`${data.msg}`);
           });
       };

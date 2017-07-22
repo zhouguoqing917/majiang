@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 var routes=require('./router/login');
-var port=5100;
+var port=4100;
 
 
 
